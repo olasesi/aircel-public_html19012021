@@ -1,0 +1,87 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        {% if device_count > 0 %}
+          <a href="https://www.buymeacoffee.com/Rajinder" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" style="height: 51px !important;width: 217px !important;" ></a>
+          <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_send }}" class="btn btn-primary"><i class="fa fa-paper-plane"></i></button>
+        {% endif %}
+        <a href="{{ action.cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }} <a href="https://www.opencart.com/index.php?route=marketplace/extension/info&member_token=zKf4HCE0Z8orJH1TgJ5m3TGz1SZqwQ8s&extension_id=39447" target="_blank">Get Pro Version</a></h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error.permission != '' %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_permission }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+    {% if error_message != '' %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_message }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+    {% if success_message != '' %}
+    <div class="alert alert-success alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ success_message }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-paper-plane"></i>{{ text_send_notification }}</h3>
+      </div>
+      <div class="panel-body">
+
+        <form action="{{ action.save }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+            {% if device_count < 1 %}
+              <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> 
+                {{error_device}}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+              </div>
+            {% endif %}
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-message">{{ message_title }} <strong style="color:red">*</strong></label>
+                <div class="col-sm-10">
+                    <input type="text" name="title" value="{{ title }}" placeholder="{{ placeholder_title }}" id="input-message" class="form-control" required/>
+                    {% if error.title %}
+                        <div class="text-danger">{{ error_title }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-message">{{ message_body }} <strong style="color:red">*</strong></label>
+                <div class="col-sm-10">
+                    <textarea name="body" placeholder="{{ placeholder_body }}" id="input-message" class="form-control" rows="4" required>{{body}}</textarea>
+                    {% if error.body %}
+                        <div class="text-danger">{{ error_body }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label" for="input-message">{{ action_url }}</label>
+                <div class="col-sm-10">
+                    <input type="url" name="action" placeholder="{{ placeholder_URL }}" value="{{action}}" id="input-message" class="form-control"/>
+                    {% if error.body %}
+                        <div class="text-danger">{{ error_body }}</div>
+                    {% endif %}
+                </div>
+            </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

@@ -1,0 +1,110 @@
+{% for row in rows %}
+  {% if row.type == 'columns' %}
+    <div class="row columns {{ row.class }}" style="{{ row.css }}">
+      {% for column in row.columns %}
+        <div class="column {{ column.class }} {{ column.type }} {{ row.classes }} {{ column.title ? '' : 'no-title' }}">
+          {% if column.title %}
+            <h3>{{ column.title }}</h3>
+          {% endif %}
+          {% if column.type == 'menu' %}
+            <div class="column-menu-wrap" style="{{ column.style }}">
+              <ul>
+                {% for item in column.items %}
+
+                  {% if item.href %}
+                    <li><a href="{{ item.href }}" {{ item.class }}{{ item.target }}>{{ item.icon_left }}{{ item.name }}{{ item.icon_right }}</a></li>
+                  {% else %}
+                    <li>{{ item.target }}{{ item.icon_left }}{{ item.name }}{{ item.icon_right }}</li>
+                  {% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+          {% elseif column.type =='text' %}
+            <div class="column-text-wrap {{ column.has_icon ? 'has-icon': '' }} block-icon-{{ column.icon_position }}" style="{{ column.style }}">
+              {% if column.has_icon %}
+                <div class="block-icon block-icon-{{ column.icon_position }}" style="{{ column.icon_css }}">{{ column.icon }}</div>
+              {% endif %}
+              <span>{{ column.text }}</span>
+            </div>
+          {% elseif column.type =='newsletter' %}
+            <div class="column-wrap" style="{{ column.style }}">{{ column.content }}</div>
+          {% elseif column.type =='products' %}
+            <div class="column-wrap" style="{{ column.style }}">
+              {% for product in column.products %}
+                <div class="product-grid-item {{ journal2.settings.get('product_grid_classes') }} display-{{ journal2.settings.get('product_grid_wishlist_icon_display') }} {{ journal2.settings.get('product_grid_button_block_button') }}">
+                  <div class="product-wrapper">
+                    {% if product.thumb %}
+                      <div class="image">
+                        <a href="{{ product.href }}">
+                          <img width="{{ image.width }}" height="{{ image.height }}" src="{{ product.thumb }}" title="{{ product.name }}" alt="{{ product.name }}"/>
+                        </a>
+                      </div>
+                    {% endif %}
+                    <div class="product-details">
+                      <div class="name"><a href="{{ product.href }}">{{ product.name }}</a></div>
+                      {% if product.price %}
+                        <div class="price">
+                          {% if not product.special %}
+                            {{ product.price }}
+                          {% else %}
+                            <span class="price-old">{{ product.price }}</span> <span class="price-new">{{ product.special }}</span>
+                          {% endif %}
+                        </div>
+                      {% endif %}
+                      {% if product.rating %}
+                        <div class="rating">
+                          {% for i in 1..5 %}
+                            {% if product.rating < i %}
+                              <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                            {% else %}
+                              <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                            {% endif %}
+                          {% endfor %}
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% elseif column.type =='posts' %}
+            <div class="column-wrap" style="{{ column.style }}">
+              {% for post in column.posts %}
+                <div class="footer-post">
+                  {% if post.image %}
+                    <a class="footer-post-image" href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}"/></a>
+                  {% endif %}
+                  <div class="footer-post-details">
+                    <a class="footer-post-title" href="{{ post.href }}">{{ post.name }}</a>
+                    <div class="comment-date">
+                      <span class="p-date">{{ post.date }}</span>
+                      <span class="p-comment">{{ post.comments }}</span>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+  {% if row.type == 'contacts' %}
+    <div class="row contacts" style="{{ row.css }}">
+      {% if row.contacts.left %}
+        <div class="contacts-left">
+          {% for contact in row.contacts.left %}
+            <span class="{{ contact.classes }}" data-hint="{{ contact.name }}"><a {{ contact.target }} class="contact-icon" href="{{ contact.link }}">{{ contact.icon_left }}{{ contact.icon_right }}</a><a {{ contact.target }} href="{{ contact.link }}"><span class="contacts-text">{{ contact.tooltip ? '' : contact.name }}</span></a></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if row.contacts.right %}
+        <div class="contacts-right">
+          {% for contact in row.contacts.right %}
+            <span class="{{ contact.classes }}" data-hint="{{ contact.name }}"><a {{ contact.target }} class="contact-icon" href="{{ contact.link }}">{{ contact.icon_left }}{{ contact.icon_right }}</a><a {{ contact.target }} href="{{ contact.link }}"><span class="contacts-text">{{ contact.tooltip ? '' : contact.name }}</span></a></span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endfor %}

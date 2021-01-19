@@ -1,0 +1,114 @@
+<div id="carousel-{{ module }}" class="carousel-{{ module_id }} box journal-carousel carousel-brand {{ disable_on_classes | join(' ') }} {{ show_title_class }} {% if bullets %} bullets-on {% endif %} {% if arrows == 'top' %} arrows-top {% endif %} {{ gutter_on_class }}" style="{{ css }}">
+  <div>
+    <div class="htabs box-heading {{ single_class }}" {% if not show_title %} style="display: none" {% endif %}>
+      {% for section in sections %}
+        {% if section.is_link %}
+          <a href="{{ section.url }}" {{ section.target }}>{{ section.section_name }}</a>
+        {% elseif section.items %}
+          <a href="#carousel-{{ module }}-{{ loop.index - 1 }}" class="atab">{{ section.section_name }}</a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% for section in sections %}
+      {% if section.items %}
+        <div id="carousel-{{ module }}-{{ loop.index - 1 }}" class="tab-content box-content">
+          <div class="swiper">
+            <div class="swiper-container" {% if journal2.settings.get('rtl') %} dir="rtl" {% endif %}>
+              <div class="swiper-wrapper">
+                {% for item in section.items %}
+                  <div class="product-grid-item isotope-element swiper-slide {{ item.section_class | join (' ') }} {{ grid_classes }}">
+                    <div class="product-wrapper" data-respond="start: 150px; end: 300px; interval: 20px;" style="{{ image_bgcolor }}">
+                      {% if item.thumb %}
+                        <div class="image">
+                          <a href="{{ item.href }}" style="{{ image_border_css }}">
+                            <img class="first-image" width="{{ image_width }}" height="{{ image_height }}" src="{{ item.thumb }}" title="{{ item.name }}" alt="{{ item.name }}"/>
+                          </a>
+                        </div>
+                      {% endif %}
+                      {% if brand_name %}
+                        <div class="product-details">
+                          <div class="name"><a href="{{ item.href }}">{{ item.name }}</a></div>
+                        </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% if arrows != 'none' %}
+              <div class="swiper-button-next"></div>
+              <div class="swiper-button-prev"></div>
+            {% endif %}
+          </div>
+          {% if bullets %}
+            <div class="swiper-pagination"></div>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <script>
+      (function () {
+        $('#carousel-{{ module }} .htabs a.atab').tabs();
+
+        var grid = $.parseJSON('{{ grid | json_encode() }}');
+
+        var breakpoints = {
+          470: {
+            slidesPerView: grid[0][1],
+            slidesPerGroup: grid[0][1]
+          },
+          760: {
+            slidesPerView: grid[1][1],
+            slidesPerGroup: grid[1][1]
+          },
+          980: {
+            slidesPerView: grid[2][1],
+            slidesPerGroup: grid[2][1]
+          },
+          1220: {
+            slidesPerView: grid[3][1],
+            slidesPerGroup: grid[3][1]
+          }
+        };
+
+        var current = null;
+
+        $('#carousel-{{ module }} .htabs a.atab').click(function () {
+          if (this === current) {
+            return;
+          }
+
+          current = this;
+
+          var opts = {
+            slidesPerView: grid[4][1],
+            slidesPerGroup: grid[4][1],
+            breakpoints: breakpoints,
+            spaceBetween: parseInt('{{ spacing }}', 10),
+            pagination: {% if bullets %} $($(this).attr('href')).find('.swiper-pagination') {% else %} false {% endif %},
+            paginationClickable: true,
+            nextButton: {% if arrows != 'none' %} $($(this).attr('href')).find('.swiper-button-next') {% else %} false {% endif %},
+            prevButton: {% if arrows != 'none' %} $($(this).attr('href')).find('.swiper-button-prev') {% else %} false {% endif %},
+            autoplay: {{ autoplay ? autoplay : 0 }},
+            autoplayStopOnHover: {% if pause_on_hover %} true {% else %} false {% endif %},
+            speed: {{ slide_speed }},
+            touchEventsTarget: {% if touch_drag %} 'container' {% else %} false {% endif %},
+            preventClicks: false,
+            preventClicksPropagation: false
+          };
+
+          $($(this).attr('href') + ' .swiper-container').swiper(opts);
+
+          {% if brand_name %}
+          if (!Journal.isFlexboxSupported) {
+            Journal.equalHeight($('#carousel-{{ module }} .product-grid-item'), '.name');
+          }
+          {% endif %}
+        });
+
+        $('#carousel-{{ module }} .htabs a.atab[href="#carousel-{{ module }}-{{ default_section }}"]').click();
+      })();
+    </script>
+  </div>
+</div>

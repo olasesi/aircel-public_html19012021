@@ -1,0 +1,65 @@
+<div id="cart" class="btn-group btn-block">
+  <button type="button" data-toggle="dropdown" class="btn btn-inverse btn-block btn-lg dropdown-toggle heading"><a><span id="cart-total" data-loading-text="{{ text_loading }}&nbsp;&nbsp;">{{ text_items }}</span> <i></i></a></button>
+  <div class="content">
+    <ul class="cart-wrapper">
+      {% if products or vouchers %}
+        <li class="mini-cart-info">
+          <table class="table table-striped">
+            {% for product in products %}
+              <tr>
+                <td class="text-center image">{% if product.thumb %}<a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail"/></a>{% endif %}</td>
+                <td class="text-left name"><a href="{{ product.href }}">{{ product.name }}</a>
+                  <div>
+                    {% for option in product.option %}
+                      <br/>
+                      -
+                      <small>{{ option.name }} {{ option.value }}</small>
+                    {% endfor %}
+                    {% if product.recurring %}
+                      <br/>
+                      -
+                      <small>{{ text_recurring }} {{ product.recurring }}></small>
+                    {% endif %}
+                  </div>
+                </td>
+                <td class="text-right quantity">x {{ product.quantity }}</td>
+                <td class="text-right total">{{ product.total }}</td>
+                <td class="text-center remove">
+                  <button type="button" onclick="cart.remove('{{ product.cart_id }}');" title="{{ button_remove }}" class=""><i class=""></i></button>
+                </td>
+              </tr>
+            {% endfor %}
+            {% for voucher in vouchers %}
+              <tr>
+                <td class="text-center"></td>
+                <td class="text-left name">{{ voucher.decription }}</td>
+                <td class="text-right quantity">x&nbsp;1</td>
+                <td class="text-right total">{{ voucher.amount }}</td>
+                <td class="text-center remove">
+                  <button type="button" onclick="voucher.remove('{{ voucher.key }}');" title="{{ button_remove }}" class=""><i class=""></i></button>
+                </td>
+              </tr>
+            {% endfor %}
+          </table>
+        </li>
+        <li>
+          <div class="mini-cart-total">
+            <table class="table table-bordered">
+              {% for total in totals %}
+                <tr>
+                  <td class="text-right right"><strong>{{ total.title }}</strong></td>
+                  <td class="text-right right">{{ total.text }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+            <p class="text-right checkout"><a class="button" href="{{ cart }}">{{ text_cart }}</a>&nbsp;<a class="button" href="{{ checkout }}">{{ text_checkout }}</a></p>
+          </div>
+        </li>
+      {% else %}
+        <li>
+          <p class="text-center empty">{{ text_empty }}</p>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+</div>

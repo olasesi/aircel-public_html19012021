@@ -1,0 +1,231 @@
+/*
+  Journal - Advanced Opencart Theme Framework
+  Version 2.9.8
+  Copyright (c) 2017 Digital Atelier
+  https://www.journal-theme.com/
+*/
+
+//Widths
+$sitewidth: 1024px;
+
+//Fonts
+$sans: Helvetica, Arial, sans-serif;
+
+//Heights
+$j-min: 40px;
+$j-50: 50px;
+$j-100: $j-min * 2 + 20px;
+
+$margin:20px;
+$side: 240px;
+
+
+//Colors
+$red: #EA2E49;
+$f4: #f4f4f4;
+$e4:#E4E4E4;
+$ee: #EEEEEE;
+$light:#A9B8C0;
+$yel:#f1c40f;
+$verydark: #222222;
+$green: #339965;
+$gray: #5F6874;
+$lightquartz:#5C8BA6;
+$dark: #333745;
+$quartz: #3F5765;
+$blue: #428bca;
+$darkblue: #45738f;
+$ccc: #CCCCCC;
+$verylight: #FAFAFA;
+
+// Nth-child mixins
+// http://lukyvj.github.io/family.scss/
+
+@mixin first($num) {
+  @if $num == 1 {
+    &:first-child {
+      @content;
+    }
+  } @else {
+    &:nth-child(-n + #{$num}) {
+      @content;
+    }
+  }
+}
+
+@mixin last($num) {
+  &:nth-last-child(-n + #{$num}) {
+    @content;
+  }
+}
+
+@mixin after-first($num) {
+  &:nth-child(n + #{$num + 1}) {
+    @content;
+  }
+}
+
+@mixin from-end($num) {
+  &:nth-last-child(#{$num}) {
+    @content;
+  }
+}
+
+@mixin between($first, $last) {
+  &:nth-child(n + #{$first}):nth-child(-n + #{$last}) {
+    @content;
+  }
+}
+
+@mixin even-between($first, $last) {
+  &:nth-child(even):nth-child(n + #{$first}):nth-child(-n + #{$last}) {
+    @content;
+  }
+}
+
+@mixin odd-between($first, $last) {
+  &:nth-child(odd):nth-child(n + #{$first}):nth-child(-n + #{$last}) {
+    @content;
+  }
+}
+
+@mixin n-between($num, $first, $last) {
+  &:nth-child(#{$num}n):nth-child(n + #{$first}):nth-child(-n + #{$last}) {
+    @content;
+  }
+}
+
+@mixin all-but($num) {
+  &:not(:nth-child(#{$num})) {
+    @content;
+  }
+}
+
+@mixin each($num) {
+  &:nth-child(#{$num}n) {
+    @content;
+  }
+}
+
+@mixin every($num) {
+  &:nth-child(#{$num}n) {
+    @content;
+  }
+}
+
+@mixin from-first-last($num) {
+  &:nth-child(#{$num}),
+  &:nth-last-child(#{$num}) {
+    @content;
+  }
+}
+
+@mixin middle($num) {
+  &:nth-child(#{round($num / 2)}) {
+    @content;
+  }
+}
+
+@mixin all-but-first-last($num) {
+  &:nth-child(n + #{$num}):nth-last-child(n + #{$num}) {
+    @content;
+  }
+}
+
+@mixin first-of($limit) {
+  &:nth-last-child(#{$limit}):first-child {
+    @content;
+  }
+}
+
+@mixin last-of($limit) {
+  &:nth-of-type(#{$limit}):nth-last-of-type(1) {
+    @content;
+  }
+}
+@mixin at-least($num) {
+  $selector: &;
+  $child: nth(nth($selector, -1), -1);
+
+  &:nth-last-child(n + #{$num}),
+  &:nth-last-child(n + #{$num}) ~ #{$child} {
+    @content;
+  }
+}
+@mixin at-most($num) {
+  $selector: &;
+  $child: nth(nth($selector, -1), -1);
+
+  &:nth-last-child(-n + #{$num}):first-child,
+  &:nth-last-child(-n + #{$num}):first-child ~ #{$child} {
+    @content;
+  }
+}
+@mixin in-between($min, $max) {
+  $selector: &;
+  $child: nth(nth($selector, -1), -1);
+
+  &:nth-last-child(n + #{$min}):nth-last-child(-n + #{$max}):first-child,
+  &:nth-last-child(n + #{$min}):nth-last-child(-n + #{$max}):first-child ~ #{$child} {
+    @content;
+  }
+}
+@mixin first-child() {
+  &:first-of-type {
+    @content
+  }
+}
+@mixin last-child() {
+  &:last-of-type {
+    @content
+  }
+}
+@mixin even() {
+  &:nth-child(even) {
+    @content;
+  }
+}
+@mixin odd() {
+  &:nth-child(odd) {
+    @content;
+  }
+}
+@mixin first-last() {
+  &:first-child,
+  &:last-child {
+    @content;
+  }
+}
+@mixin unique() {
+  &:only-child {
+    @content;
+  }
+}
+@mixin only() {
+  &:only-child {
+    @content;
+  }
+}
+@mixin not-unique() {
+  &:not(:only-child) {
+    @content;
+  }
+}
+@mixin child-index($num, $direction: 'forward', $index: 0) {
+  @for $i from 1 through $num {
+    @if ($direction == 'forward') {
+      &:nth-child(#{$i}) {
+        z-index: order-index($i, $index);
+        @content;
+      }
+    } @else if ($direction == 'backward') {
+      &:nth-last-child(#{$i}) {
+        z-index: order-index($i, $index);
+        @content;
+      }
+    }
+  }
+}
+@function order-index($i, $index) {
+  @return ($index + $i);
+}

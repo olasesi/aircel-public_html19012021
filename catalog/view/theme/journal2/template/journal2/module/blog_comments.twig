@@ -1,0 +1,17 @@
+<div id="journal-blog-comments-{{ module }}" class="journal-blog-comments-{{ module_id }} box side-blog side-posts blog-comments">
+  <div class="box-heading">{{ heading_title }}</div>
+  <div class="box-comment box-post">
+    {% for comment in comments %}
+      <div class="side-post">
+        <a class="side-post-image" href="{{ comment.href }}">{{ staticCall('Journal2Utils', 'gravatar', [comment.email, default_author_image, 75, '']) }}</a>
+        <div class="side-post-details">
+          <a class="side-post-title" href="{{ comment.href }}">{{ comment.post }}</a>
+          <div class="comment-date">
+            <span class="p-author">{{ comment.name }}</span>
+          </div>
+        </div>
+      </div>
+      <hr/>
+    {% endfor %}
+  </div>
+</div>

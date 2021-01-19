@@ -1,0 +1,20 @@
+{% if richsnippets_company_info %}
+<script type="application/ld+json">            
+{
+ "@context":"http://schema.org",
+ "@type":"Organization",
+ "url":"{{ seo_url_site }}",
+ "logo":"{{ seo_logo }}",
+ "potentialAction":[{
+   "@type":"SearchAction",
+   "target":"{{ seo_search }}",
+   "query-input":"required name=search_term_string"
+ }],
+ "contactPoint":[{
+    "@type":"ContactPoint",
+    "telephone":"{{ richsnippet_phone }}",
+    "contactType":"customer service"
+  }]
+}
+</script>
+{% endif %}

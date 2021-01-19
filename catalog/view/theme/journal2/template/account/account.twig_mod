@@ -1,0 +1,101 @@
+{{ header }}
+<div id="container" class="container j-container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ breadcrumb.href }}" itemprop="url"><span itemprop="title">{{ breadcrumb.text }}</span></a></li>
+    {% endfor %}
+  </ul>
+  {% if success %}
+    <div class="alert alert-success success"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  <div class="row">{{ column_left }}{{ column_right }}
+    {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+      {% set class = 'col-sm-9' %}
+    {% else %}
+      {% set class = 'col-sm-12' %}
+    {% endif %}
+    {#<div id="content" class="{{ class }}">{{ content_top }}#}
+    {#  <h2 class="secondary-title">{{ text_my_account }}</h2>#}
+    {#  <div class="content my-account">#}
+    {#    <ul class="list-unstyled">#}
+    {#      <li><a href="{{ edit }}">{{ text_edit }}</a></li>#}
+    {#      <li><a href="{{ password }}">{{ text_password }}</a></li>#}
+    {#      <li><a href="{{ address }}">{{ text_address }}</a></li>#}
+    {#      <li><a href="{{ wishlist }}">{{ text_wishlist }}</a></li>#}
+    {#    </ul>#}
+    {#  </div>#}
+    {#  {% if credit_cards %}#}
+    {#    <h2>{{ text_credit_card }}</h2>#}
+    {#    <ul class="list-unstyled">#}
+    {#      {% for credit_card in credit_cards %}#}
+    {#        <li><a href="{{ credit_card.href }}">{{ credit_card.name }}</a></li>#}
+    {#      {% endfor %}#}
+    {#    </ul>#}
+    {#  {% endif %}#}
+    {#  <h2 class="secondary-title">{{ text_my_orders }}</h2>#}
+    {#  <div class="content my-orders">#}
+    {#    <ul class="list-unstyled">#}
+    {#      <li><a href="{{ order }}">{{ text_order }}</a></li>#}
+    {#      <li><a href="{{ download }}">{{ text_download }}</a></li>#}
+    {#      {% if reward %}#}
+    {#        <li><a href="{{ reward }}">{{ text_reward }}</a></li>#}
+    {#      {% endif %}#}
+    {#      <li><a href="{{ return }}">{{ text_return }}</a></li>#}
+    {#      <li><a href="{{ transaction }}">{{ text_transaction }}</a></li>#}
+    {#      <li><a href="{{ recurring }}">{{ text_recurring }}</a></li>#}
+    {#    </ul>#}
+    {#  </div>#}
+
+    {#  <h2 class="secondary-title">{{ text_my_affiliate }}</h2>#}
+    {#  <ul class="list-unstyled">#}
+    {#    {% if not tracking %}#}
+    {#      <li><a href="{{ affiliate }}">{{ text_affiliate_add }}</a></li>#}
+    {#    {% else %}#}
+    {#      <li><a href="{{ affiliate }}">{{ text_affiliate_edit }}</a></li>#}
+    {#      <li><a href="{{ tracking }}">{{ text_tracking }}</a></li>#}
+    {#    {% endif %}#}
+    {#  </ul>#}
+    {#  <h2 class="secondary-title">{{ text_my_newsletter }}</h2>#}
+    {#  <ul class="list-unstyled">#}
+    {#    <li><a href="{{ newsletter }}">{{ text_newsletter }}</a></li>#}
+    {#  </ul>#}
+    {#  {{ content_bottom }}</div>#}
+        <div class='col-4'>
+            <div class='card'>
+                <div class='card-body'>
+                    <nav class='nav'>
+                        <ul class='nav flex-column'>
+                            <li class='nav-item'><a href='https://www.obejor.com.ng/account' class="nav-link"><span class="fas fa-user"></span> {{ text_my_account }}</a></li>
+                            <li class='nav-item'><a href="{{ order }}" class="nav-link"><span class="fas fa-cart-plus"></span> {{ text_order }}</a></li>
+                            <li class='nav-item'><a href="{{ wishlist }}" class="nav-link"><span class="fas fa-heart"></span> {{ text_wishlist }}</a></li>
+                            <li class='nav-item'><a href="{{ return }}" class="nav-link"><span class="fas fa-dolly"></span> {{ text_return }}</a></li>
+                            <li class='nav-item'><a href="{{ edit }}" class="nav-link">Details</a></li> 
+                            <li class='nav-item'><a href="{{ address }}" class="nav-link"><span class="fas fa-address-book"></span> {{ text_address }}</a></li>
+                            <li class='nav-item'><a href="{{ password }}" class="nav-link">{{ text_password }}</a></li>
+                            <li class='nav-item'><a href="{{ newsletter }}" class="nav-link">{{ text_newsletter }}</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            
+        </div>
+        <section class='col-8'>
+             <div class='card'>
+                <div class='card-body'></div>
+            </div>
+        </section>
+       {#<link href="catalog/view/theme/journal2/css/dashboard-new.css" rel="stylesheet" />#}
+       {#<link href="catalog/view/theme/journal2/css/dashRemake.css" rel="stylesheet" />#}
+
+  </div>
+</div>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+{{ footer }}

@@ -1,0 +1,23 @@
+<div id="journal-accordion-{{ module }}" class="journal-accordion journal-accordion-{{ module_id }} box {{ disable_on_classes | join(' ') }} {{ gutter_on_class }}" style="{{ css }}">
+  {% if title %}
+    <div class="box-heading">{{ title }}</div>
+  {% endif %}
+  <div data-accordion-group>
+    {% for section in sections %}
+      <div data-accordion>
+        <div class="journal-accordion-heading" data-control>{{ section.title }}</div>
+        <div class="journal-accordion-content" data-content style="text-align: {{ section.content_align }}">
+          <div>{{ section.content }}</div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<script>
+  $(function () {
+    $('#journal-accordion-{{ module }} [data-accordion]').accordion2({
+      "transitionSpeed": 400,
+      "singleOpen": {{ close_others ? 'true' : 'false' }}
+    });
+  });
+</script>

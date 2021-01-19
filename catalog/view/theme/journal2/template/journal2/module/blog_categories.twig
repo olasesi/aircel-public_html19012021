@@ -1,0 +1,12 @@
+<div id="journal-blog-categories-{{ module }}" class="journal-blog-categories-{{ module_id }} box side-blog blog-category">
+  <div class="box-heading">{{ heading_title }}</div>
+  <div class="box-category box-post">
+    <ul>
+      {% for category in categories %}
+        <li>
+          <a href="{{ category.href }}">{{ category.name }}</a>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,140 @@
+{{ header }}
+<div id="account-account" class="pts-container">
+  <ul class="pts-breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+    {% if error_warning %}
+    <div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+  {% if success %}
+  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_create_plan_confirmation }}</h1>
+		 
+<!-----------------plan confirmation----------------------------->
+		 <form action="{{ action }}" method="post" enctype="multipart/form-data" class="pts-col-sm-12 pts-form-horizontal selected-plan">	
+			<div class="pts-col-sm-12 p-0">
+				<div class="pts-col-sm-12 mid">
+			{% if multiplePlan %}
+			{% if currentplan %}
+				<div class="pts-col-sm-6">
+					<div class="pts-col-sm-12">
+						<p><strong>{{ heading_current_plan }}: </strong>{{ currentplan.plan_name }}  <a class="pts-popuplink" data-toggle="modal" data-target="#myModala">{{ button_view_description }}</a></p>
+						<p><strong>{{ column_start_date }}: </strong>{{ currentplan.start_date }}</p>
+						<p><strong>{{ column_end_date }}: </strong>{{ currentplan.end_date }}</p>
+						<p><strong>{{ column_validity }}: </strong>{{ currentplan.validity }}</p>
+						<p><strong>{{ column_subscription_price }}: </strong>{{ currentplan.subscription_price }}</p>
+					</div>
+				</div>
+				{% endif %}
+				{% endif %}
+					{% if newplan %}
+				<div class="pts-col-sm-6 ">
+					<div class="pts-col-sm-12">
+						<p><strong>{{ column_new_plan }}: </strong>{{ newplan.plan_name }} <a class="pts-popuplink" data-toggle="modal" data-target="#myModalb">{{ button_view_description }}</a></p>
+						<!----p><strong>{{ newplan.plan_name }}</strong> {{ newplan.plan_short_description }}</p---->
+						<p><strong>{{ column_start_date }}: </strong>{{ newplan.start_date }}</p>
+						<p><strong>{{ column_end_date }}: </strong>{{ newplan.end_date }}</p>
+						<p><strong>{{ column_validity }}: </strong>{{ newplan.validity }}</p>
+						<p><strong>{{ column_subscription_price }}: </strong>{{ subscription_price }}</p>
+					</div>
+				</div>
+				</div>
+					<div class="pts-row">
+						{% if subscriptions %}
+						<div class="pts-col-sm-4" style="margin-left: 10px;padding: 5px;">
+						<select name="s_date" class="dropdwonnn form-control">
+						<!-- <option value="0" >{{ text_start_now }}</option> -->
+						<option value="1" >{{ text_start_at_end }}</option>
+						</select>
+						</div>
+
+						 {% else %}	
+						<div class="pts-col-sm-4" style="margin-left: 10px;padding: 5px;">
+						<select name="s_date" class="dropdwonnn form-control">
+						<option value="0" >{{ text_start_now }}</option>
+								{% if currentplan %}
+						<option value="1" >{{ text_start_at_end }}</option>
+						{% endif %}
+						</select>
+						</div>
+
+						{% endif %}
+						</div>
+						<input type="hidden" name="plan_id" value="{{ subscription.plan_id }}"/>
+					
+					<div class="pts-col-sm-12 text-right mid form-group">
+					{% for key,Plan in totals.plan %}
+						<div class="pts-col-sm-10 p-0"><span><strong>{{ Plan.title }}</strong></span></div><div class="pts-col-sm-2">{{ Plan.value }}</div>
+							{% endfor %} 
+							</div>
+					
+					<input type="hidden" name="plan_id" value="{{ plan_id }}">
+					
+					<div class="pts-col-sm-12 pts-text-right pts-form-group">
+						<button type="submit"  class="pts-btn pts-btn-primary">{{ button_save_generate_invoice }}</button>
+					</div>
+				{% endif %}
+			</div>
+			{% if currentplan %}
+			<!-- Modal plan a -->
+			  <div class="modal fade" id="myModala" role="dialog">
+				<div class="modal-dialog popup-model">
+				  <!-- Modal content-->
+				  <div class="modal-content hieght-fixed">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title">{{ column_description }}</h4>
+					</div>
+					<div class="modal-body">
+					  <p>{{ currentplan.plan_description }} </p>
+					</div>
+				  </div>
+				  
+				</div>
+			  </div>
+			  {% endif %}
+			   <div class="modal fade" id="myModalb" role="dialog">
+				<div class="modal-dialog popup-model">
+				  <!-- Modal content-->
+				  <div class="modal-content hieght-fixed">
+					<div class="modal-header">
+					  <button type="button" class="close" data-dismiss="modal">&times;</button>
+					  <h4 class="modal-title">{{ column_description }}</h4>
+					</div>
+					<div class="modal-body">
+					  <p>{{ newplan.plan_description }} </p>
+					</div>
+				  </div>
+				  
+				</div>
+			  </div>
+			</form>
+</div>
+      {{ content_bottom }}
+    {{ column_right }}
+	
+</div>
+</div>
+<script>
+$( document ).ready(function() {
+$(".dropdwonnn").change(function () {
+        var end = this.value;
+		window.location.href = window.location.href + "&s_date="+end;
+    });
+    });
+</script>
+{{ footer }}

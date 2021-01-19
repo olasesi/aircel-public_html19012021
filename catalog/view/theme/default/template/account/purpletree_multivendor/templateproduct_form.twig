@@ -1,0 +1,199 @@
+{{ header }}
+<div class="pts-container">
+  <ul class="pts-breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	{% endfor %}
+  </ul>
+  {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+	{% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-product" class="pts-form-horizontal">
+          <div class="pts-tab-content" style="box-shadow:0px 3px 5px 0px rgba(0,0,0,0.5);padding:10px;">
+            <h3 style="margin:5px;margin-bottom:20px;padding-left:10px">{{ heading_title }}</h3>
+			<div class="row">
+				<div class="col-sm-3 col-xs-12 col-12" style="padding-left: 29px !important">
+					<img src= {{ template_image }} class="img-fluid img-responsive" style="padding:25px;border:1px solid #eee">
+				</div>
+				<div class="col-sm-9 col-xs-12 col-12">
+					 <h2 style="margin:0;margin-bottom:10px;padding-left:10px;line-height:0"><small>{{ template_name }}</small></h2>
+					<div class=" col-sm-6 col-xs-12 col-12">
+					  <div class="pts-form-group">
+						<label class="pts-col-sm-12 col-form-label" for="input-price">{{ entry_price }}</label>
+						<div class="pts-col-sm-12">
+						  <input type="text" name="price" value="{{ price }}" placeholder="{{ entry_price }}" id="input-price" class="pts-form-control" />
+						</div>
+					  </div>
+					</div>
+					<div class=" col-sm-6 col-xs-12 col-12">
+					  <div class="pts-form-group">
+						<label class="pts-col-sm-12 col-form-label" for="input-quantity">{{ entry_quantity }}</label>
+						<div class="pts-col-sm-12">
+						  <input type="text" name="quantity" value="{{ quantity }}" placeholder="{{ entry_quantity }}" id="input-quantity" class="pts-form-control" />
+						</div>
+					  </div>
+					</div>
+				<div class=" col-sm-6 col-xs-12 col-12">  
+				  <div class="pts-form-group ">
+					<label class="pts-col-sm-12 col-form-label" for="input-subtract">{{ entry_subtract }}</label>
+					<div class="pts-col-sm-12">
+					  <select name="subtract" id="input-subtract" class="pts-form-control">	
+						{% if subtract %}
+						<option value="1" selected="selected">{{ text_yes }}</option>
+						<option value="0">{{ text_no }}</option>
+						{% else %}
+						<option value="1">{{ text_yes }}</option>
+						<option value="0" selected="selected">{{ text_no }}</option>
+						{% endif %}
+					  </select>
+					</div>
+				  </div>
+				</div>
+				<div class="col-sm-6 col-xs-12 col-12">
+				  <div class="pts-form-group">
+					<label class="pts-col-sm-12 col-form-label" for="input-stock-status"><span data-toggle="tooltip" title="{{ entry_stock_status }}">{{ entry_stock_status }}</span></label>
+					<div class="pts-col-sm-12">
+					  <select name="stock_status_id" id="input-stock-status" class="pts-form-control">
+						{% for stock_status in stock_statuses %}
+						{% if stock_status.stock_status_id == stock_status_id %}
+						<option value="{{ stock_status.stock_status_id }}" selected="selected">{{ stock_status.name }}</option>
+						{% else %}
+						<option value="{{ stock_status.stock_status_id }}">{{ stock_status.name }}</option>
+						{% endif %}
+						{% endfor %}
+					  </select>
+					</div>
+				  </div>
+				 </div>
+				 <div class="col-sm-6 col-xs-12 col-12">  
+				  <div class="pts-form-group">
+					<label class="pts-col-sm-12 col-form-label" for="input-status">{{ entry_status }}</label>
+					<div class="pts-col-sm-12">
+					  <select name="status" id="input-status" class="pts-form-control">	
+						{% if status %}
+						<option value="1" selected="selected">{{ text_enabled }}</option>
+						<option value="0">{{ text_disabled }}</option>
+						{% else %}
+						<option value="1">{{ text_enabled }}</option>
+						<option value="0" selected="selected">{{ text_disabled }}</option>
+						{% endif %}
+					  </select>
+					</div>
+				  </div>
+				</div>
+				<div class="col-sm-6 col-xs-12 col-12 pts-text-right" style="line-height:7">
+					<input type="submit" value="{{ button_save }}" class="pts-btn pts-btn-primary" />
+				</div>
+				</div>
+			
+			
+			<div class="clearfix"></div>
+			<div class=" col-sm-12 col-xs-12 col-12">
+			<div class="compare-price">
+				<h3 class="h3">{{ text_other }}</h3>
+				<div class="pts-border-grey">
+					<table class="table strip">
+						<tbody>
+						{% for template_price in template_prices %}
+							<tr class="bg-strip">
+								<td><a><img src= {{ template_price.store_logo }} class="img-fluid img-responsive seller-logo-compare"></a></td>
+								<td>{{ template_price.store_name }}</td>
+								<td>
+									<div class="compare-pts-star">
+										{% for i in 1..5 %}
+										  {% if template_price.rating < i %}
+										 <i class="fa fa-star-o"></i>
+										  {% else %}							 
+										  <i class="fa fa-star"></i>
+										  {% endif %}
+										{% endfor %}
+									</div>
+								</td>
+								<td><h4>{{ template_price.price }}</h4></td>
+							</tr>
+						{% endfor %}							
+						</tbody>
+					</table>
+				</div>
+			</div>
+			
+			 <!-- description -->
+			<div id="accordion" class="panel-group description-accord col-sm-12 col-xs-12 col-12">
+				<div class="panel panel-default toggle-btn">
+					<div class="panel-heading">
+							<a class="panel-title" style="margin:0;padding:5px">{{ entry_description }}</a>
+					</div>
+					<div id="collapseOne" class="panel-collapse">
+						<div class="panel-body">
+							 {{ templatetemplate_description_name }}
+						</div>
+					</div>
+				</div>
+			</div>
+		 <!-- description -->
+		 </div>
+		 </div>
+		</div>
+			   
+		</form>
+				
+		
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+
+<style>
+	.seller-logo-compare{
+		max-width:60px;
+	}
+	.compare-price{padding:14px}
+	.pts-border-grey{
+		border:1px solid #eee;
+		margin-bottom:15px;
+	}
+	.pts-border-grey table{
+		margin-bottom:0px !important
+	}
+	.pts-border-grey table thead tr{
+		background:#f1f1f1;
+		padding:5px;
+		text-transform:uppercase
+	}
+	.bg-strip:nth-last-child(2n+1){
+		background:#e5f3ff;
+	}
+	.pts-border-grey table thead tr th{padding:6px !important;color:#337ab7 !important}
+	.pts-border-grey table tbody tr td{vertical-align:middle;padding:5px !important}
+	.description-accord .panel-heading{color:#fff;background:#337ab7;border-radius:0;}
+	.description-accord .panel-default{border-radius:0;}
+	.description-accord.panel-group{margin:0}
+	.description-accord.panel-group .panel-title a:hover,
+	.description-accord.panel-group .panel-title a:focus{color:#fff}
+	.compare-price .h3{
+		background: #337ab7;
+		color: #fff;
+		padding: 13px 17px;
+		margin: 0;
+		font-size:16px;
+	}
+</style>
+
+{% if ver=='3.1.0.0_b' %}
+    <script type="text/javascript"><!--
+      $('textarea[data-toggle=\'summernote\']').ckeditor();
+    //--></script>
+	
+{% else %}
+{% endif %}
+{{ footer }}

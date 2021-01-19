@@ -1,0 +1,20 @@
+<div id="journal-blog-side-posts-{{ module }}" class="journal-blog-side-posts-{{ module_id }} box side-blog side-posts">
+  <div class="box-heading">{{ heading_title }}</div>
+  <div class="box-post">
+    {% for post in posts %}
+      <div class="side-post">
+        {% if post.image %}
+          <a class="side-post-image" href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}"/></a>
+        {% endif %}
+        <div class="side-post-details">
+          <a class="side-post-title" href="{{ post.href }}">{{ post.name }}</a>
+          <div class="comment-date">
+            <span class="p-date">{{ post.date }}</span>
+            <span class="p-comment">{{ post.comments }}</span>
+          </div>
+        </div>
+      </div>
+      <hr/>
+    {% endfor %}
+  </div>
+</div>

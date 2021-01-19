@@ -1,0 +1,122 @@
+{{ header }}
+<div class="pts-blog-main">
+<div class="pts-container">
+  <ul class="breadcrumb pts-breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if success %}
+	<div class="alert pts-alert-success"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+  <div class="pts-row d-flex">
+    <div id="pts-content" class="pts-col-sm-9 ptsblogcontent">{{ content_top }}
+      <h1 class="pts-static-heading">{{ heading_title }}</h1>
+	  <img src="{{ image }}" class="img img-responsive" />
+      {{ description }}
+	  {{ post_date }}
+	  {% if post_tags %}
+		  {% for tag in post_tags %}
+			  {% if tag %}
+				<span class="pts-blog-tag">{{ tag }}</span>
+			  {% endif %} 
+		  {% endfor %}
+	{% endif %}
+	  <div>
+		<span class="label-error"><h3>{{ text_comment_heading }}: {{ comment_count }}</h3></span>
+		<hr />
+	  </div>
+	  {% if post_comments %}
+		{% for post_comment in post_comments %}
+		<div class="pts-well pts-well-sm">
+			<div><strong>{{ post_comment.name }}</strong></div>			
+			<div>{{ post_comment.date }}</div>
+			<div>{{ post_comment.text }}</div>
+		</div>
+		{% endfor %}
+	    {% else %}
+		{{ text_comment_empty }}
+	{% endif %}
+	  <div class="pts-col-sm-12">
+		<span class="label-error"><h3>{{ text_comment_reply }}</h3></span>
+	  </div>
+	  <div class="pts-col-sm-12">
+		<form action="{{ action }}" method="post" enctype="multipart/form-data" class="pts-form-horizontal">
+			<fieldset>
+			  <div class="pts-form-group required">
+				<label class="pts-col-sm-2 pts-control-label" for="input-name">{{ entry_name }}</label>
+				<div class="pts-col-sm-10">
+				  <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="pts-form-control" />
+				  {% if error_name %}
+				  <div class="text-danger">{{ error_name }}</div>
+				  {% endif %}
+				</div>
+			  </div>
+			  <div class="pts-form-group required">
+				<label class="pts-col-sm-2 pts-control-label" for="input-email">{{ entry_email }}</label>
+				<div class="pts-col-sm-10">
+				  <input type="text" name="email_id" value="{{ email_id }}" placeholder="{{ entry_email }}" id="input-email" class="pts-form-control" />
+				  {% if error_email_id %}
+				  <div class="text-danger">{{ error_email_id }}</div>
+				  {% endif %}
+				</div>
+			  </div>
+			  <div class="pts-form-group required">
+				<label class="pts-col-sm-2 pts-control-label" for="input-text">{{ entry_text }}</label>
+				<div class="pts-col-sm-10">
+				  <textarea name="text" placeholder="{{ entry_text }}" id="input-text" class="pts-form-control">{{ text }}</textarea>
+				  {% if error_text %}
+				  <div class="text-danger">{{ error_text }}</div>
+				  {% endif %}
+				</div>
+			  </div>
+			</fieldset>
+			<div class="pts-buttons clearfix">
+			  <div class="pts-pull-right">
+				<input type="submit" value="{{ button_comment }}" class="pts-btn pts-btn-primary" />
+			  </div>
+			</div>
+		</form>
+	  </div>
+	  {{ content_bottom }}</div>
+	  <div class="pts-col-sm-3" id="pts-content">
+	  <div class="">
+	   {% if pts_blogs %}
+		<h1 class="pts-blog-right-heading">{{ text_popupar_posts }}</h1>
+		<div class="pts-blog-popular-post">
+			<div class="pts-blog-categorylist">
+			{% for popular_blog in pts_blogs %}
+				
+					<a href="{{ popular_blog.href }}">
+						<div class="pts-col-md-12 pts-col-sm-12 pts-col-xs-12 pts-col-lg-12" style="border:1px solid #eee">
+							<div class="pts-col-md-12 pts-col-sm-12 pts-col-xs-12 pts-col-lg-12">
+								<b>{{ popular_blog.date }}</b>
+								<h5>{{ popular_blog.title }}</h5>
+							</div>
+							<div class="pts-col-md-12 pts-col-sm-12 pts-col-xs-12 pts-col-lg-12">
+								<div class="ptsblogcontent" style="text-align: center;"><img src="{{ popular_blog.thumb }}"></div>
+							</div>
+							
+						</div>
+					</a>
+				
+			{% endfor %}
+			</div>
+		</div>
+			{% endif %}
+	
+	  </div>
+	  </div></div>
+</div>
+</div>
+<script>
+jQuery(".pts-blog-category-plus").click(function(){
+	$(this).next().css("display","block");
+	$(this).css("display","none");
+});
+jQuery(".pts-blog-category-minus").click(function(){
+	$(this).prev().css("display","block");
+	$(this).css("display","none");
+});
+</script>
+{{ footer }}

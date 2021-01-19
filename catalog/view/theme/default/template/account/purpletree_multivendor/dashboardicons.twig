@@ -1,0 +1,89 @@
+{{ header }}
+<div class="pts-container">
+	<ul class="pts-breadcrumb">
+		{% for breadcrumb in breadcrumbs %}
+		<li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+		{% endfor %}
+	</ul>
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+	 <div class="pts-row d-flex">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+		
+    <div id="pts-content" class="{{ class }}"> {{ content_top }}
+      <h1>{{ heading_title }}</h1>
+			 
+		<div class="">
+			<div class="pts-col-md-12 pts-col-xs-12 ">
+				<div class="pts-col-md-12 pts-col-xs-12 account-bg">
+					<div class="pts-col-md-4 pts-col-xs-12">
+						<h4 class="text-left"> {{ text_Seller_Account }}</h4>
+						<hr style="    width: 50%;margin-left: 0;margin-top: 13px;border: 1px solid #1f93bf;">
+						
+						<a href="{{ sellerusers }}"><img src="image/catalog/dashboardicon/usericon.png"  class="sellerAccountImg"/>{{ text_Users }} {# 13-12-2019 added code #}
+                        </a><br>
+
+						<a href="{{ sellerorder }}"><img src="image/catalog/dashboardicon/shipping-icon-0.png"  class="sellerAccountImg"/>{{ text_Orders }}
+						{% if not totalorders==0 %}
+						<span class="pts-counting-1">{{ totalorders }}</span>
+						{% endif %}
+						</a><br>
+						<a href="{{ sellerproduct }}"><img src="image/catalog/dashboardicon/myfinacle1.png" class="sellerAccountImg"/>{{ text_Manage_products }}</a><br>
+						{% if module_purpletree_multivendor_seller_product_template == 1 %}
+						<a href="{{ seller_template_product }}"><img src="image/catalog/dashboardicon/producttem.png" class="sellerAccountImg"/>{{ text_seller_template_product }}</a><br>
+						{% endif %}
+						<a href="{{ sellerenquiries }}"><img src="image/catalog/dashboardicon/Adminmessages.png" class="sellerAccountImg"/>{{ text_sellerenquiries }}</a><br>
+						{# 20-May-2019 Commented out links on seller dashboard #}
+						{#<a href="{{ sellerenquiry }}"><img src="image/catalog/dashboardicon/enquiry.png" class="sellerAccountImg"/>{{ text_Customer_Enquiries }}#}
+						{#{% if not totalenqures==0 %}#}
+						{#<span class="pts-counting-1">{{ totalenqures }}</span>#}
+						{#{% endif %}#}
+						{#</a><br>#}
+						{#<a href="{{ bulkproductupload }}"><img src="image/catalog/dashboardicon/icon-prepaid.png" class="sellerAccountImg"/>{{ text_Bulk_product_upload}}</a><br>#}
+                        <a href="{{ sellerreview }}"><img src="image/catalog/dashboardicon/review-icon-2.png" class="sellerAccountImg"/>{{ text_reviews }}</a><br>						
+						<a href="{{ downloadsitems }}"><img src="image/catalog/dashboardicon/manage-downloads.png"  class="sellerAccountImg"/>{{ text_Manage_Downloads }}</a><br>			
+					</div>
+					<div class="pts-col-md-4 pts-col-xs-12">
+						<h4 class="text-left "> {{ text_Seller_Store}} </h4>
+						<hr style="    width: 50%;margin-left: 0;margin-top: 13px;border: 1px solid #1f93bf;">
+						{#<a href="{{ sellerview }}"><img src="image/catalog/dashboardicon/view1.png"  class="sellerAccountImg"/>{{ text_View_Store }}</a><br>#}
+						<a href="{{ sellerstore }}"><img src="image/catalog/dashboardicon/shop.png" class="sellerAccountImg"/>{{ text_Store_information }}</a><br>					
+						
+						{% if subscriptionplan %}
+							<a href="{{ subscriptionplan }}"><img src="image/catalog/dashboardicon/subscription.png"  class="sellerAccountImg"/>{{ text_Subscription_plan }}</a><br>
+							
+							 {% if subscriptions %}
+							<a href="{{ subscriptions }}"><img src="image/catalog/dashboardicon/invoice.png"  class="sellerAccountImg"/>{{ text_Subscription_Invoice }}</a><br>
+						  {% endif %}
+					{% endif %}
+					
+					{# 20-May-2019 Commented out links on seller dashboard #}
+					 {#<a href="{{ sellerblogpost }}"><img src="image/catalog/dashboardicon/blog.png"  class="sellerAccountImg"/>{{  text_blog_post }}</a><br>#}
+                     {#<a href="{{ sellerblogcomment }}"><img src="image/catalog/dashboardicon/blog-comment.png"  class="sellerAccountImg"/>{{ text_blog_comment }}</a><br>#}
+					</div>
+					<div class="pts-col-md-4 pts-col-xs-12">
+						<h4 class="text-left"> {{ text_Seller_Payments }}</h4>
+						<hr style="    width: 50%;margin-left: 0;margin-top: 13px;border: 1px solid #1f93bf;">
+						<a href="{{ sellerpayment }}"><img src="image/catalog/dashboardicon/payment.png"  class="sellerAccountImg"/>{{ text_Payments }}</a><br>
+						<a href="{{ sellercommission }}"><img src="image/catalog/dashboardicon/commission.png"  class="sellerAccountImg"/>{{ text_Commisions }}</a><br>
+						<a href="{{ commissioninvoice }}"><img src="image/catalog/dashboardicon/Stocks-3_7-512.png"  class="sellerAccountImg"/>{{ text_commissioninvoice }}</a><br>
+						<a href="{{ shipping }}"><img src="image/catalog/dashboardicon/shipping.png"  class="sellerAccountImg"/>{{ text_shiiping_rate }}</a><br>
+						<a href="https://www.obejor.com/seller_mobile/comm_rate.pdf"target="_blank"><img src="image/catalog/dashboardicon/commission.png" class="sellerAccountImg"/>{{ text_commissionrates }}</a>
+					</div>
+				</div>
+			</div>
+		  </div>
+	
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

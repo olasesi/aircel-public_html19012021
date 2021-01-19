@@ -1,0 +1,120 @@
+<div id="journal-blog-posts-{{ module }}" class="journal-blog-posts-{{ module_id }} box post-module {% if not heading_title %} no-heading {% endif %} {{ disable_on_classes | join(' ') }} {% if carousel %} journal-carousel {% if bullets %} bullets-on {% endif %} {% if arrows == 'top' %} arrows-top {% endif %} {% endif %} {{ gutter_on_class }}" style="{{ css }}">
+  <div>
+    {% if heading_title %}
+      <div class="box-heading">{{ heading_title }}</div>
+    {% endif %}
+    <div class="box-post box-content posts {% if display == 'list' %} blog-list-view {% endif %}">
+      {% if carousel %}
+        <div class="swiper">
+          <div class="swiper-container" {% if journal2.settings.get('rtl') %} dir="rtl" {% endif %}>
+            <div class="swiper-wrapper">
+              {% for post in posts %}
+                <div class="post-item {{ grid_classes }} swiper-slide">
+                  <div class="post-wrapper">
+                    {% if post.image %}
+                      <a class="post-image" href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}"/></a>
+                    {% endif %}
+                    <div class="post-item-details post-content-align{{ content_align }}">
+                      <h2><a href="{{ post.href }}">{{ post.name }}</a></h2>
+                      <div class="comment-date">
+                        <span class="p-author">{{ post.author }}</span>
+                        <span class="p-date">{{ post.date }}</span>
+                        <span class="p-comment">{{ post.comments }}</span>
+                      </div>
+                      {% if post.description %}
+                        <div class="post-text"><span>{{ post.description }}</span></div>
+                      {% endif %}
+                      <div class="post-button">
+                        <a class="post-view-more button" href="{{ post.href }}"><i class="post-button-left-icon"></i>{{ journal2.settings.get('blog_button_read_more', 'Read More') }}<i class="post-button-right-icon"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% if arrows != 'none' %}
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          {% endif %}
+        </div>
+        {% if bullets %}
+          <div class="swiper-pagination"></div>
+        {% endif %}
+      {% else %}
+        {% for post in posts %}
+          <div class="post-item {{ grid_classes }}">
+            <div class="post-wrapper">
+              {% if post.image %}
+                <a class="post-image" href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}"/></a>
+              {% endif %}
+              <div class="post-item-details" style="text-align:{{ content_align }}">
+                <h2><a href="{{ post.href }}">{{ post.name }}</a></h2>
+                <div class="comment-date">
+                  <span class="p-author">{{ post.author }}</span>
+                  <span class="p-date">{{ post.date }}</span>
+                  <span class="p-comment">{{ post.comments }}</span>
+                </div>
+                {% if post.description %}
+                  <div class="post-text"><span>{{ post.description }}</span></div>
+                {% endif %}
+                <div class="post-button">
+                  <a class="post-view-more button" href="{{ post.href }}"><i class="post-button-left-icon"></i>{{ journal2.settings.get('blog_button_read_more', 'Read More') }}<i class="post-button-right-icon"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+<script>
+  {% if carousel %}
+  (function () {
+    var grid = $.parseJSON('{{ grid | json_encode() }}');
+
+    var breakpoints = {
+      470: {
+        slidesPerView: grid[0][1],
+        slidesPerGroup: grid[0][1]
+      },
+      760: {
+        slidesPerView: grid[1][1],
+        slidesPerGroup: grid[1][1]
+      },
+      980: {
+        slidesPerView: grid[2][1],
+        slidesPerGroup: grid[2][1]
+      },
+      1220: {
+        slidesPerView: grid[3][1],
+        slidesPerGroup: grid[3][1]
+      }
+    };
+
+    var opts = {
+      slidesPerView: grid[4][1],
+      slidesPerGroup: grid[4][1],
+      breakpoints: breakpoints,
+      spaceBetween: 20,
+      pagination: {% if bullets %} $('#journal-blog-posts-{{ module }} .swiper-pagination') {% else %} false {% endif %},
+      paginationClickable: true,
+      nextButton: {% if arrows != 'none' %} $('#journal-blog-posts-{{ module }} .swiper-button-next') {% else %} false {% endif %},
+      prevButton: {% if arrows != 'none' %} $('#journal-blog-posts-{{ module }} .swiper-button-prev') {% else %} false {% endif %},
+      autoplay: {{ autoplay ? autoplay : 0 }},
+      speed: {{ slide_speed }},
+      touchEventsTarget: {% if touch_drag %} 'container' {% else %} false {% endif %}
+    };
+
+    $('#journal-blog-posts-{{ module }} .swiper-container').swiper(opts);
+  })();
+  {% endif %}
+  if (!Journal.isFlexboxSupported) {
+    Journal.equalHeight($('#journal-blog-posts-{{ module }} .post-wrapper'), '.post-item-details h2 a');
+    {% if show_description %}
+    Journal.equalHeight($('#journal-blog-posts-{{ module }} .post-wrapper'), '.post-text span');
+    {% endif %}
+  }
+</script>
+

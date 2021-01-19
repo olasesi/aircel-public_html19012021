@@ -1,0 +1,43 @@
+{{ header }}
+<div id="container" class="container j-container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ breadcrumb.href }}" itemprop="url"><span itemprop="title">{{ breadcrumb.text }}</span></a></li>
+    {% endfor %}
+  </ul>
+  <div class="row">{{ column_left }}{{ column_right }}
+    {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+      {% set class = 'col-sm-9' %}
+    {% else %}
+      {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">
+      <h1 class="heading-title"></h1>    <?php /*{{ heading_title }}*/ ?>
+      {{ content_top }}
+      {% if categories %}
+        <p><strong>{{ text_index }}</strong> {% for category in categories %}
+            &nbsp;&nbsp;&nbsp;<a href="index.php?route=product/manufacturer#{{ category.name }}">{{ category.name }}</a> {% endfor %} </p>
+        {% for category in categories %}
+          <div class="manufacturer-list">
+            <h2 id="{{ category.name }}" class="manufacturer-heading">{{ category.name }}</h2>
+            {% if category.manufacturer %}
+              {% for manufacturers in category.manufacturer|batch(4) %}
+                <div class="row manufacturer-content"> {% for manufacturer in manufacturers %}
+                    <div class="col-sm-3"><a href="{{ manufacturer.href }}">{{ manufacturer.name }}</a></div>
+                  {% endfor %} </div>
+              {% endfor %}
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% else %}
+        <p>{{ text_empty }}</p>
+        <div class="buttons clearfix">
+          <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+        </div>
+      {% endif %}
+      {{ content_bottom }}</div>
+  </div>
+</div>
+{{ footer }}

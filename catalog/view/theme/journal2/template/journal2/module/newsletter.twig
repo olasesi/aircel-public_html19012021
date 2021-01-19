@@ -1,0 +1,28 @@
+<div id="journal-newsletter-{{ module }}" class="journal-newsletter-{{ module_id }} box journal-newsletter text-{{ text_class }} {{ disable_on_classes | join(' ') }}" style="{{ css }}">
+  {% if heading_title %}
+    <div class="box-heading">{{ heading_title }}</div>
+  {% endif %}
+  <div class="box-content" style="{{ module_css }}">
+    {% if module_text %}
+      <!--<span class="newsletter-text" style="{{ font_css }}">{{ module_text }}</span> -->
+            <span class="newsletter-text">{{ module_text }}</span>
+    {% endif %}
+    <span class="newsletter-input-wrap" style="{{ input_style }}">
+      <!--<input type="text" class="newsletter-email" placeholder="{{ input_placeholder }}" style="{{ input_field_style }}"/> -->
+      
+      <input type="text" class="newsletter-email" placeholder="{{ input_placeholder }}"/>
+      <a class="newsletter-button button" onclick="Journal.newsletter($('#journal-newsletter-{{ module }}'));" style="{{ button_style }}">{{ button_icon }}{{ button_text }}</a>
+    </span>
+    {% if text_agree %}
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" name="agree" value="1"/>
+          {{ text_agree }}
+        </label>
+      </div>
+    {% endif %}
+  </div>
+  <script>
+    $("<style>{{ global_style | join (' ') }}</style>").appendTo($('head'));
+  </script>
+</div>

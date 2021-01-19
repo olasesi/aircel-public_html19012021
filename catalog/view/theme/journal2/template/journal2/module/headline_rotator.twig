@@ -1,0 +1,39 @@
+<div id="journal-headline-rotator-{{ module }}" class="journal-headline-rotator-{{ module_id }} journal-rotator headline-mode box {{ disable_on_classes | join(' ') }} {% if bullets %} bullets-on bullets-{{ bullets_position }} {% else %} bullets-off {% endif %} align-{{ text_align }}" style="display: none; {{ rotator_css }}; {{ css }}">
+  {% for section in sections %}
+    <div class="quote {% if not section.text %} no-text {% endif %} {% if section.cta %} has-cta cta-{{ section.cta_position }} {% endif %}" style="{{ quote_css }}">
+      <div style="min-height: {{ headline_rotator_height }}px">
+        {% if section.cta and section.cta_position == 'left' %}
+          {% if section.cta_link %}
+            <a href="{{ section.cta_link }}" class="cta button button-left" {{ section.cta_target }} style="{{ section.cta_style }}">{{ section.cta_icon }}{{ section.cta_text }}</a>
+          {% else %}
+            <a class="cta button" style="{{ section.cta_style }}">{{ section.cta_icon }}{{ section.cta_text }}</a>
+          {% endif %}
+        {% endif %}
+        <div class="rotator-text {% if section.line_through %} line-through {% endif %}">{{ section.icon }}<span style="{{ section.style }}">{{ section.text }}</span></div>
+        {% if section.cta and section.cta_position != 'left' %}
+          {% if section.cta_link %}
+            <a href="{{ section.cta_link }}" class="cta button button-{{ section.cta_position }} button-icon-{{ section.cta_icon_position }}" {{ section.cta_target }} style="{{ section.cta_style }}">{{ section.cta_icon }}{{ section.cta_text }}</a>
+          {% else %}
+            <a class="cta button button-icon-{{ section.cta_icon_position }}" style="{{ section.cta_style }}">{{ section.cta_icon }}{{ section.cta_text }}</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+<script>
+  (function () {
+    var single_quote = parseInt('{{ sections | length }}', 10) <= 1;
+
+    $('#journal-headline-rotator-{{ module }}').show().quovolver({
+      children: '.quote',
+      equalHeight: false,
+      navPosition: single_quote ? '' : 'below',
+      navNum: {% if bullets %} true {% else %} false {% endif %},
+      pauseOnHover: !!parseInt('{{ pause_on_hover }}', 10),
+      autoPlay: !single_quote,
+      autoPlaySpeed: {{ transition_delay }},
+      transitionSpeed: 300
+    });
+  })();
+</script>

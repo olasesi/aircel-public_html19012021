@@ -1,0 +1,218 @@
+{% macro renderMultiLevelMenu(menu) %}
+  {% for item in menu.subcategories %}
+    {% set submenu = _self.renderMultiLevelMenu(item) %}
+    <li>
+      <a {% if item.href %} href="{{ item.href }}" {% if item.target %} {{ item.target }} {% endif %} {% endif %} class="{{ item.class }}">
+        {{ item.name }}
+        {% if item.subcategories | length > 0 %}
+          <i class="menu-plus"></i>
+        {% endif %}
+      </a>
+      {% if item.subcategories | length > 0 %}
+        <ul> {{ submenu }}</ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+{% endmacro %}
+
+<div id="flyout-{{ module }}" class="flyout-{{ module_id }} box flyout-menu">
+  <div class="box-heading">{{ heading_title }}</div>
+  <div class="flyout">
+    <ul>
+      {% for menu_item in menu_items %}
+        {% set menu = menu_item.type == 'drop-down' ? (menu_item.subcategories | length > 0) : true %}
+
+        <li class="fly-{{ menu_item.type }}">
+          {% if menu_item.href %}
+            <a href="{{ menu_item.href }}" {{ menu_item.target }}>{{ menu_item.icon }} {% if not menu_item.hide_text %}<span class="main-menu-text">{{ menu_item.name }}</span>{% endif %}{% if menu %}<i class="menu-plus"></i>{% endif %}</a><span class="clear"></span>
+          {% else %}
+            <a>{{ menu_item.icon }}{% if not menu_item.hide_text %}<span class="main-menu-text">{{ menu_item.name }}</span>{% endif %} {% if menu %}<i class="menu-plus"></i>{% endif %}</a><span class="clear"></span>
+          {% endif %}
+
+          {% if menu_item.type == 'mega-menu-mixed' and menu_item.mixed_columns | length > 0 %}
+            <div class="fly-mega-menu mega-menu" style="{{ menu_item.css }}">
+              <div>
+                {% for menu_column in menu_item.mixed_columns %}
+                  {% if menu_column.type == 'mega-menu-categories' and menu_column.items | length > 0 %}
+                    <div class="fly-column mega-menu-column mega-menu-categories {{ menu_column.class }}" style="width: {{ menu_column.width }}">
+                      {% for cms_block in menu_column.top_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                      <div>
+                        {% for submenu_item in menu_column.items %}
+                          <div class="mega-menu-item {{ menu_column.classes }} {{ menu_column.show_class }}">
+                            <div>
+                              <h3><a href="{{ submenu_item.href }}">{{ submenu_item.name }}</a></h3>
+                              {% if menu_column.show in ['image', 'both'] %}
+                                <a href="{{ submenu_item.href }}"><img width="{{ submenu_item.image_width }}" height="{{ submenu_item.image_height }}" class="lazy" src="{{ submenu_item.dummy }}" data-src="{{ submenu_item.image }}" data-default-src="{{ submenu_item.image }}" alt="{{ submenu_item.name }}"/></a>
+                              {% endif %}
+                              {% if menu_column.show in ['links', 'both'] %}
+                                <ul>
+                                  {% for sub2menu_item in submenu_item.items %}
+                                    {% if menu_column.limit == 0 or (menu_column.limit > 0 and menu_column.limit >= loop.index) %}
+                                      <li data-image="{{ sub2menu_item.image }}"><a href="{{ sub2menu_item.href }}">{{ sub2menu_item.name }}</a></li>
+                                    {% elseif menu_column.limit > 0 and menu_column.limit == loop.index %}
+                                      <li class="view-more"><a href="{{ submenu_item.href }}">{{ journal2.settings.get('view_more_text') }}</a></li>
+                                    {% endif %}
+                                  {% endfor %}
+                                </ul>
+                              {% endif %}
+                              <span class="clearfix"> </span>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                      {% for cms_block in menu_column.bottom_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
+                  {% if menu_column.type == 'mega-menu-products' and menu_column.items | length > 0 %}
+                    <div class="fly-column mega-menu-column mega-menu-products {{ menu_column.class }}" style="width: {{ menu_column.width }}">
+                      {% for cms_block in menu_column.top_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                      <div>
+                        {% if menu_column.name %}
+                          <h3>{{ menu_column.name }}</h3>
+                        {% endif %}
+                        {% for product in menu_column.items %}
+                          {% if menu_column.limit == 0 or (menu_column.limit > 0 and menu_column.limit >= loop.index) %}
+                            <div class="mega-menu-item product-grid-item {{ menu_column.classes }} display-{{ journal2.settings.get('product_grid_wishlist_icon_display') }} {{ journal2.settings.get('product_grid_button_block_button') }}">
+                              <div class="product-wrapper {% if product.labels and product.labels.outofstock %} outofstock {% endif %}">
+                                <div class="image">
+                                  <a href="{{ product.href }}">
+                                    <img class="lazy" src="{{ product.dummy }}" data-src="{{ product.image }}" width="{{ product.image_width }}" height="{{ product.image_height }}" alt="{{ product.name }}"/>
+                                  </a>
+                                  {% for label, name in product.labels %}
+                                    <span class="label-{{ label }}"><b>{{ name }}</b></span>
+                                  {% endfor %}
+                                  {% if journal2.settings.get('product_grid_wishlist_icon_position') == 'image' and journal2.settings.get('product_grid_wishlist_icon_display') == 'icon' %}
+                                    <div class="wishlist"><a onclick="addToWishList('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_wishlist }}"><i class="wishlist-icon"></i><span class="button-wishlist-text">{{ button_wishlist }}</span></a></div>
+                                    <div class="compare"><a onclick="addToCompare('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_compare }}"><i class="compare-icon"></i><span class="button-compare-text">{{ button_compare }}</span></a></div>
+                                  {% endif %}
+                                </div>
+                                <div class="product-details">
+                                  <div class="caption">
+                                    <div class="name"><a href="{{ product.href }}">{{ product.name }}</a></div>
+                                    {% if product.price %}
+                                      <div class="price">
+                                        {% if not product.special %}
+                                          {{ product.price }}
+                                        {% else %}
+                                          <span class="price-old">{{ product.price }}</span> <span class="price-new">{{ product.special }}</span>
+                                        {% endif %}
+                                      </div>
+                                    {% endif %}
+                                    {% if product.rating %}
+                                      <div class="rating">
+                                        {% for i in 1..5 %}
+                                          {% if product.rating < i %}
+                                            <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                          {% else %}
+                                            <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                                          {% endif %}
+                                        {% endfor %}
+                                      </div>
+                                    {% endif %}
+                                  </div>
+                                  <div class="button-group">
+                                    {% if staticCall('Journal2Utils', 'isEnquiryProduct', [null, product]) %}
+                                      <div class="cart enquiry-button">
+                                        <a href="javascript:Journal.openPopup('{{ journal2.settings.get('enquiry_popup_code') }}', '{{ product.product_id }}');" data-clk="addToCart('{{ product.product_id }}');" class="button hint--top" data-hint="{{ journal2.settings.get('enquiry_button_text') }}">{{ journal2.settings.get('enquiry_button_icon') }}<span class="button-cart-text">{{ journal2.settings.get('enquiry_button_text') }}</span></a>
+                                      </div>
+                                    {% else %}
+                                      <div class="cart {% if product.labels and product.labels.outofstock %} outofstock {% endif %}">
+                                        <a onclick="addToCart('{{ product.product_id }}', '{{ product.minimum }}');" class="button hint--top" data-hint="{{ button_cart }}"><i class="button-left-icon"></i><span class="button-cart-text">{{ button_cart }}</span><i class="button-right-icon"></i></a>
+                                      </div>
+                                    {% endif %}
+                                    <div class="wishlist"><a onclick="addToWishList('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_wishlist }}"><i class="wishlist-icon"></i><span class="button-wishlist-text">{{ button_wishlist }}</span></a></div>
+                                    <div class="compare"><a onclick="addToCompare('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_compare }}"><i class="compare-icon"></i><span class="button-compare-text">{{ button_compare }}</span></a></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          {% endif %}
+                        {% endfor %}
+                      </div>
+                      {% for cms_block in menu_column.bottom_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
+                  {% if menu_column.type == 'mega-menu-brands' and menu_column.items | length > 0 %}
+                    <div class="fly-column mega-menu-column mega-menu-brands {{ menu_column.class }}" style="width: {{ menu_column.width }}">
+                      {% for cms_block in menu_column.top_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                      <div>
+                        {% if menu_column.name %}
+                          <h3>{{ menu_column.name }}</h3>
+                        {% endif %}
+                        {% for submenu_item in menu_column.items %}
+                          <div class="mega-menu-item {{ menu_column.classes }}">
+                            <div>
+                              {% if submenu_item.show != 'image' and submenu_item.name %}
+                                <h3><a href="{{ submenu_item.href }}">{{ submenu_item.name }}</a></h3>
+                              {% endif %}
+                              <div>
+                                {% if submenu_item.show != 'text' %}
+                                  <a href="{{ submenu_item.href }}"> <img width="{{ submenu_item.image_width }}" height="{{ submenu_item.image_height }}" class="lazy" src="{{ submenu_item.dummy }}" data-src="{{ submenu_item.image }}" alt="{{ submenu_item.name }}"/></a>
+                                {% endif %}
+                                <ul>
+                                  {% for sub2menu_item in submenu_item.items %}
+                                    <li data-image="{{ sub2menu_item.image }}"><a href="{{ sub2menu_item.href }}">{{ sub2menu_item.name }}</a></li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                              <span class="clearfix"></span>
+                            </div>
+                          </div>
+                        {% endfor %}
+                      </div>
+                      {% for cms_block in menu_column.bottom_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+
+                  {% if menu_column.type == 'mega-menu-html-block' %}
+                    <div class="fly-column mega-menu-column mega-menu-html mega-menu-html-block {{ menu_column.class }}" style="width: {{ menu_column.width }}">
+                      {% for cms_block in menu_column.top_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                      <div>
+                        {% if menu_column.name %}
+                          <h3>{{ menu_column.name }}</h3>
+                        {% endif %}
+                        <div class="wrapper">
+                          {{ menu_column.html_text }}
+                        </div>
+                      </div>
+                      {% for cms_block in menu_column.bottom_cms_blocks %}
+                        <div class="menu-cms-block">{{ cms_block.content }}</div>
+                      {% endfor %}
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          {% endif %}
+
+          {% if menu_item.type == 'drop-down' and menu_item.subcategories | length > 0 %}
+            <ul>
+              {{ _self.renderMultiLevelMenu(menu_item) }}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <script>
+    $(window).resize(function () {
+      $('#flyout-{{ module }} .fly-mega-menu').css('max-width', $(window).width() - 260);
+    });
+  </script>
+</div>

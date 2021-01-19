@@ -1,0 +1,7 @@
+{% if modules %}
+  <div id="column-right" class="col-sm-3 hidden-xs side-column {% if journal2.settings.get('flyout_column_right_active') %} flyout-right {% endif %}">
+    {% for module in modules %}
+      {{ module }}
+    {% endfor %}
+  </div>
+{% endif %}

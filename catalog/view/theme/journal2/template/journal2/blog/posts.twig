@@ -1,0 +1,58 @@
+{{ header }}
+<div id="container" class="container j-container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ breadcrumb.href }}" itemprop="url"><span itemprop="title">{{ breadcrumb.text }}</span></a></li>
+    {% endfor %}
+  </ul>
+  {{ column_left }}{{ column_right }}
+  <div id="content">
+    <h1 class="heading-title">{{ heading_title }}
+      {% if journal2.settings.get('blog_blog_feed_url') %}
+        <a class="journal-blog-feed" href="{{ journal2.settings.get('blog_blog_feed_url') }}" target="_blank"><span class="feed-text">{{ journal2.settings.get('feed_text') }}</span></a>
+      {% endif %}
+    </h1>
+    {{ content_top }}
+    {% if category_description %}
+      <div>{{ category_description }}</div>
+    {% endif %}
+    {% if posts|length > 0 %}
+      <div class="posts main-posts blog-{{ journal2.settings.get('config_blog_settings.posts_display', 'grid"') }}-view">
+        {% for post in posts %}
+          <div class="post-item {{ grid_classes }}">
+            <div class="post-wrapper">
+              {% if post.image %}
+                <a class="post-image" href="{{ post.href }}"><img src="{{ post.image }}" alt="{{ post.name }}"/></a>
+              {% endif %}
+              <div class="post-item-details">
+                <h2><a href="{{ post.href }}">{{ post.name }}</a></h2>
+                <div class="comment-date">
+                  <span class="p-author">{{ post.author }}</span>
+                  <span class="p-date">{{ post.date }}</span>
+                  <span class="p-comment">{{ post.comments }}</span>
+                </div>
+                <div class="post-text"><span>{{ post.description }}</span></div>
+                <div class="post-button">
+                  <a class="post-view-more button" href="{{ post.href }}"><i class="post-button-left-icon"></i>{{ journal2.settings.get('blog_button_read_more', 'Read More') }}<i class="post-button-right-icon"></i></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      {{ pagination }}
+    {% else %}
+      <div class="buttons">
+        <div class="right"><a href="{{ continue }}" class="button">{{ button_continue }}</a></div>
+      </div>
+    {% endif %}
+    {{ content_bottom }}
+  </div>
+  <script>
+    if (!Journal.isFlexboxSupported) {
+      Journal.equalHeight($(".posts .post-wrapper"), '.post-item-details h2 a');
+      Journal.equalHeight($(".posts .post-wrapper"), '.post-text span');
+    }
+  </script>
+</div>
+{{ footer }}

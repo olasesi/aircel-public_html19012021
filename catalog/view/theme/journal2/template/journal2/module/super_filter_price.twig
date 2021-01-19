@@ -1,0 +1,18 @@
+<div class="sf-price {% if price_slider != '1' %} sf-input {% endif %} box {% if is_collapsed %} is-collapsed {% endif %}" data-id="price" data-min-price="{{ min_price }}" data-max-price="{{ max_price }}">
+  <div class="box-heading">{{ journal2.settings.get('filter_price_text', text_price) }}</div>
+  <div class="box-content">
+    {% if price_slider == '1' %}
+      <section class="slider" data-min-value="{{ min_price }}" data-max-value="{{ max_price }}"></section>
+    {% else %}
+      <span class="{% if is_currency_left %} currency-left {% else %} currency-right {% endif %}">
+            <label for="filter-min-price">{{ is_currency_left ? currency_left : currency_right }}</label>
+            <input id="filter-min-price" type="text" class="min-price" value="{{ min_price }}"/>
+        </span>
+      <span class="{% if is_currency_left %} currency-left {% else %} currency-right {% endif %}">
+            <label for="filter-max-price">{{ is_currency_left ? currency_left : currency_right }}</label>
+            <input id="filter-max-price" type="text" class="max-price" value="{{ max_price }}"/>
+        </span>
+      <input type="button" class="button btn price-filter-button" value="{{ journal2.settings.get('filter_price_apply_text', 'Apply') }}"/>
+    {% endif %}
+  </div>
+</div>

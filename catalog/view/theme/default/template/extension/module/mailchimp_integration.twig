@@ -1,0 +1,226 @@
+<?php
+//==============================================================================
+// MailChimp Integration v303.1
+// 
+// Author: Clear Thinking, LLC
+// E-mail: johnathan@getclearthinking.com
+// Website: http://www.getclearthinking.com
+// 
+// All code within this file is copyright Clear Thinking, LLC.
+// You may not copy or reuse code within this file without written permission.
+//==============================================================================
+?>
+
+<?php $module_id = rand(); ?>
+
+<style type="text/css">
+	.mailchimp-integration {
+		overflow: hidden;
+		margin-bottom: 20px;
+	}
+	.mailchimp-integration h3,
+	.mailchimp-integration h4 {
+		margin: 0;
+	}
+	.mailchimp-integration h4 {
+		margin-bottom: 5px;
+	}
+	.mailchimp-integration label,
+	.mailchimp-integration input[type="checkbox"],
+	.mailchimp-integration input[type="radio"] {
+		cursor: pointer;
+	}
+	.mi-message {
+		display: none;
+		font-size: 11px;
+		margin-bottom: 10px;
+	}
+	.mi-message a {
+		font-size: 11px;
+	}
+	.mi-block {
+		display: inline-block;
+		margin: 5px;
+		min-width: 150px;
+		vertical-align: top;
+	}
+	.mi-toptext {
+		display: block;
+		margin: 5px;
+	}
+	.mi-required {
+		color: #F00;
+	}
+	.mi-button {
+		text-align: center;
+	}
+	#content .mi-button {
+		margin-top: 26px;
+	}
+	#column-left .mi-button,
+	#column-right .mi-button {
+		margin-top: 15px;
+	}
+	.mi-button .button[disabled="disabled"] {
+		cursor: not-allowed;
+		opacity: 0.5;
+	}
+	.mi-padleft {
+		margin-left: 10px;
+	}
+</style>
+
+<?php if ($popup) { ?>
+	<style type="text/css">
+		#mi<?php echo $module_id; ?> h3 {
+			margin-top: 20px;
+		}
+		#mi<?php echo $module_id; ?> {
+			display: none;
+			background: #FFF;
+			border: 10px solid #444;
+			padding: 0 15px 15px 15px;
+			position: fixed;
+			top: 20%;
+			left: 38%;
+			width: 25%;
+			min-width: 210px;
+			z-index: 100000;
+			box-shadow: 0 0 10px #000;
+			border-radius: 5px;
+		}
+		#mi-modal-overlay {
+			display: none;
+			background: #000;
+			opacity: 0.5;
+			position: fixed;
+			_position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			z-index: 99999;
+		}
+		@media (max-width: 767px) {
+			#mi<?php echo $module_id; ?> {
+				left: 0;
+				width: 100%;
+			}
+		}
+	</style>
+	<script type="text/javascript"><!--
+		function showMailchimpPopup() {
+			$('#mi-modal-overlay, .mailchimp-integration').fadeIn();
+			$('#mi<?php echo $module_id; ?>').find('.box-heading').removeClass('box-heading').wrap('<h3>');
+			$('#mi<?php echo $module_id; ?>').find('.box-content').removeClass('box-content');
+		}
+		
+		<?php if (!empty($trigger_popup)) { ?>
+			$(document).ready(function(){
+				showMailchimpPopup();
+			});
+		<?php } ?>
+	//--></script>
+	<div id="mi-modal-overlay" onclick="$(this).fadeOut().next().fadeOut()"></div>
+<?php } ?>
+
+<div id="mi<?php echo $module_id; ?>" class="mailchimp-integration box">
+	<div class="box-heading">
+		<?php if ($settings['moduletext_heading_'.$language]) { ?>
+			<h3><?php echo html_entity_decode($settings['moduletext_heading_'.$language], ENT_QUOTES, 'UTF-8'); ?></h3>
+		<?php } ?>
+	</div>
+	
+	<div class="box-content">
+		<div class="mi-message"></div>
+		
+		<?php if ($subscribed) { ?>
+			
+			<div class="mi-block">
+				<?php echo html_entity_decode(str_replace('[email]', $email, $settings['moduletext_subscribed_'.$language]), ENT_QUOTES, 'UTF-8'); ?>
+			</div>
+			<input type="hidden" name="email" value="<?php echo $email; ?>" />
+			
+		<?php } else { ?>
+			
+			<?php if (!empty($settings['moduletext_top_'.$language])) { ?>
+				<div class="mi-toptext"><?php echo html_entity_decode($settings['moduletext_top_'.$language], ENT_QUOTES, 'UTF-8'); ?></div>
+			<?php } ?>
+			
+			<div class="mi-block">
+				<h4><span class="mi-required">*</span> <?php echo $entry_email . (strpos($entry_email, ':') ? '' : ':'); ?></h4>
+				<input type="text" class="form-control" name="email" onkeydown="if (event.keyCode == 13) miSubscribe<?php echo $module_id; ?>($(this))" <?php if ($email) echo 'value="' . $email . '" disabled="disabled"'; ?> />
+			</div>
+			
+			<?php if (!$email) { ?>
+				<?php foreach (array('firstname', 'lastname') as $field) { ?>
+					<?php if (empty($settings['modules_' . $field]) || $settings['modules_' . $field] == 'hide') continue; ?>
+					<div class="mi-block">
+						<h4><?php if ($settings['modules_' . $field] == 'required') { ?>
+								<span class="mi-required">*</span>
+							<?php } ?>
+							<?php echo ${'entry_'.$field}; ?><?php echo (strpos(${'entry_'.$field}, ':')) ? '' : ':'; ?>
+						</h4>
+						<input type="text" class="form-control" name="<?php echo $field; ?>" onkeydown="if (event.keyCode == 13) miSubscribe<?php echo $module_id; ?>($(this))" />
+					</div>
+				<?php } ?>
+			<?php } ?>
+		<?php } ?>
+		
+		<?php if (!$subscribed) { ?>
+			<div class="mi-block mi-button">
+				<a class="button btn btn-primary" onclick="miSubscribe<?php echo $module_id; ?>($(this))"><?php echo $settings['moduletext_button_'.$language]; ?></a>
+			</div>
+		<?php } ?>
+	</div>
+</div>
+
+<script>
+	function miSubscribe<?php echo $module_id; ?>(element) {
+		var message = element.parent().parent().find('.mi-message');
+		element.parent().parent().find('a.button').attr('disabled', 'disabled');
+		message.slideUp(function(){
+			message.removeClass('attention success warning alert alert-warning alert-danger');
+			
+			if (!$.trim(element.parent().parent().find('input[name="email"]').val()).match(/^[^\@]+@.*\.[a-z]{2,6}$/i)) {
+				
+				message.html('<?php echo str_replace("'", "\'", $settings['moduletext_invalidemail_'.$language]); ?>').addClass('attention alert alert-warning').slideDown();
+				element.parent().parent().find('a.button').removeAttr('disabled');
+			<?php foreach (array('firstname', 'lastname') as $field) { ?>
+				<?php if (!$email && isset($settings['modules_' . $field]) && $settings['modules_' . $field] == 'required') { ?>
+					} else if (!$.trim(element.parent().parent().find('input[name="<?php echo $field; ?>"]').val())) {
+						message.html('<?php echo str_replace("'", "\'", $settings['moduletext_emptyfield_'.$language]); ?>').addClass('attention alert alert-warning').slideDown();
+						element.parent().parent().find('a.button').removeAttr('disabled');
+				<?php } ?>
+			<?php } ?>
+				
+			} else {
+				$.ajax({
+					type: 'POST',
+					url: 'index.php?route=extension/<?php echo $type; ?>/<?php echo $name; ?>/subscribe',
+					data: element.parent().parent().find(':input:not(:checkbox,:radio), :checkbox:checked, :radio:checked'),
+					success: function(error) {
+						if (error.indexOf('Use PUT to insert or update list members') != -1) {
+							message.html('<?php echo html_entity_decode($settings['moduletext_subscribed_'.$language], ENT_QUOTES, 'UTF-8'); ?>'.replace('[email]', $('input[name="email"]').val())).addClass('warning alert alert-danger').slideDown();
+						} else if (error) {
+							message.html(<?php echo ($settings['moduletext_error_'.$language]) ? "'" . str_replace("'", "\'", $settings['moduletext_error_'.$language]) . "'" : 'error'; ?>).addClass('warning alert alert-danger').slideDown();
+						} else {
+							var messageText = '<?php echo str_replace("'", "\'", $settings['moduletext_success_' . $language]); ?>';
+							<?php if ($settings['modules_redirect']) { ?>
+								alert(messageText);
+								location = '<?php echo $settings['modules_redirect']; ?>';
+							<?php } elseif ($popup) { ?>
+								alert(messageText);
+								$('#mi-modal-overlay, .mailchimp-integration').fadeOut();
+							<?php } else { ?>
+								message.html(messageText).addClass('success alert alert-success').slideDown();
+							<?php } ?>
+						} 
+						element.parent().parent().find('a.button').removeAttr('disabled');
+					}
+				});
+			}
+			
+		});
+	}
+</script>

@@ -1,0 +1,34 @@
+<div id="journal-rotator-{{ module }}" class="journal-rotator-{{ module_id }} journal-rotator box text-rotator {{ disable_on_classes | join(' ') }} {% if bullets %} bullets-on bullets-{{ bullets_position }} {% else %} bullets-off {% endif %} align-{{ text_align }}" style="{{ rotator_css }}; {{ css }}">
+  {% if title %}
+    <div class="box-heading text-rotator-heading {{ disable_on_classes | join(' ') }}">{{ title }}</div>
+  {% endif %}
+  {% for section in sections %}
+    <div class="quote" style="{{ quote_css }}">
+      {% if section.image %}
+        <img width="{{ image_width }}" height="{{ image_height }}" src="{{ section.image }}" alt="" class="rotator-image image-{{ image_align }}" style="{{ image_css }}"/>
+      {% endif %}
+      <span class="rotator-text">{{ section.icon }}{{ section.text }}</span>
+      {% if section.author %}
+        <div class="rotator-author" style="{{ author_css }}">- {{ section.author }}</div>
+      {% endif %}
+      <div class="clearfix"></div>
+    </div>
+  {% endfor %}
+</div>
+<script>
+  (function () {
+    var single_quote = parseInt('{{ sections | length }}', 10) <= 1;
+
+    $('#journal-rotator-{{ module }}').quovolver({
+      children: '.quote',
+      equalHeight: false,
+      navPosition: single_quote ? '' : 'below',
+      navNum: {% if bullets %} true {% else %} false {% endif %},
+      pauseOnHover: !!parseInt('{{ pause_on_hover }}', 10),
+      autoPlay: !single_quote,
+      autoPlaySpeed: {{ transition_delay }},
+      transitionSpeed: 300
+    });
+  })();
+</script>
+

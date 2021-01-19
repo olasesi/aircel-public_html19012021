@@ -1,0 +1,9 @@
+<div class="box sf-availability {% if is_collapsed %} is-collapsed {% endif %}" data-id="availability">
+  <div class="box-heading">{{ journal2.settings.get('filter_availability_text', 'Availability') }}</div>
+  <div class="box-content">
+    <ul>
+      <li><label><input type="checkbox" value="1" {% if availability_yes %} checked {% endif %}><span class="sf-name">{{ journal2.settings.get('filter_availability_yes_text', 'In Stock') }}</span></label></li>
+      <li><label><input type="checkbox" value="0" {% if availability_no %} checked {% endif %}><span class="sf-name">{{ journal2.settings.get('filter_availability_no_text', 'Out of Stock') }}</span></label></li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div id="static-banners-{{ module }}" class="static-banners-{{ module_id }} box static-banners {% if carousel %} journal-carousel {% endif %} {{ disable_on_classes | join(' ') }} {{ gutter_on_class }}" style="{{ css }}">
+  <div>
+    {% if title %}
+      <div class="box-heading">{{ title }}</div>
+    {% endif %}
+    <div class="box-content">
+      {% if carousel %}
+        <div class="swiper">
+          <div class="swiper-container" {% if journal2.settings.get('rtl') %} dir="rtl" {% endif %}>
+            <div class="swiper-wrapper">
+              {% for section in sections %}
+                <div class="static-banner swiper-slide">
+                  {% if section.link %}
+                    <a href="{{ section.link }}" {{ section.target }}> <span class="banner-overlay" style="{{ image_border }}; {% if bgcolor %} background-color: {{ bgcolor }} {% endif %}">{{ icon }}</span><img style="{{ image_border }}" src="{{ section.image }}" width="{{ section.image_width }}" height="{{ section.image_height }}" alt="{{ section.image_title }}"/></a>
+                  {% else %}
+                    <img style="{{ image_border }}" src="{{ section.image }}" alt="{{ section.image_title }}" width="{{ section.image_width }}" height="{{ section.image_height }}"/>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% if arrows %}
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          {% endif %}
+        </div>
+        {% if bullets %}
+          <div class="swiper-pagination"></div>
+        {% endif %}
+      {% else %}
+        {% for section in sections %}
+          <div class="static-banner {{ grid_classes }}">
+            {% if section.link %}
+              <a href="{{ section.link }}" {{ section.target }}> <span class="banner-overlay" style="{{ image_border }}; {% if bgcolor %} background-color: {{ bgcolor }} {% endif %}">{{ icon }}</span><img style="{{ image_border }}" src="{{ section.image }}" width="{{ section.image_width }}" height="{{ section.image_height }}" alt="{{ section.image_title }}"/></a>
+            {% else %}
+              <img style="{{ image_border }}" src="{{ section.image }}" alt="{{ section.image_title }}" width="{{ section.image_width }}" height="{{ section.image_height }}"/>
+            {% endif %}
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% if carousel %}
+  <script>
+    (function () {
+      var grid = $.parseJSON('{{ grid | json_encode() }}');
+
+      var breakpoints = {
+        470: {
+          slidesPerView: grid[0][1],
+          slidesPerGroup: grid[0][1]
+        },
+        760: {
+          slidesPerView: grid[1][1],
+          slidesPerGroup: grid[1][1]
+        },
+        980: {
+          slidesPerView: grid[2][1],
+          slidesPerGroup: grid[2][1]
+        },
+        1220: {
+          slidesPerView: grid[3][1],
+          slidesPerGroup: grid[3][1]
+        }
+      };
+
+      var opts = {
+        slidesPerView: grid[4][1],
+        slidesPerGroup: grid[4][1],
+        breakpoints: breakpoints,
+        spaceBetween: 20,
+
+        pagination: {% if bullets %} $('#static-banners-{{ module }} .swiper-pagination') {% else %} false {% endif %},
+        paginationClickable: true,
+        nextButton: {% if arrows != 'none' %} $('#static-banners-{{ module }} .swiper-button-next') {% else %} false {% endif %},
+        prevButton: {% if arrows != 'none' %} $('#static-banners-{{ module }} .swiper-button-prev') {% else %} false {% endif %},
+        autoplay: {{ autoplay ? autoplay : 0 }},
+        speed: {{ slide_speed }},
+        touchEventsTarget: {% if touch_drag %} 'container' {% else %} false {% endif %}
+      };
+
+      $('#static-banners-{{ module }} .swiper-container').swiper(opts);
+    })();
+  </script>
+{% endif %}

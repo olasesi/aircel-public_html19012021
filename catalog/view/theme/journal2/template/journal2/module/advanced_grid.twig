@@ -1,0 +1,68 @@
+<div id="multi-module-{{ module }}" class="multi-module-{{ module_id }} multi-modules-wrapper {{ gutter_on_class }} {{ disable_on_classes | join(' ') }}" style="{{ css }}">
+  <div class="box multi-modules" style="height: {{ height }}px; {% if module_spacing %} margin-right: -{{ module_spacing }} {% endif %}">
+    {% for column in columns %}
+      <div class="multi-modules-column {{ column.classes }}" style="{% if module_spacing %} padding-right: {{ module_spacing }} {% endif %}">
+        {% for m in column.modules %}
+          {% if loop.last %}
+            <div class="multi-modules-row {{ m.class | join(' ') }}" data-ratio="{{ m.height }}" style="height: calc(100% / {{ 100 / m.height }} - {{ module_spacing }});">
+              {{ m.content }}
+            </div>
+          {% else %}
+            <div class="multi-modules-row {{ m.class | join(' ') }}" data-ratio="{{ m.height }}" style="height: calc(100% / {{ 100 / m.height }} - {{ module_spacing }}); {% if module_spacing %} margin-bottom: {{ module_spacing }} {% endif %}">
+              {{ m.content }}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+
+  {% set sw = journal2.settings.get('site_width', 1024) %}
+  {% set ratio = height / sw %}
+
+  <style>
+    @media only screen and (min-width: {{ sw }}px) {
+      #top-modules .multi-modules-wrapper,
+      #bottom-modules .multi-modules-wrapper {
+        margin-bottom: -{{ module_spacing }} !important;
+      }
+    }
+
+    @media only screen and (max-width: {{ sw }}px) {
+      #multi-module-{{ module }} .multi-modules {
+        height: calc(100% * {{ ratio }}) !important;
+      }
+    }
+
+    @media only screen and (max-width: 760px) {
+      #multi-module-{{ module }} .multi-modules,
+      #multi-module-{{ module }} .multi-modules-column,
+      #multi-module-{{ module }} .multi-modules-row {
+        height: auto !important;
+      }
+
+    {% for i, column in columns %}
+      #multi-module-{{ module }} .multi-modules-column:nth-child({{ i + 1 }}) .row-rs {
+        height: calc(100vw * {{ height / (sw * column.width / 100 + 40) }}) !important;
+      }
+
+    {% endfor %}
+      #multi-module-{{ module }} .column-banner .multi-modules-row:first-of-type:not(:only-of-type) {
+        margin-bottom: {{ module_spacing }};
+      }
+    }
+  </style>
+
+  {% if grid_dimensions %}
+    <script>
+      (function () {
+        var $row = $('.multi-modules-row');
+        $row.find('.container-dimensions').remove();
+        $row.each(function () {
+          $(this).append('<span class="container-dimensions">' + $(this).width() + 'x' + $(this).height() + '</span>');
+        });
+      })();
+    </script>
+  {% endif %}
+</div>
+

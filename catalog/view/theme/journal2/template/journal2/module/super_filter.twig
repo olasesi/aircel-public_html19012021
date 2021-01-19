@@ -1,0 +1,14 @@
+<div id="journal-super-filter-{{ module_id }}" class="journal-sf {% if is_collapsible %} filter-collapse {% endif %} {{ disable_on_classes | join (' ') }}" data-filters-action="{{ filter_action_url }}" data-products-action="{{ products_action_url }}" data-route="{{ route }}" data-path="{{ path }}" data-full_path="{{ full_path }}" data-manufacturer="{{ manufacturer_id }}" data-search="{{ search }}" data-tag="{{ tag }}" data-loading-text="{{ loading_text }}" data-currency-left="{{ currency_left }}" data-currency-right="{{ currency_right }}" data-currency-decimal="{{ currency_decimal }}" data-currency-thousand="{{ currency_thousand }}" data-category_id="{{ category_id }}" data-sub_category="{{ sub_category }}" data-st="E.R.">
+  {% if reset %}
+    <a class="sf-reset hint--top sf-{{ journal2.settings.get('filter_reset_display') }}" data-hint="{{ reset_btn_text }}"><span class="sf-reset-text">{{ reset_btn_text }}</span><i class="sf-reset-icon"></i></a>
+  {% endif %}
+  <input type="hidden" class="sf-page" value=""/>
+  {% for filter_group in filter_groups %}
+    {{ filter_group.html }}
+  {% endfor %}
+</div>
+{% if not ajax %}
+  <script>
+    Journal.SuperFilter.init($('#journal-super-filter-{{ module_id }}'));
+  </script>
+{% endif %}

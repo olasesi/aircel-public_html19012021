@@ -1,0 +1,74 @@
+{{ header }}
+<div id="container" class="container j-container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+      <li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="{{ breadcrumb.href }}" itemprop="url"><span itemprop="title">{{ breadcrumb.text }}</span></a></li>
+    {% endfor %}
+  </ul>
+  {% if success %}
+    <div class="alert alert-success success"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  {% if error_warning %}
+    <div class="alert alert-danger warning"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+  <div class="row">{{ column_left }}{{ column_right }}
+    {% if column_left and column_right %}
+      {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+      {% set class = 'col-sm-9' %}
+    {% else %}
+      {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">
+      {{ content_top }}
+      <div class="row login-content">
+        <div class="col-sm-6 left">
+          <div class="well">
+            <h2 class="secondary-title">{{ text_new_customer }}</h2>
+            <div class="login-wrap">
+              <p><strong>{{ text_register }}</strong></p>
+              <p>{{ text_register_account }}</p>
+            </div>
+            <hr/>
+            <a href="{{ register }}" class="btn btn-primary button">{{ button_continue }}</a></div>
+        </div>
+        <div class="col-sm-6 right">
+          <div class="well">
+            <h2 class="secondary-title">{{ text_returning_customer }}</h2>
+            <form action="{{ action }}" method="post" enctype="multipart/form-data">
+              <div class="login-wrap">
+                <p>{{ text_i_am_returning_customer }}</p>
+                <div class="form-group">
+                  <label class="control-label" for="input-email">{{ entry_email }}</label>
+                  <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control"/>
+                </div>
+                <div class="form-group">
+                  <label class="control-label" for="input-password">{{ entry_password }}</label>
+                  <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="form-control"/>
+                  <span toggle="#input-password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+                  <a href="{{ forgotten }}">{{ text_forgotten }}</a></div>
+              </div>
+              <hr/>
+              <input type="submit" value="{{ button_login }}" class="btn btn-primary button"/>
+              {% if redirect %}
+                <input type="hidden" name="redirect" value="{{ redirect }}"/>
+              {% endif %}
+            </form>
+          </div>
+        </div>
+      </div>
+      {{ content_bottom }}</div>
+  </div>
+</div>
+<script>
+    $(".toggle-password").click(function() {
+      $(this).toggleClass("fa-eye fa-eye-slash");
+      var input = $($(this).attr("toggle"));
+      if (input.attr("type") == "password") {
+        input.attr("type", "text");
+      } else {
+        input.attr("type", "password");
+      }
+    });
+</script>
+{{ footer }}

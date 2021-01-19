@@ -1,0 +1,90 @@
+<div id="cs-{{ module }}" class="cs-{{ module_id }} box custom-sections section-brand {{ disable_on_classes | join(' ') }} {{ single_class }} {{ show_title_class }} {{ gutter_on_class }}" style="{{ css }}">
+  {% if spacing %}
+    <style>
+      #cs-{{ module }} .product-grid-item {
+        margin-bottom: {{ spacing }}px;
+      }
+
+      #cs-{{ module }} .product-wrapper {
+        margin-right: {{ spacing }}px;
+      }
+
+      #cs-{{ module }} .product-grid, #content #cs-{{ module }} .box-product {
+        padding-top: {{ spacing }}px;
+        margin-right: -{{ spacing }}px;
+      }
+    </style>
+  {% endif %}
+  {% if show_title %}
+    <div class="box-heading box-sections box-block">
+      <ul>
+        {% for section in sections %}
+          {% if section.is_link %}
+            <li><a href="{{ section.url }}" {{ section.target }}>{{ section.section_name }}</a></li>
+          {% elseif section.items %}
+            <li><a href="javascript:;" data-option-value="section-{{ section.section_class }}">{{ section.section_name }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  <div class="box-content">
+    <div class="product-grid">
+      {% for item in items %}
+        <div class="product-grid-item isotope-element {{ item.section_class | join (' ') }} {{ grid_classes }}">
+          <div class="product-wrapper" data-respond="start: 150px; end: 300px; interval: 20px;" style="{{ image_bgcolor }}">
+            {% if item.thumb %}
+              <div class="image">
+                <a href="{{ item.href }}" style="{{ image_border_css }}">
+                  <img class="first-image" width="{{ image_width }}" height="{{ image_height }}" src="{{ item.thumb }}" title="{{ item.name }}" alt="{{ item.name }}"/>
+                </a>
+              </div>
+            {% endif %}
+            {% if brand_name %}
+              <div class="product-details">
+                <div class="name"><a href="{{ item.href }}">{{ item.name }}</a></div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+    (function () {
+      var $isotope = $('#cs-{{ module }} .product-grid');
+      var $filters = $('#cs-{{ module }} .box-heading a[data-option-value]');
+      var default_section = '{{ sections | length > 1 ? default_section : '' }}';
+
+
+      $isotope.each(function () {
+        Journal.equalHeight($(this).find('.product-grid-item'), '.name');
+      });
+
+      $('#cs-{{ module }} img').imagesLoaded(function () {
+        $isotope.isotope({
+          itemSelector: '.isotope-element',
+          initLayout: default_section === ''
+        });
+      });
+
+      $filters.click(function () {
+        var $this = $(this);
+        if ($this.hasClass('selected')) {
+          return false;
+        }
+        $filters.removeClass('selected');
+        $this.addClass('selected');
+        $isotope.isotope({
+          filter: '.' + $this.attr('data-option-value')
+        })
+      });
+
+      if (default_section !== '') {
+        $('#cs-{{ module }} .box-heading a[data-option-value="section-' + default_section + '"]').click();
+      } else {
+        $('#cs-{{ module }} .box-heading a').first().click();
+      }
+    }());
+  </script>
+</div>

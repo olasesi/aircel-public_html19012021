@@ -1,0 +1,33 @@
+<div id="journal-header-notice-{{ module }}" class="journal-header-notice-{{ module_id }} header-notice {{ text_align }}-notice {{ disable_on_classes | join(' ') }} {{ float_icon }} {{ fullwidth }}" style="{{ css }}">
+  <div>
+    <span class="notice-text">{{ icon }}<span>{{ text }}</span></span>
+
+    {% if close_button_type == 'icon' %}
+      <button class="close-notice x-icon" style="padding-left: 6px; padding-right: 6px;"></button>
+    {% else %}
+      <button class="close-notice button"style="height: 25px;width: 25px;background-color: #bbb;border-radius: 50%;display: inline-block;">{{ close_button_text }}</button>
+    {% endif %}
+
+    <script>
+      $('#journal-header-notice-{{ module }} .close-notice').click(function () {
+        var isSticky = $('html').hasClass('header-sticky');
+        var h = $('#journal-header-notice-{{ module }}').outerHeight();
+        Journal.stickyHeaderHeight -= h;
+        $('#journal-header-notice-{{ module }}').slideUp(function () {
+          if (isSticky) {
+            $('.header').css('top', $('.header').css('top') - h);
+          }
+        });
+        {% if do_not_show_again %}
+        $.cookie('{{ cookie_name }}', true, {
+          expires: 365
+        });
+        {% endif %}
+      });
+
+      {% if global_style %}
+      $('<style>{{ global_style | join(' ') }}</style>').appendTo($('head'));
+      {% endif %}
+    </script>
+  </div>
+</div>

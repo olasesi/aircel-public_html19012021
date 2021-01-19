@@ -1,0 +1,151 @@
+<div id="cs-{{ module }}" class="cs-{{ module_id }} box custom-sections section-product {{ disable_on_classes | join(' ') }} {{ single_class }} {{ show_title_class }} {{ gutter_on_class }}" style="{{ css }}">
+  {% if spacing %}
+    <style>
+      #cs-{{ module }} .product-grid-item {
+        margin-bottom: {{ spacing }}px;
+      }
+
+      #cs-{{ module }} .product-wrapper {
+        margin-right: {{ spacing }}px;
+      }
+
+      #cs-{{ module }} .product-grid, #content #cs-{{ module }} .box-product {
+        margin-right: -{{ spacing }}px;
+      }
+    </style>
+  {% endif %}
+  {% if show_title %}
+    <div class="box-heading box-sections box-block">
+      <ul>
+        {% for section in sections %}
+          {% if section.is_link %}
+            <li><a style="text-align: right;padding-right: 10px;"  href="{{ section.url }}" {{ section.target }}>{{ section.section_name }}</a></li>
+          {% elseif section.items %}
+            <li><a style="text-align: left;padding-left: 10px;" href="javascript:;" data-option-value="section-{{ section.section_class }}">{{ section.section_name }}</a></li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+  <div class="box-content">
+    <div class="product-grid">
+      {% for product in items %}
+        <div class="product-grid-item isotope-element display-{{ journal2.settings.get('product_grid_wishlist_icon_display') }} {{ journal2.settings.get('product_grid_button_block_button') }} {{ product.section_class | join (' ') }} {{ grid_classes }}">
+          <div class="product-wrapper {% if product.labels and product.labels.outofstock %} outofstock {% endif %}" style="{{ image_bgcolor }}">
+            {% if product.thumb %}
+              <div class="image {% if journal2.settings.get('show_countdown', 'never') != 'never' and product.date_end %} has-countdown {% endif %}">
+                 {% if product.from_abroad == 'YES' %}
+                    <span style="color:#ff6600"><u>Shipped From Abroad</u></span><br />
+                 {% else %}
+                    <br />
+                 {% endif %}
+                  
+                <a href="{{ product.href }}" {% if product.thumb2 %} class="has-second-image" style="{{ image_border_css }}; background: url('{{ product.thumb2 }}') no-repeat" {% else %} style="{{ image_border_css }}" {% endif %}>
+                  <img class="first-image" width="{{ image_width }}" height="{{ image_height }}" src="{{ product.thumb }}" title="{{ product.name }}" alt="{{ product.name }}"/>
+                </a>
+                {% for label, name in product.labels %}
+                  <span class="label-{{ label }}"><b>{{ name }}</b></span>
+                {% endfor %}
+                {% if journal2.settings.get('product_grid_wishlist_icon_position') == 'image' and journal2.settings.get('product_grid_wishlist_icon_display') == 'icon' %}
+                  <div class="wishlist"><a onclick="addToWishList('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_wishlist }}"><i class="wishlist-icon"></i><span class="button-wishlist-text">{{ button_wishlist }}</span></a></div>
+                  <div class="compare"><a onclick="addToCompare('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_compare }}"><i class="compare-icon"></i><span class="button-compare-text">{{ button_compare }}</span></a></div>
+                {% endif %}
+              </div>
+            {% endif %}
+            <div class="product-details">
+              <div class="caption">
+                <div class="name"><a href="{{ product.href }}">{{ product.name[:25] }}...</a></div>
+                <div class="description">{{ product.description[:25] }}...</div>
+                {% if product.price %}
+                  <div class="price">
+                    {% if not product.special %}
+                      {{ product.price }}
+                    {% else %}
+                      <span class="price-old">{{ product.price }}</span> <span class="price-new" {% if product.date_end %}data-end-date="{{ product.date_end }}"{% endif %}>{{ product.special }}</span>
+                    {% endif %}
+                  </div>
+                  {% if product.tax %}
+                    <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+                  {% endif %}
+                {% endif %}
+                {#{% if product.rating %}#}
+                {#  <div class="rating">#}
+                {#    {% for i in 1..5 %}#}
+                {#      {% if product.rating < i %}#}
+                {#        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>#}
+                {#      {% else %}#}
+                {#        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>#}
+                {#      {% endif %}#}
+                {#    {% endfor %}#}
+                {#  </div>#}
+                {#{% endif %}#}
+              </div>
+              <div class="button-group">
+                {% if staticCall('Journal2Utils', 'isEnquiryProduct', [null, product]) %}
+                  <div class="cart enquiry-button">
+                    <a href="javascript:Journal.openPopup('{{ journal2.settings.get('enquiry_popup_code') }}', '{{ product.product_id }}');" data-clk="addToCart('{{ product.product_id }}');" class="button hint--top" data-hint="{{ journal2.settings.get('enquiry_button_text') }}">{{ journal2.settings.get('enquiry_button_icon') }}<span class="button-cart-text">{{ journal2.settings.get('enquiry_button_text') }}</span></a>
+                  </div>
+                {% else %}
+                  <div class="cart {% if product.labels and product.labels.outofstock %} outofstock {% endif %}">
+                    <a onclick="addToCart('{{ product.product_id }}', '{{ product.minimum }}');" class="button hint--top" data-hint="{{ button_cart }}"><i class="button-left-icon"></i><span class="button-cart-text">Add To Cart</span><i class="button-right-icon"></i></a>
+                  </div>
+                {% endif %}
+                <div class="wishlist"><a onclick="addToWishList('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_wishlist }}"><i class="wishlist-icon"></i><span class="button-wishlist-text">{{ button_wishlist }}</span></a></div>
+                <div class="compare"><a onclick="addToCompare('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_compare }}"><i class="compare-icon"></i><span class="button-compare-text">{{ button_compare }}</span></a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+  
+ 
+  
+    (function () {
+      var $isotope = $('#cs-{{ module }} .product-grid');
+      var $filters = $('#cs-{{ module }} .box-heading a[data-option-value]');
+      var default_section = '{{ sections | length > 1 ? default_section : '' }}';
+
+      $isotope.each(function () {
+        Journal.equalHeight($(this).find('.product-grid-item'), '.name');
+        Journal.equalHeight($(this).find('.product-grid-item'), '.description');
+        Journal.equalHeight($(this).find('.product-grid-item'), '.price');
+      });
+
+      $('#cs-{{ module }} img').imagesLoaded(function () {
+        $isotope.isotope({
+          itemSelector: '.isotope-element',
+          initLayout: default_section === ''
+        });
+      });
+
+      $filters.click(function () {
+        var $this = $(this);
+        if ($this.hasClass('selected')) {
+          return false;
+        }
+        $filters.removeClass('selected');
+        $this.addClass('selected');
+        $isotope.isotope({
+          filter: '.' + $this.attr('data-option-value')
+        })
+      });
+
+      if (default_section !== '') {
+        $('#cs-{{ module }} .box-heading a[data-option-value="section-' + default_section + '"]').click();
+      }
+
+      {% if journal2.settings.get('show_countdown', 'never') != 'never' %}
+      $('#cs-{{ module }} .product-grid-item > div').each(function () {
+        var $new = $(this).find('.price-new');
+        if ($new.length && $new.attr('data-end-date')) {
+          $(this).find('.image').append('<div class="countdown"></div>');
+        }
+        Journal.countdown($(this).find('.countdown'), $new.attr('data-end-date'));
+      });
+      {% endif %}
+    }());
+  </script>
+</div>

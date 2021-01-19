@@ -1,0 +1,25 @@
+{% if category_breadcrumbs %}
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+  
+  {% for index, breadcrumb in breadcrumbs %}
+  {
+    "@type": "ListItem",
+    "position": {{ index+1 }},
+    "item": {
+      "@id": "{{ breadcrumb.href }}",
+      "name": "{{ breadcrumb.name}}"
+    }
+  }   
+  {% if loop.last %}
+  ]
+  {% else %}
+  ,
+  {% endif %}
+  {% endfor %}
+}
+</script>
+{% endif %}

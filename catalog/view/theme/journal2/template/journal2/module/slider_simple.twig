@@ -1,0 +1,34 @@
+<div class="journal-simple-slider-{{ module_id }} {{ nav_on_hover }} journal-simple-slider box {{ disable_on_classes | join(' ') }}" style="{{ width }}; max-height: {{ height }}px">
+  <div id="journal-simple-slider-{{ module }}">
+    <div class="swiper-container" {% if journal2.settings.get('rtl') %} dir="rtl" {% endif %}>
+      <div class="swiper-wrapper">
+        {% for slide in slides %}
+          {% if slide.link %}
+            <div class="item swiper-slide"><a href="{{ slide.link }}" {{ slide.target }}><img width="{{ image_width }}" height="{{ image_height }}" src="{{ slide.image }}" alt="{{ slide.name }}"/></a></div>
+          {% else %}
+            <div class="item swiper-slide">
+              <img width="{{ image_width }}" height="{{ image_height }}" src="{{ slide.image }}" alt="{{ slide.name }}"/>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+    {% if bullets %}
+      <div class="swiper-pagination"></div>
+    {% endif %}
+    {% if arrows %}
+      <div class="swiper-button-next"></div>
+      <div class="swiper-button-prev"></div>
+    {% endif %}
+  </div>
+  <script>
+    (function () {
+      var opts = $.parseJSON('{{ js_options | json_encode() }}');
+      if (opts.pagination) {
+        opts.pagination = $('#journal-simple-slider-{{ module }} .swiper-pagination');
+      }
+      $('#journal-simple-slider-{{ module }} .swiper-container').swiper(opts);
+    })();
+  </script>
+</div>
+

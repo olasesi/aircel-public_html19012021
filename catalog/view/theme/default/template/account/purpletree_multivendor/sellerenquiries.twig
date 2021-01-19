@@ -1,0 +1,70 @@
+{{ header }} {{ column_left }}
+<div class="pts-container">
+      <ul class="breadcrumb">
+	  {% for breadcrumb in breadcrumbs %}
+        <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+		{% endfor %}
+      </ul>
+{% if success %}
+  <div class="alert pts-alert-success"><i class="fa fa-check-circle"></i>{{ success }}</div>
+  {% endif %}
+  	{% if error_warning %}
+  <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+ {% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+   {% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_title }}</h1>
+      <form action="" method="post" enctype="multipart/form-data" class="pts-form-horizontal">
+        <fieldset>
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storeaddress">{{ entry_message }}</label>
+			<div class="pts-col-sm-10">
+			  <textarea name="message" class="pts-form-control" rows="5"></textarea>
+			  <input type="hidden" name="seller_id" value="{{ seller_id }}">
+			  {% if error_msg %}
+			  <div class="text-danger">{{ error_msg }}</div>
+			  {% endif %}
+			</div>
+		</div>
+        </fieldset>
+        <div class="buttons clearfix">
+          <div class="pts-pull-right">
+            <input type="submit" value="{{ button_continue }}" class="pts-btn pts-btn-primary" />
+          </div>
+        </div>
+      </form>
+	  	  <div class="table-responsive">
+	    <table class="table table-bordered table-hover">
+           <thead>
+                <tr>
+                  <td class="text-left">{{ entry_messages }}</td>
+                </tr>
+              </thead>
+              <tbody>
+			  {% for key,result in messages %}
+               <tr class="pts-tr-hover-none">
+			   {% if result.contact_from ==0 %}
+			   <td class="pts-text-right pts-chat-seller" >{{ result.message }}<br>{{ result.created_at }}</td>
+			   {% else %}
+			    <td class="pts-text-right pts-chat-admin" >{{ result.message }}<br>{{ result.created_at }}</td>
+			   {% endif %}
+                </tr>
+				{% endfor %}
+              </tbody>
+            </table>
+		</div>
+		<div class="pts-row">
+		  <div class="pts-col-sm-6 pts-text-left">{{ pagination }}</div>
+		  <div class="pts-col-sm-6 pts-text-right">{{ results }}</div>
+	</div>
+	  {{ content_bottom }}</div>
+	 {{ column_right }}</div>
+</div>
+{{ footer }}

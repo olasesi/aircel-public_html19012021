@@ -1,0 +1,16 @@
+<div class="box sf-option sf-{{ option.display_mode }} sf-option-{{ option.option_id }} sf-{{ option.type }} {% if is_collapsed %} is-collapsed {% endif %}" data-id="option-{{ option.option_id }}">
+  <div class="box-heading">{{ option.option_name }}</div>
+  <div class="box-content">
+    <ul class="{% if not journal2.settings.get('filter_show_box') %} hide-checkbox {% endif %}">
+      {% for value in option.values %}
+        {% if option.display_mode == 'list' %}
+          <li><label><input data-keyword="{{ value.keyword }}" type="checkbox" name="option[{{ option.option_id }}]" value="{{ value.option_value_id }}"><span class="sf-name">{{ value.option_value_name }}</span></label></li>
+        {% elseif option.display_mode == 'image' %}
+          <li><label><input data-keyword="{{ value.keyword }}" type="checkbox" name="option[{{ option.option_id }}]" value="{{ value.option_value_id }}"><img width="{{ option_image_width }}" height="{{ option_image_height }}" src="{{ value.image }}" alt="{{ value.option_value_name }}" title="{{ value.option_value_name }}"/></label></li>
+        {% else %}
+          <li><label><input data-keyword="{{ value.keyword }}" type="checkbox" name="option[{{ option.option_id }}]" value="{{ value.option_value_id }}"><img width="{{ option_image_width }}" height="{{ option_image_height }}" src="{{ value.image }}" alt="{{ value.option_value_name }}"/><span class="sf-name">{{ value.option_value_name }}</span></label></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+<div id="journal-blog-tags-{{ module }}" class="journal-blog-tags-{{ module_id }} box side-blog side-posts side-blog-tags">
+  {% if heading_title %}
+    <div class="box-heading">{{ heading_title }}</div>
+  {% endif %}
+  <div class="box-tag box-post">
+    <div>
+      {% for tag in tags %}
+        <a href="{{ tag.href }}">{{ tag.name }}</a>
+      {% endfor %}
+    </div>
+  </div>
+</div>

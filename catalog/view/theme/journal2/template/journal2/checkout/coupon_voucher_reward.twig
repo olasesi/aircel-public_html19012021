@@ -1,0 +1,42 @@
+<div class="checkout-content coupon-voucher">
+  <h2 class="secondary-title">{{ journal2.settings.get('one_page_lang_coupon_voucher', 'Do you Have a Coupon or Voucher?') }}</h2>
+  <div class="cvr">
+    {% if coupon_status %}
+      <div class="panel-body checkout-coupon">
+        <label class="col-sm-2 control-label" for="input-coupon">{{ journal2.settings.get('one_page_lang_coupon_placeholder', 'Enter coupon code') }}</label>
+        <div class="input-group">
+          <input type="text" name="coupon" value="{{ coupon }}" placeholder="{{ journal2.settings.get('one_page_lang_coupon_placeholder', 'Enter coupon code') }}" id="input-coupon" class="form-control"/>
+          <span class="input-group-btn">
+                <input type="button" value="{{ journal2.settings.get('one_page_lang_coupon_button', 'Apply Coupon') }}" id="button-coupon" data-loading-text="{{ text_loading }}" class="btn-primary button"/>
+            </span>
+        </div>
+      </div>
+    {% endif %}
+    {% if voucher_status %}
+      <div class="panel-body checkout-voucher">
+        <label class="col-sm-2 control-label" for="input-voucher">{{ journal2.settings.get('one_page_lang_voucher_placeholder', 'Enter voucher code') }}</label>
+        <div class="input-group">
+          <input type="text" name="voucher" value="{{ voucher }}" placeholder="{{ journal2.settings.get('one_page_lang_voucher_placeholder', 'Enter voucher code') }}" id="input-voucher" class="form-control"/>
+          <span class="input-group-btn">
+                <input type="button" value="{{ journal2.settings.get('one_page_lang_voucher_button', 'Apply Voucher') }}" id="button-voucher" data-loading-text="{{ text_loading }}" class="btn-primary button"/>
+            </span>
+        </div>
+      </div>
+    {% endif %}
+    {% if reward_status %}
+      <div class="panel-body checkout-reward">
+        <label class="col-sm-2 control-label" for="input-reward">{{ journal2.settings.get('one_page_lang_reward_placeholder', 'Enter reward points') }}</label>
+        <div class="reward-stats">
+          <span class="reward-total">{{ reward_total }}</span>
+          <span class="reward-use">{{ reward_use }}</span>
+        </div>
+        <div class="input-group">
+          <input type="text" name="reward" value="{{ reward }}" placeholder="{{ journal2.settings.get('one_page_lang_reward_placeholder', 'Enter reward points') }}" id="input-reward" class="form-control"/>
+          <span class="input-group-btn">
+                <input type="button" value="{{ journal2.settings.get('one_page_lang_reward_button', 'Apply Points') }}" id="button-reward" data-loading-text="{{ text_loading }}" class="btn-primary button"/>
+            </span>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+</div>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+<head>
+<meta charset="UTF-8" />
+<title></title>
+<base href="{{ base }}" />
+<link href="{{ HTTPS_SERVER }}catalog/view/javascript/purpletree/bootstrap1/css/bootstrap.css" rel="stylesheet" media="all" />
+<script type="text/javascript" src="{{ HTTPS_SERVER }}catalog/view/javascript/purpletree/jquery/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="{{ HTTPS_SERVER }}catalog/view/javascript/purpletree/bootstrap1/js/bootstrap.min.js"></script>
+<link href="{{ HTTPS_SERVER }}catalog/view/javascript/purpletree/font-awesome/css/font-awesome.min.css" type="text/css" rel="stylesheet" />
+<link type="text/css" href="{{ HTTPS_SERVER }}catalog/view/javascript/purpletree/css/stylesheet/stylesheet.css" rel="stylesheet" media="all" />
+</head>
+<body>
+<div class="container">
+    <div style="page-break-after: always;">
+    <h1>{{ text_invoice_id }}#{{ invoice_id }}</h1>
+    <table class="table table-bordered">
+      <thead>
+        <!--tr>
+          <td colspan="2">{{ text_invoice_details }}</td>
+        </tr-->
+      </thead>
+      <tbody>
+        <tr>
+          <td style="width: 50%;">
+		  {% if admin_info %}
+					<div class="pts-col-sm-6 admin-store">
+						<p><strong>{{ text_admin_storename }}: </strong>{{ admin_info.name }}</p>
+						<p><strong>{{ text_address }}: </strong>{{ admin_info.address }}</p>
+						<p><strong>{{ text_telephone }}: </strong>{{ admin_info.telephone }}</p>
+						<p><strong>{{ text_email }}: </strong>{{ admin_info.email }}</p>
+						<p><strong>{{ text_website }}: </strong>{{ admin_info.url }}</p>
+					</div>
+					{% endif %}		  
+		         </td>
+                  <td style="width: 50%;">
+				  	{% if store_info %}
+					<div class="pts-col-sm-6">
+						<p><strong>{{ text_seller_storename }}: </strong>{{ store_info.name }}</p>
+							<p><strong>{{ text_seller_name }}: </strong>{{ origina_seller_name.seller_name }}</p>
+						<p><strong>{{ text_address }}: </strong>{{ store_info.address }}</p>
+						<p><strong>{{ text_telephone }}: </strong>{{ store_info.telephone }}</p>
+						<p><strong>{{ text_email }}: </strong>{{ store_info.email }}</p>
+					</div>
+					{% endif %}
+				  </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-bordered">
+      <thead>
+        <!--tr>
+          <td><b>{{ text_plan_details }}</b></td>
+        </tr-->
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+		 <div class="pts-col-sm-12 mid">
+		 {% if newplan %}
+				<div class="pts-col-sm-12 mid">
+					<div class="pts-col-sm-8">
+						<p><strong>{{ newplan.plan_name }}</strong> {{ newplan.plan_short_description }}</p>
+						<p><strong>{{ column_start_date }}: </strong>{{ newplan.start_date }}</p>
+						<p><strong>{{ column_end_date }}: </strong>{{ newplan.end_date }}</p>
+					</div>
+					<div class="pts-col-sm-4 text-right">
+					<span>{{ newplan.subscription_price }}</span>
+					<div >
+					
+				</div>
+				{% endif %}
+				</div>
+			</td>
+        </tr>
+      </tbody>
+    </table>
+	    <table class="table table-bordered">
+      <tbody>
+         {% for value in invoice.item %}
+        <tr>
+          <td class="text-right" colspan="4"><b>{{ value.title }}</b></td>
+          <td class="text-right">{{ value.price }}</td>
+        </tr>
+		{% endfor %}
+		<tr>
+          <td class="text-right" colspan="4"><b>{{ text_grand_total }}</b></td>
+          <td class="text-right">{{ grand_total }}</td>
+        </tr>
+		</tbody>
+    </table>
+	    <table class="table table-bordered">
+      <tbody>
+        <tr>
+         <td style="width: 50%; padding:20px;">
+            <b>{{ text_invoice_id }}</b># {{ invoice_id }} <br />
+            <b>{{ text_created_date }}:</b> {{ invoice.created_date}} <br />
+          </td>
+          <td>
+			<h3 align="center"><b>{{ invoice.status_id }} <br /><h3 />
+				
+		  </td>
+        </tr>
+      </tbody>
+    </table>
+	<table class="table table-bordered">
+      <thead>
+          <tr>
+          <td class="text-right" colspan="4"><b>{{ column_payment_mode }}</b></td>
+          <td class="text-right">{{ column_transaction_id }}</td>
+          <td class="text-right">{{ column_payment_date }}</td>
+          <td class="text-right">{{ column_comment }}</td>
+        </tr>
+              </thead>
+              <tbody>
+			  {% if payment_history %}
+			  {% for value in payment_history %}
+         <tr>
+		<td class="text-right" colspan="4">{{ value.payment_mode }}</td>
+          <td class="text-right">{{ value.transaction_id }}</td>
+          <td class="text-right">{{ value.created_date }}</td>
+          <td class="text-right">{{ value.comment  }}</td>
+        </tr>
+		{% endfor %}
+		{% else %}
+                  <tr>
+                    <td class="text-center" colspan="8">{{ text_no_results }}</td>
+                  </tr>
+		{% endif %}
+              </tbody>
+		</table>
+      </div>
+ </div>
+</body>
+</html>

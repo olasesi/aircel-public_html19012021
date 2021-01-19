@@ -1,0 +1,31 @@
+{% if store %}
+<h3 class="pts-h3">{{ heading_title }}</h3>
+<div class="row">
+<div id="carousel_seller_featuredstore" class="aaaa owl-carousel text-center">
+  {% for result in store %}
+  <div class="pts-product-layout pts-col-lg-12 pts-col-md-12 pts-col-sm-12 pts-col-xs-12">
+   <div class=" pts-product-thumb transition">
+      <div class="image">
+	  <a href="{{ result.href }}">
+		<img src="{{ result.store_logo }}" alt="{{ result.store_name }}" title="{{ result.store_name }}" class="img-responsive" />
+	  </a>
+	  </div>
+      <div class="pts-caption" style="min-height:auto !important">
+        <h4><a href="{{ result.href }}">{{ result.store_name }}</a></h4>       
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+<script type="text/javascript">
+$('#carousel_seller_featuredstore').owlCarousel({
+	items: 5,
+	autoPlay: 3000,
+	margin:10,
+	navigation: true,
+	navigationText: ['<i class="fa fa-chevron-left fa-5x"></i>', '<i class="fa fa-chevron-right fa-5x"></i>'],
+	pagination: true
+});
+</script>
+{% endif %}

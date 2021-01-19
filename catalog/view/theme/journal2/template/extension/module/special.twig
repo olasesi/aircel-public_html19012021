@@ -1,0 +1,64 @@
+<div class="box oc-module">
+  <h3 class="box-heading">{{ heading_title }}</h3>
+  <div class="box-content row">
+    <div class="box-product">
+      {% for product in products %}
+        <div class="product-grid-item {{ journal2.settings.get('product_grid_classes') }}">
+          <div class="product-thumb product-wrapper {% if product.labels and product.labels.outofstock %} outofstock {% endif %}">
+            <div class="image {% if journal2.settings.get('show_countdown', 'never') != 'never' and product.date_end %} has-countdown {% endif %}">
+              <a href="{{ product.href }}" {% if product.thumb2 %} class="has-second-image" style="background: url('{{ product.thumb2 }}') no-repeat" {% endif %}>
+                <img class="lazy first-image" width="{{ journal2.settings.get('config_image_width') }}" height="{{ journal2.settings.get('config_image_height') }}" src="{{ journal2.settings.get('product_dummy_image') }}" data-src="{{ product.thumb }}" title="{{ product.name }}" alt="{{ product.name }}"/>
+              </a>
+              {% for label, name in product.labels %}
+                <span class="label-{{ label }}"><b>{{ name }}</b></span>
+              {% endfor %}
+              {% if journal2.settings.get('product_grid_wishlist_icon_position') == 'image' and journal2.settings.get('product_grid_wishlist_icon_display') == 'icon' %}
+                <div class="wishlist"><a onclick="addToWishList('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_wishlist }}"><i class="wishlist-icon"></i><span class="button-wishlist-text">{{ button_wishlist }}</span></a></div>
+                <div class="compare"><a onclick="addToCompare('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_compare }}"><i class="compare-icon"></i><span class="button-compare-text">{{ button_compare }}</span></a></div>
+              {% endif %}
+            </div>
+            <div class="product-details">
+              <div class="caption">
+                <h4 class="name"><a href="{{ product.href }}">{{ product.name }}</a></h4>
+                <p class="description">{{ product.description }}</p>
+                {% if product.price %}
+                  <div class="price">
+                    {% if not product.special %}
+                      {{ product.price }}
+                    {% else %}
+                      <span class="price-old">{{ product.price }}</span> <span class="price-new">{{ product.special }}</span>
+                    {% endif %}
+                  </div>
+                {% endif %}
+                {% if product.rating %}
+                  <div class="rating">
+                    {% for i in 1..5 %}
+                      {% if product.rating < i %}
+                        <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                      {% else %}
+                        <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                      {% endif %}
+                    {% endfor %}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="button-group">
+                {% if staticCall('Journal2Utils', 'isEnquiryProduct', [null, product]) %}
+                  <div class="cart enquiry-button">
+                    <a href="javascript:Journal.openPopup('{{ journal2.settings.get('enquiry_popup_code') }}', '{{ product.product_id }}');" data-clk="addToCart('{{ product.product_id }}');" class="button hint--top" data-hint="{{ journal2.settings.get('enquiry_button_text') }}">{{ journal2.settings.get('enquiry_button_icon') }}<span class="button-cart-text">{{ journal2.settings.get('enquiry_button_text') }}</span></a>
+                  </div>
+                {% else %}
+                  <div class="cart {% if product.labels and product.labels.outofstock %} outofstock {% endif %}">
+                    <a onclick="addToCart('{{ product.product_id }}', '{{ product.minimum }}');" class="button hint--top" data-hint="{{ button_cart }}"><i class="button-left-icon"></i><span class="button-cart-text">{{ button_cart }}</span><i class="button-right-icon"></i></a>
+                  </div>
+                {% endif %}
+                <div class="wishlist"><a onclick="addToWishList('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_wishlist }}"><i class="wishlist-icon"></i><span class="button-wishlist-text">{{ button_wishlist }}</span></a></div>
+                <div class="compare"><a onclick="addToCompare('{{ product.product_id }}');" class="hint--top" data-hint="{{ button_compare }}"><i class="compare-icon"></i><span class="button-compare-text">{{ button_compare }}</span></a></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

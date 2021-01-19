@@ -1,0 +1,36 @@
+<div id="journal-cms-block-{{ module }}" class="journal-cms-block-{{ module_id }} box cms-blocks {{ disable_on_classes | join(' ') }} {{ gutter_on_class }}" style="{{ css }}">
+  <style>
+    #journal-cms-block-{{ module }} .editor-content h1,
+    #journal-cms-block-{{ module }} .editor-content h2,
+    #journal-cms-block-{{ module }} .editor-content h3 {
+    {{ headings_style }}
+    }
+
+    #journal-cms-block-{{ module }} .editor-content p {
+    {{ paragraphs_style }}
+    }
+  </style>
+  {% if title %}
+    <div class="box-heading">{{ title }}</div>
+  {% endif %}
+  <div class="blocks">
+    {% for section in sections %}
+      <div class="cms-block {{ grid_classes }}" style="{{ section.block_css }}">
+        {% if section.title %}
+          <h3>{{ section.title }}</h3>
+        {% endif %}
+        <span class="block-content block-content-{{ section.icon_position }}" style="{{ section.css }}">
+            {% if section.has_icon %}
+              <div class="block-icon block-icon-{{ section.icon_position }}" style="{{ section.icon_css }}">{{ section.icon }}</div>
+            {% endif %}
+          <div class="editor-content" style="text-align: {{ section.content_align }}">{{ section.content }}</div>
+        </span>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+<script>
+  if (!Journal.isFlexboxSupported) {
+    Journal.equalHeight($('#journal-cms-block-{{ module }} .cms-block'), '.block-content');
+  }
+</script>

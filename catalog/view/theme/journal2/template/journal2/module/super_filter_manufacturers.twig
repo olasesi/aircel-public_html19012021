@@ -1,0 +1,16 @@
+<div class="box sf-manufacturer sf-{{ manufacturer_display_mode }} sf-{{ manufacturer_type }}> {% if is_collapsed %} is-collapsed {% endif %}" data-id="manufacturer">
+  <div class="box-heading">{{ journal2.settings.get('filter_brands_text', text_manufacturers) }}</div>
+  <div class="box-content">
+    <ul class="{% if not journal2.settings.get('filter_show_box') %} hide-checkbox {% endif %}">
+      {% for manufacturer in manufacturers %}
+        {% if manufacturer_display_mode == 'list' %}
+          <li><label><input data-keyword="{{ manufacturer.keyword }}" type="checkbox" name="manufacturer" value="{{ manufacturer.manufacturer_id }}"><span class="sf-name">{{ manufacturer.name }}</span></label></li>
+        {% elseif manufacturer_display_mode == 'image' %}
+          <li><label><input data-keyword="{{ manufacturer.keyword }}" type="checkbox" name="manufacturer" value="{{ manufacturer.manufacturer_id }}"><img width="{{ brand_image_width }}" height="{{ brand_image_height }}" data-hint="{{ manufacturer.name }}" src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}" title="{{ manufacturer.name }}"/></label></li>
+        {% else %}
+          <li><label><input data-keyword="{{ manufacturer.keyword }}" type="checkbox" name="manufacturer" value="{{ manufacturer.manufacturer_id }}"><img width="{{ brand_image_width }}" height="{{ brand_image_height }}" src="{{ manufacturer.image }}" alt="{{ manufacturer.name }}"/><span class="sf-name">{{ manufacturer.name }}</span> </label></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>

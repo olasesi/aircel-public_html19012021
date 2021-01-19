@@ -1,0 +1,39 @@
+<h3 class="pts-h3">{{ heading_title }}
+     <div class="pts-right-link pts-pull-right">
+			    <a href="{{ all_blog }}">{{ view_all }}</a>
+     </div>
+</h3>
+<div class="row">
+<div id="carousel_seller_blog_multivendor" class="owl-carousel">
+  {% for pts_blog in pts_blogs %}
+   <div class="pts-col-lg-12 pts-col-md-3 pts-col-sm-6 pts-col-xs-12 pts-col-xs-12">
+  <div class="  text-center pts-product-thumb transition" style="text-align:center !important">
+    <div class="transition">
+	<div class="pull-left pts-col-md-7">
+		{{ pts_blog.date }}
+	</div>		
+      <div> <a href="{{ pts_blog.href }}"><img src="{{ pts_blog.thumb }}" alt="{{ pts_blog.title }}" title="{{ pts_blog.title }}" class="pts-seller-blog-image img-responsive"  /></a>
+	  </div>
+      <div  style="height: auto !important">
+        <h4><a href="{{ pts_blog.href }}">{{ pts_blog.title }}</a></h4>
+        <p>{{ pts_blog.description }}</p>
+      </div>
+	  </div>
+	  <div>
+		<a href="{{ pts_blog.href }}">{{ text_readmore }}</a>
+	  </div>
+    </div>
+  </div>
+  {% endfor %}
+  </div>
+</div>
+<script type="text/javascript">
+$('#carousel_seller_blog_multivendor').owlCarousel({
+	items: 5,
+	autoPlay: 3000,
+	margin:10,
+	navigation: true,
+	navigationText: ['<i class="fa fa-chevron-left fa-5x"></i>', '<i class="fa fa-chevron-right fa-5x"></i>'],
+	pagination: true
+});
+</script>

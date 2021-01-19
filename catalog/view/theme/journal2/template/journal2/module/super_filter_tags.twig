@@ -1,0 +1,10 @@
+<div class="box sf-tags {% if is_collapsed %} is-collapsed {% endif %}" data-id="tags">
+  <div class="box-heading">{{ journal2.settings.get('filter_tags_text') }}</div>
+  <div class="box-content">
+    <ul class="{% if not journal2.settings.get('filter_show_box') %} hide-checkbox {% endif %}">
+      {% for t in tags %}
+        <li><label><input data-keyword="{{ t.keyword }}" type="checkbox" name="tag" value="{{ t.text }}" {% if tag == t.text %} checked {% endif %}><span class="sf-name">{{ t.name }}</span></label></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,428 @@
+
+{{ header }}
+<div class="pts-container">
+  <ul class="pts-breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href}}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if success %}
+  <div class="alert pts-alert-success"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+	{% if error_warning %}
+  <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+	{% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_title }}</h1>
+      <form action="{{ action }}" method="post" enctype="multipart/form-data" class="pts-form-horizontal">
+        <fieldset>
+         <div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storename">{{ entry_name }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="seller_name" disabled value="{{ seller_name }}" placeholder="{{ entry_name }}" id="input-name" class="pts-form-control" />
+			  <input type="hidden" name="seller_name" value="{{ seller_name }}" />
+			</div>
+		</div>
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storename">{{ entry_storename }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_name"  value="{{ store_name }}" placeholder="{{ entry_storename }}" id="input-storename" class="pts-form-control" />
+				{% if error_storename %}
+			  <div class="text-danger">{{ error_storename }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label">{{ entry_storelogo }}</label>
+			<div class="pts-col-sm-10"><a href="" id="thumb-image" data-toggle="image" class="img-thumbnail img-left"><img src="{{ thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+			  <input type="hidden" name="store_logo" value="{{ store_logo }}" id="input-storelogo" />
+			</div>
+		</div>
+		<!-- <div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storeemail">{{ entry_storeemail }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_email" value="{{ store_email }}" placeholder="{{ entry_storeemail }}" id="input-storeemail" class="pts-form-control" />
+				{% if error_storeemail %}
+			  <div class="text-danger">{{ error_storeemail }}</div>
+			  {% endif %}
+			</div>
+		</div> -->
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storephone">{{ entry_storephone }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_phone"  value="{{ store_phone }}" placeholder="{{ entry_storephone }}" id="input-storephone" class="pts-form-control" />
+				{% if error_storephone %}
+			  <div class="text-danger">{{ error_storephone }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storephone">{{ entry_facebook }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="facebook_link" readonly value="{{ facebook_link }}" placeholder="{{ entry_facebook }}" id="input-storephone" class="pts-form-control" />
+			</div>
+		</div>
+		
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storephone">{{ entry_google }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="google_link"readonly value="{{ google_link }}" placeholder="{{ entry_google }}" id="input-storephone" class="pts-form-control" />
+			</div>
+		</div>		
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storephone">{{ entry_twitter }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="twitter_link" readonly value="{{ twitter_link }}" placeholder="{{ entry_twitter }}" id="input-storephone" class="pts-form-control" />
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storephone">{{ entry_instagram }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="instagram_link" readonly value="{{ instagram_link }}" placeholder="{{ entry_instagram }}" id="input-storephone" class="pts-form-control" />
+			</div>
+		</div>
+				<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storephone">{{ entry_printerest }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="pinterest_link" readonly value="{{ pinterest_link }}" placeholder="{{ entry_printerest }}" id="input-storephone" class="pts-form-control" />
+			</div>
+		</div>
+				<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storephone">{{ entry_website }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="wesbsite_link" readonly value="{{ wesbsite_link }}" placeholder="{{ entry_website }}" id="input-storephone" class="pts-form-control" />
+			</div>
+		</div>
+		
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-whatsapp">{{ entry_whatsapp_number }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="whatsapp_link" readonly value="{{ whatsapp_link }}" placeholder="{{ entry_whatsapp_number }}" id="input-whatsapp" class="pts-form-control" />
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label">{{ entry_storebanner }}</label>
+			<div class="pts-col-sm-10"><a href="" id="banner-thumb-image" data-toggle="image" class="img-thumbnail img-left"><img src="{{ banner_thumb }}" alt="" title="" data-placeholder="{{ placeholder }}" /></a>
+			  <input type="hidden" name="store_banner" value="{{ store_banner }}" id="input-storebanner" /><br>
+			  {{ entry_storebanner_desc }}
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storedescription">{{ entry_storedescription }}</label>
+			<div class="pts-col-sm-10">
+				<textarea name="store_description" data-toggle="summernote" id="input-storedescription" class="pts-form-control summernote ckeditor">{{ store_description }}</textarea>
+			</div>
+		</div>
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storeaddress">{{ entry_storeaddress }}</label>
+			<div class="pts-col-sm-10">
+			  <textarea name="store_address" class="pts-form-control" rows="5">{{ store_address }}</textarea>
+				{% if error_storeaddress %}
+			  <div class="text-danger">{{ error_storeaddress }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storecity">{{ entry_storecity }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_city" value="{{ store_city }}" placeholder="{{ entry_storecity }}" id="input-storecity" class="pts-form-control" />
+				{% if error_storecity %}
+			  <div class="text-danger">{{ error_storecity }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group required">
+		<label class="pts-col-sm-2 pts-control-label" for="input-storecountry">{{ entry_storecountry }}</label>
+		<div class="pts-col-sm-10">
+		  <select name="store_country" id="input-storecountry" onchange="country(this,'{{ store_state }}');" class="pts-form-control">
+			<option value="">{{ text_select }}</option>
+			{% for country in countries %}
+			{% if country.country_id == store_country %}
+			<option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+			{% else %}
+			<option value="{{ country.country_id }}">{{ country.name }}</option>
+			{% endif %}
+			{% endfor %}
+		  </select>
+		  {% if error_storecountry %}
+		  <div class="text-danger">{{ error_storecountry }}</div>
+		  {% endif %}
+		</div>
+	  </div>
+	  <div class="pts-form-group required">
+		<label class="pts-col-sm-2 pts-control-label" for="input-storestate">{{ entry_storezone }}</label>
+		<div class="pts-col-sm-10">
+		  <select name="store_state" id="input-storestate" class="pts-form-control">
+		  </select>
+		  {% if error_storezone %}
+		  <div class="text-danger">{{ error_storezone }}</div>
+		  {% endif %}
+		</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storezipcode">{{ entry_storepostcode }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_zipcode" value="{{ store_zipcode }}" placeholder="{{ entry_storepostcode }}" id="input-storezipcode" class="pts-form-control" />
+			  {% if error_storezipcode %}
+			  <div class="text-danger">{{ error_storezipcode }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storeshipping">{{ entry_storeshippingpolicy }}</label>
+			<div class="pts-col-sm-10">
+			  <textarea name="store_shipping_policy" data-toggle="summernote" id="input-storeshipping" class="pts-form-control summernote ckeditor">{{ store_shipping_policy }}</textarea>
+			  {% if error_storeshipping %}
+			  <div class="text-danger">{{ error_storeshipping }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storereturn">{{ entry_storereturn }}</label>
+			<div class="pts-col-sm-10">
+			  <textarea name="store_return_policy" data-toggle="summernote" id="input-storereturn" class="pts-form-control summernote ckeditor">{{ store_return_policy }}</textarea>
+			  {% if error_storereturn %}
+			  <div class="text-danger">{{ error_storereturn }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storemetakeyword">{{ entry_storemetakeyword }}</label>
+			<div class="pts-col-sm-10">
+			   <textarea name="store_meta_keywords" class="pts-form-control" rows="5">{{ store_meta_keywords }}</textarea>
+			  {% if error_storemetakeyword %}
+			  <div class="text-danger">{{ error_storemetakeyword }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storemetadescription">{{ entry_storemetadescription }}</label>
+			<div class="pts-col-sm-10">
+			   <textarea name="store_meta_description" class="pts-form-control" rows="5">{{ store_meta_description }}</textarea>
+			  {% if error_storemetadescription %}
+			  <div class="text-danger">{{ error_storemetadescription }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group required">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storebankdetail">{{ entry_storebankdetail }}</label>
+			<div class="pts-col-sm-10">
+			   <textarea name="store_bank_details"readonly class="pts-form-control" rows="5">{{ store_bank_details }}</textarea>
+			  {% if error_storebankdetail %}
+			  <div class="text-danger">{{ error_storebankdetail }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storetin">{{ entry_storetin }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_tin" value="{{ store_tin }}" placeholder="" id="input-storetin" class="pts-form-control" />
+			  {% if error_storetin %}
+			  <div class="text-danger">{{ error_storetin }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		
+				
+						 <div class="pts-form-group">
+                          <label class="pts-col-sm-2 pts-control-label" for="input-newsletter">{{ entry_storeshipping_type }}</label>
+                          <div class="pts-col-sm-10">
+                            <select name="store_shipping_order_type" id="input-storeshipping-type" class="pts-form-control">
+                              
+                              <option value="pts_product_wise" {% if store_shipping_order_type == 'pts_product_wise' %} selected="selected" {% endif %}>{{entry_product_wise}}</option>
+                              <option value="pts_order_wise" {% if store_shipping_order_type == 'pts_order_wise' %} selected="selected" {% endif %}>{{entry_order_wise}}</option>
+                             
+                            </select>
+                          </div>
+                        </div>
+						
+						<div class="pts-form-group">
+                          <label class="pts-col-sm-2 pts-control-label" for="input-newsletter">{{ entry_storeshipping_charge }}</label>
+                          <div class="pts-col-sm-10">
+                            <select name="store_shipping_type" id="input-store-shipping-type" class="pts-form-control">
+                              
+                              <option value="pts_flat_rate_shipping" onclick="show2();" {% if store_shipping_type == 'pts_flat_rate_shipping' %} selected="selected" {% endif %}>{{ entry_store_flat_rate_shipping }}</option>
+							  
+                              <option value="pts_matrix_shipping" {% if store_shipping_type == 'pts_matrix_shipping' %} selected="selected" {% endif %}  onclick="show1();">{{ entry_store_matrix_shipping }}</option>
+							  
+							  <option {% if store_shipping_type == 'pts_flexible_shipping' %} selected="selected" {% endif %} name="store_shipping_type" value="pts_flexible_shipping" onclick="show2();">{{ entry_store_flexible_shipping }}</option>
+                              
+                            </select>
+                          </div>
+                        </div>
+									
+				
+							
+					
+		<div class="pts-form-group" id="div1" class="hide">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storeshipping">{{ entry_storeshipping }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_shipping_charge" value="{{ store_shipping_charge }}" placeholder="{{ entry_storeshipping }}" id="input-storeshipping" class="pts-form-control" />
+			  {% if error_storecharge %}
+			  <div class="text-danger">{{ error_storecharge }}</div>
+			  {% endif %}
+			</div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storeshipping">{{ entry_storeseo }}</label>
+			<div class="pts-col-sm-10">
+			  <input type="text" name="store_seo" value="{{ store_seo }}" placeholder="{{ entry_storeseo }}" id="input-storeseo" class="pts-form-control" />
+			  {% if error_storeseo %}
+			  <div class="text-danger">{{ error_storeseo }}</div>
+			 {% endif %}
+			</div>  
+		</div>  
+			{% if module_purpletree_multivendor_allow_live_chat %}
+		 <div class="pts-form-group">
+		  <label class="pts-col-sm-2 pts-control-label" for="input-live-chat">{{ entry_allow_live_chat }}</label>
+		  <div class="pts-col-sm-10">
+			<select name="store_live_chat_enable" id="input-live-chat" class="pts-form-control">
+			  
+			  <option value="1" {% if store_live_chat_enable %} selected="selected" {% endif %}>{{text_yes}}</option>
+			  <option value="0" {% if store_live_chat_enable == 0 %} selected="selected" {% endif %}>{{text_no}}</option>
+			 
+			</select>
+		  </div>
+		</div>
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-live_chat_code">{{ entry_live_chat_code }}</label>
+			<div class="pts-col-sm-10">
+				<input type="text" id="input-live_chat_code" name="store_live_chat_code" class="pts-form-control" value="{{ store_live_chat_code }}" />
+			</div>
+		</div>
+		{% endif %}
+	<!-- paypal -->
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-seller-paypal-id">
+			{{ entry_seller_paypal_id }}</label>
+			<div class="pts-col-sm-10">
+				<input type="text" id="input-seller-paypal-id" name="seller_paypal_id" class="pts-form-control" value="{{ seller_paypal_id }}" />
+				 {% if error_seller_paypal_id %}
+			        <div class="text-danger">{{ error_seller_paypal_id }}</div>
+			     {% endif %}
+			</div>
+		</div>
+		<!-- End paypal -->
+		<div class="pts-form-group">
+			<label class="pts-col-sm-2 pts-control-label" for="input-storeshipping">{{ text_attachment }}</label>
+			<div class="pts-col-sm-10" style="padding-top:7px;">
+			<input type="file" name="upload_file" value="" />
+			{% if upload_file_existing %} 
+			<input type="hidden" name="upload_file_exiting" value="{{ upload_file_existing }}" />
+			<a target="_blank" href ="{{ upload_file_existing_href }}"><span>{{ upload_file_existing }}</span></a>
+			 {% endif %}
+			<div class="text">{{  text_supported  }}</div>
+			 {% if error_file_upload %}
+			<div class="text-danger">{{ error_file_upload }}</div>
+			 {% endif %}
+			  
+			</div>
+		</div>
+        </fieldset>
+        <div class="buttons clearfix">
+          <div class="pts-pull-left"><a href="{{ back }}" class="pts-btn pts-btn-default">{{ button_back }}</a></div>
+          <div class="pts-pull-right">
+            <input type="submit" value="{{ button_continue }}" class="pts-btn pts-btn-primary" />
+          </div>
+        </div>
+      </form>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+<!-- <link href="catalog/view/javascript/purpletree/codemirror/lib/codemirror.css" rel="stylesheet" />
+  <link href="catalog/view/javascript/purpletree/codemirror/theme/monokai.css" rel="stylesheet" />
+  <script type="text/javascript" src="catalog/view/javascript/purpletree/codemirror/lib/codemirror.js"></script> 
+  <script type="text/javascript" src="catalog/view/javascript/purpletree/codemirror/lib/xml.js"></script> 
+  <script type="text/javascript" src="catalog/view/javascript/purpletree/codemirror/lib/formatting.js"></script>  -->
+  {% if ver=='3.1.0.0_b' %}
+    <script type="text/javascript"><!--
+      $('textarea[data-toggle=\'summernote\']').ckeditor();
+    //--></script>
+{% else %}
+	<!--   <script type="text/javascript" src="catalog/view/javascript/purpletree/summernote/summernote.js"></script>
+	  <link href="catalog/view/javascript/purpletree/summernote/summernote.css" rel="stylesheet" />
+	  <script type="text/javascript" src="catalog/view/javascript/purpletree/summernote/summernote-image-attributes.js"></script> 
+	  <script type="text/javascript" src="catalog/view/javascript/purpletree/summernote/opencart.js"></script>  -->
+{% endif %} 
+ <script type="text/javascript"><!--
+function country(element,zone_id) { 
+	$.ajax({
+		url: 'index.php?route=account/account/country&country_id=' + element.value,
+		dataType: 'json',
+		beforeSend: function() {
+			$('select[name=\'store_country\']').after(' <i class="fa fa-circle-o-notch fa-spin"></i>');
+		},
+		complete: function() {
+			$('.fa-spin').remove();
+		},
+		success: function(json) {
+			if (json['postcode_required'] == '1') {
+				$('input[name=\'store_zipcode]\']').parent().parent().addClass('required');
+			} else {
+				$('input[name=\'store_zipcode\']').parent().parent().removeClass('required');
+			}
+
+			html = '<option value="">{{ text_select }}</option>';
+
+			if (json['zone'] && json['zone'] != '') {
+				for (i = 0; i < json['zone'].length; i++) {
+					html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+					if (json['zone'][i]['zone_id'] == zone_id) {
+						html += ' selected="selected"';
+					}
+
+					html += '>' + json['zone'][i]['name'] + '</option>';
+				}
+			} else {
+				html += '<option value="0">{{ text_none }}</option>';
+			}
+
+			$('select[name=\'store_state\']').html(html);
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+}
+
+$('select[name$=\'store_country\']').trigger('change');
+function show1(){
+  document.getElementById('div1').style.display ='none';
+}
+function show2(){
+  document.getElementById('div1').style.display = 'block';
+}
+$(window).load(function(){
+	{% if store_shipping_type == 'pts_matrix_shipping' %}
+	 document.getElementById('div1').style.display ='none';
+	 {% endif %}
+})
+//--></script>
+{{ footer }}
+<style>
+.note-image-popover{
+  position:absolute!important;
+  background-color:#f5f5f5;
+  top:-10px!important;
+  left:0!important;
+  right:0!important;
+  border-top:0;
+  border-left:0;
+  border-right:0;
+  -webkit-border-radius:0;
+  border-radius:0;
+}
+.note-image-popover .arrow{
+  display:none!important
+}
+.fade{opacity:1 !important}
+</style>

@@ -1,0 +1,10 @@
+<div class="box sf-attribute sf-attribute-{{ attribute.attribute_id }} sf-{{ attribute.type }} {% if is_collapsed %} is-collapsed {% endif %}" data-id=" attribute-{{ attribute.attribute_id }}">
+  <div class="box-heading">{{ attribute.attribute_name }}</div>
+  <div class="box-content">
+    <ul class="{% if not journal2.settings.get('filter_show_box') %} hide-checkbox {% endif %}">
+      {% for value in attribute.values %}
+        <li><label><input data-keyword="{{ value.keyword }}" type="checkbox" name="attribute[{{ attribute.attribute_id }}]" value="{{ value.text }}">{{ value.name }}</label></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

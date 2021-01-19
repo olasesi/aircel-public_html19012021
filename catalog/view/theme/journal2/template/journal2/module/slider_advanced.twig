@@ -1,0 +1,49 @@
+<div class="journal-slider-{{ module_id }} tp-banner-container box {% if js_options.hideThumbs %} nav-on-hover {% endif %} {{ slider_class }} {% if js_options.thumbAmount == '' %} full-thumbs {% endif %} {{ disable_on_classes | join(' ') }} {% if js_options.navigationType == 'none' %} hide-navigation {% endif %}" style="{{ width }}; height: {{ height }}px;">
+  <div class="tp-banner" id="journal-slider-{{ module }}" style="display: none; background-image: url('{{ slides.0.image }}'); background-size: cover; background-position: center center;">
+    <ul>
+      {% for slide in slides %}
+        <li {{ slide.data }}>
+          {% if preload_images %}
+            <img src="{{ dummy_image }}" data-lazyload="{{ slide.image }}" width="{{ js_options.startwidth }}" height="{{ js_options.startheight }}" alt="{{ slide.name }}"/>
+          {% else %}
+            <img src="{{ slide.image }}" width="{{ js_options.startwidth }}" height="{{ js_options.startheight }}" alt="{{ slide.name }}"/>
+          {% endif %}
+          {% for caption in slide.captions %}
+            {% if caption.link %}
+              <a id="jcaption-{{ caption.id }}" href="{{ caption.link }}" {{ caption.target }} class="tp-caption {{ caption.classes }}" style="{{ caption.css }}" {{ caption.data }}>
+                {{ caption.content }}
+              </a>
+            {% else %}
+              <div id="jcaption-{{ caption.id }}" class="tp-caption {{ caption.classes }}" style="{{ caption.css }}" {{ caption.data }}>
+                {{ caption.content }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </li>
+      {% endfor %}
+    </ul>
+    {% if timer == 'top' %}
+      <div class="tp-bannertimer"></div>
+    {% elseif timer == 'bottom' %}
+      <div class="tp-bannertimer tp-bottom"></div>
+    {% endif %}
+  </div>
+</div>
+{% if css %}
+  <style>{{ css | join (' ') }}</style>
+{% endif %}
+<script>
+  (function () {
+    $('<style>{{ global_style | join (' ') }}</style>').appendTo($('head'));
+
+    var opts = $.parseJSON('{{ js_options | json_encode }}');
+    opts.hideThumbs = 0;
+    $('#journal-slider-{{ module }}').show().revolution(opts);
+    {% if timer != 'top' and timer != 'bottom' %}
+    $('#journal-slider-{{ module }} .tp-bannertimer').hide();
+    {% endif %}
+    setTimeout(function () {
+      $('#journal-slider-{{ module }}').css('background-image', 'none');
+    }, 2500);
+  })();
+</script>

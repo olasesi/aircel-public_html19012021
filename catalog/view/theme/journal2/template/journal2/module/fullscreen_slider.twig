@@ -1,0 +1,19 @@
+<div class="journal-fullscreen-slider journal-fullscreen-slider-{{ module_id }} {{ disable_on_classes | join(' ') }}">
+  {% if transparent_overlay %}
+    <div class="transparent-overlay" style="background-image: url('{{ transparent_overlay }}');"></div>
+  {% endif %}
+  {% if images %}
+    <script>
+      jQuery(function ($) {
+        var opts = {
+          transition: '{{ transition }}',
+          transition_speed: parseInt('{{ transition_speed }}', 10),
+          slide_interval: parseInt('{{ transition_delay }}'),
+          slides: $.parseJSON('{{ images | json_encode() }}')
+        };
+
+        $.supersized(opts);
+      });
+    </script>
+  {% endif %}
+</div>

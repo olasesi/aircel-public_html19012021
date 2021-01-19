@@ -1,0 +1,48 @@
+<div class="side-products-{{ module_id }} box oc-module side-products">
+  {% if heading_title %}
+    <div class="box-heading">{{ heading_title }}</div>
+  {% endif %}
+  <div class="box-content">
+    <div class="box-product">
+      {% for product in products %}
+        <div class="product-grid-item {{ journal2.settings.get('product_grid_classes') }} display-{{ journal2.settings.get('product_grid_wishlist_icon_display') }} {{ journal2.settings.get('product_grid_button_block_button') }}">
+          <div class="product-wrapper">
+            {% if product.thumb %}
+            <div class="image">
+              <a href="{{ product.href }}">
+                <img width="{{ image_width }}" height="{{ image_height }}" src="{{ product.thumb }}" title="{{ product.name }}" alt="{{ product.name }}"/>
+              </a>
+            </div>
+            {% endif %}
+            <div class="product-details">
+              <div class="name"><a href="{{ product.href }}">{{ product.name }}</a></div>
+              {% if product.price %}
+                <div class="price">
+                  {% if not product.special %}
+                    {{ product.price }}
+                  {% else %}
+                    <span class="price-old">{{ product.price }}</span> <span class="price-new">{{ product.special }}</span>
+                  {% endif %}
+                  {% if product.tax %}
+                    <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
+                  {% endif %}
+                </div>
+              {% endif %}
+              {% if product.rating %}
+                <div class="rating">
+                  {% for i in 1..5 %}
+                    {% if product.rating < i %}
+                      <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                    {% else %}
+                      <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>

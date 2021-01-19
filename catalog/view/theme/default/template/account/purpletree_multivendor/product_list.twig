@@ -1,0 +1,577 @@
+{{ header }}
+<div class="pts-container">
+  <ul class="pts-breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	{% endfor %}
+  </ul>
+  <div class="plansave"></div>
+  <div class="successdiv">
+  {% if success %}
+  <div class="alert pts-alert-success"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+   </div>
+   <div class="errordiv">
+	{% if error_warning %}
+  <div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+	{% endif %}
+	</div>
+  <div class="pts-row d-flex">{{ column_left }}
+	{% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+	<div class="pts-pull-right">
+	
+	<button type="submit" form="form-product" data-toggle="tooltip" id="button-enabledproduct" title="{{ text_product_enable }}" formaction="{{ enabledproduct }}" class="pts-btn pts-btn-primary" >{{ text_product_enable }}</button>
+	<button type="submit" form="form-product" data-toggle="tooltip" id="button-disabledproduct" title="{{ text_product_disable }}" formaction="{{ disabledproduct }}" class="pts-btn btn-danger" >{{ text_product_disable }}</button>
+
+	<a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="pts-btn pts-btn-primary"><i class="fa fa-plus"></i></a>
+	<button type="submit" form="form-product" formaction="{{ copy }}" data-toggle="tooltip" title="{{ button_copy }}" class="pts-btn pts-btn-default"><i class="fa fa-copy"></i></button>
+        <button type="submit" formaction="{{ delete }}" form="form-product"  data-toggle="tooltip" title="{{ button_delete }}" class="pts-btn pts-btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-product').submit() : false;"><i class="fa fa-trash-o fas fa-trash-alt"></i></button>
+      </div>
+      <h1>{{ heading_title }}</h1>
+      <div>
+        <div class="pts-well">
+          <div class="pts-row">
+            <div class="pts-col-sm-4">
+              <div class="pts-form-group ptsnewcss">
+                <label class="pts-control-label" for="input-name">{{ entry_name }}</label>
+                <input type="text" name="filter_name" value="{{ filter_name }}" placeholder="{{ entry_name }}" id="input-name" class="pts-form-control" />
+              </div>
+              <div class="pts-form-group ptsnewcss">
+                <label class="pts-control-label" for="input-model">{{ entry_model }}</label>
+                <input type="text" name="filter_model" value="{{ filter_model }}" placeholder="{{ entry_model }}" id="input-model" class="pts-form-control" />
+              </div>
+            </div>
+            <div class="pts-col-sm-4">
+              <div class="pts-form-group">
+                <label class="pts-control-label" for="input-price">{{ entry_price }}</label>
+                <input type="text" name="filter_price" value="{{ filter_price }}" placeholder="{{ entry_price }}" id="input-price" class="pts-form-control" />
+              </div>
+              <div class="pts-form-group">
+                <label class="pts-control-label" for="input-quantity">{{ entry_quantity }}</label>
+                <input type="text" name="filter_quantity" value="{{ filter_quantity }}" placeholder="{{ entry_quantity }}" id="input-quantity" class="pts-form-control" />
+              </div>
+            </div>
+            <div class="pts-col-sm-4">
+              <div class="pts-form-group">
+                <label class="pts-control-label" for="input-status">{{ entry_status }}</label>
+                <select name="filter_status" id="input-status" class="pts-form-control">
+                  <option value="*">{{ text_all }}</option>
+                  {% if filter_status =='1' %}
+                  <option value="1" selected="selected">{{ text_enabled }}</option>
+                  {% else %}
+                  <option value="1">{{ text_enabled }}</option>
+                  {% endif %}
+                  {% if filter_status =='0' %}
+                  <option value="0" selected="selected">{{ text_disabled }}</option>
+                  {% else %}
+                  <option value="0">{{ text_disabled }}</option>
+                  {% endif %}
+                </select>
+              </div>
+              <button type="button" id="pts-button-filter" class="pts-btn pts-btn-primary pts-pull-right" style="margin-top: 25px;"><i class="fa fa-filter"></i> {{ button_filter }}</button>
+            </div>
+          </div>
+        </div>
+        <form action="" method="post" enctype="multipart/form-data" id="form-product">
+          <div class="pts-table-responsive">
+            <table class="pts-table pts-table-bordered pts-table-hover">
+              <thead>
+                <tr>
+                  <td style="width: 1px;" class="pts-text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                  <td class="pts-text-center">{{ column_image }}</td>
+                  <td class="pts-text-left">{{ column_name }}</td>
+                  <td class="pts-text-left">{{ column_model }}</td>
+                  <td class="pts-text-right">{{ column_price }}</td>
+                  <td class="pts-text-right">{{ column_quantity }}</td>
+                  <td class="pts-text-left">{{ column_status }}</td>
+                  <td class="pts-text-left">{{ column_approved }}</td>
+				  <!-- /////// category featured and featured product ///////// -->
+				  <td class="pts-text-left">{{ column_featured_product }}</td>
+				  <td class="pts-text-right">{{ column_cataegory_featured_product }}</td>
+				  <!--  /////// End category featured and featured product /////////  -->
+                  <td class="pts-text-right">{{ column_action }}</td>
+                </tr>
+              </thead>
+              <tbody>
+				{% if products %}
+					{% for product in products %}
+                <tr {% if product.statusid==0 %} style="background-color: #f2dede;" {% endif %} >
+                  <td class="pts-text-center">{% if selected in product.product_id %}
+                    <input type="checkbox" name="selected[]" value="{{ product.product_id }}" checked="checked" />
+                    {% else %}
+                    <input type="checkbox" name="selected[]" value="{{ product.product_id }}" />
+                    {% endif %}</td>
+                  <td class="pts-text-center">{% if product.image %}
+                    <img src="{{ product.image }}" alt="{{ product.name }}" class="img-thumbnail" />
+                    {% else %}
+                    <span class="img-thumbnail list"><i class="fa fa-camera fa-2x"></i></span>
+                    {% endif %}</td>
+                  <td class="pts-text-left">{{ product.name }}</td>
+                  <td class="pts-text-left">{{ product.model }}</td>
+                  <td class="pts-text-right">{% if product.special %}
+                    <span style="text-decoration: line-through;">{{ product.price }}</span><br/>
+                    <div class="text-danger">{{ product.special }}</div>
+                    {% else %}
+                    {{ product.price }}
+                    {% endif %}</td>
+                  <td class="pts-text-right">{% if product.quantity <= 0 %}
+                    <span class="label label-warning">{{ product.quantity }}</span>
+						{% elseif product.quantity <= 5 %}
+                    <span class="label label-danger">{{ product.quantity }}</span>
+                    {% else %}
+                    <span class="label label-success">{{ product.quantity }}</span>
+                    {% endif %}</td>
+                  <td class="pts-text-left">{{ product.status }}</td>
+                  <td class="pts-text-left">{{ product.is_approved }}</td>
+				   <!-- /////// category featured and featured product ///////// -->
+				  <td class=" pts-text-center"><input product-id="{{ product.product_id }}" class="is_featured is_featu{{ product.product_id }}" name="is_featured" id="is_featured_checkbox" type="checkbox" {% if product.is_featured == 1 %} checked="checked" {% endif %}{% if product.seller_plan_sataus == 1 %} disabled= "disabled" 
+				  {% endif %}
+				  ></td>
+				  <td class=" pts-text-center"><input product-id="{{ product.product_id }}" class="is_category_featured is_catfeatu{{ product.product_id }}" name="is_category_featured" id="is_category_featured_checkbox" type="checkbox" {% if product.is_category_featured == 1 %} checked="checked" {% endif %} {% if product.seller_plan_sataus == 1 %} disabled= "disabled" 
+				  {% endif %}></td>
+				  <!-- /////// category featured and featured product ///////// -->
+				  
+				  <!--<td id="ptsproduct{{ product.product_id }}" class="pts-text-right">
+				  {% if not product.hide_edit %}
+				  <a  href="{{ product.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="pts-btn pts-btn-primary"><i class="fa fa-pencil fas fa-edit"></i></a>
+				  {% endif %}
+				  </td>-->
+                  <td id="producteditlink{{ product.product_id }}" class="pts-text-right">
+				 
+				  {% if product_buttonhide %}
+				   {% if product.is_featured !=0 or product.is_category_featured!=0 %}
+				   {% else %}
+                  <a  href="{{ product.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="pts-btn pts-btn-primary"><i class="fa fa-pencil fas fa-edit"></i></a>
+				 {% endif %}
+				  {% else %}
+				  <a  href="{{ product.edit }}" data-toggle="tooltip" title="{{ button_edit }}" class="pts-btn pts-btn-primary"><i class="fa fa-pencil fas fa-edit"></i></a>
+				  {% endif %}
+				  </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                  <td class="pts-text-center" colspan="11">{{ text_no_results }}</td>
+                </tr>
+                {% endif %}
+              </tbody>
+            </table>
+          </div>
+        </form>
+        <div class="pts-row">
+          <div class="pts-col-sm-6 pts-text-left">{{ pagination }}</div>
+          <div class="pts-col-sm-6 pts-text-right">{{ results }}</div>
+        </div>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+<!-- Modal -->
+
+{% if module_purpletree_multivendor_subscription_plans is defined and module_purpletree_multivendor_subscription_plans %}
+<div class="modal pts-sidenav fade" id="featured_Modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog"  id="mySidenav">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h2 class="modal-title text-center" id="myModalLabel">{{ entry_subscription_plans }}</h2>
+      </div>
+	<form action=""  method="post" id="form_plan">
+		<div class="modal-body">
+			<div class="errorplan"></div>	
+                <input type="hidden" name="productidinform" id="productidinform" value="" />		
+                <input type="hidden" name="featuredhidden" id="featuredhidden" value="" />
+				<div class="inputgroup">
+					{% if product_plan_info is not empty %} 
+					{% for plans in product_plan_info %}	
+						<div class="radio">				
+						    <label><input  id="planidcheck{{ plans.plan_id }}" type="radio" name="popup_product_plan_id" value="{{ plans.plan_id }}" class="plan planidcheck" checked="checked" ><span class="plans">{{ plans.plan_name }}</span></label>
+						</div>				
+					{% endfor %}{% else %} 
+					<div class="radio">
+						<label><input type="radio" name="popup_product_plan_id" class=" planidcheck" checked="checked">
+						<span class="planidcheck plans">{{ 'Plan Not Found' }}</span></label>
+					</div>
+				    {% endif %} 
+			  </div>
+        </div>
+	    <div class="modal-footer">
+		  <button type="submit" class="pts-btn pts-btn-primary sub1" id="sub1">{{ button_save }}</button>
+	    </div>
+	</form>
+    </div>
+  </div>
+</div>
+
+<!--/ popup model-->
+<style>
+/* width */
+.pts-sidenav ::-webkit-scrollbar {
+  width: 10px;
+  float:left;
+  position:absolute;
+  right:0
+}
+
+/* Track */
+.pts-sidenav ::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+}
+ 
+/* Handle */
+.pts-sidenav ::-webkit-scrollbar-thumb {
+  background: #888; 
+}
+
+/* Handle on hover */
+.pts-sidenav ::-webkit-scrollbar-thumb:hover {
+  background: #555; 
+}
+.inputgroup{
+	overflow-y:auto;
+	max-height:150px;
+   
+}
+@media(min-width:768px){
+  .pts-sidenav .modal-dialog{
+    //position: absolute;
+	 width: 25%;
+    margin-top: 5%;
+	border:none;
+  }
+}
+.pts-sidenav .modal-header .modal-title{
+  font-size: 20x
+}
+.pts-sidenav .modal-header{
+	padding:7px !important;
+	background:#337ab7;
+}
+.pts-sidenav .modal-title, .pts-sidenav .close{
+	margin: 0px !important;
+    color: #fff !important;
+}
+.pts-sidenav .modal-content{
+   height: 100%;
+   border: 0px solid #fff;
+}
+input[type="radio"] {
+  -webkit-appearance: checkbox; /* Chrome, Safari, Opera */
+  -moz-appearance: checkbox;    /* Firefox */
+  -ms-appearance: checkbox;     /* not currently supported */
+  height:20px;
+  width:20px;
+}
+.plans{
+	font-size:16px;
+	margin-left:10px;
+}
+</style>
+<script>
+$('input[name="is_category_featured"]').on('change', function(e){
+if(e.target.checked){
+	var product_id = $(this).attr('product-id');
+	$('#productidinform').val(product_id);
+	var is_catfeatu = $(this).prop('checked');
+	$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/check_category_featured_product_subscription_plan&value=' +  is_catfeatu + '&product_id='+ product_id,
+			dataType: 'json',
+			success: function(json) {
+				if(json.status == 'success') {
+				   if(json.plan_id){
+				   $('#planidcheck'+json.plan_id).prop('checked', true);
+				   }
+				$('.is_catfeatu'+product_id).prop('checked', false);
+				$('#featuredhidden').val('2');	            
+                $('#featured_Modal').modal();
+				} 
+				else {
+				  
+				}
+			}
+})
+} else {
+     var product_id = $(this).attr('product-id');
+	$('#productidinform').val(product_id);
+	$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/remove_category_featured_product_subscription_plan&product_id='+ product_id,
+			dataType: 'json',
+			success: function(json) {
+				if(json.status == 'success') {
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+					$(".plansave").html('<div class="alert pts-alert-success"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+                
+					{% if product_buttonhide %}
+						if($('.is_featu'+product_id).prop('checked')) { } else {
+						$('#producteditlink'+product_id).append('<a href="{{ productedit }}&product_id=' + product_id + ' data-toggle="tooltip" title="{{ button_edit }}" class="pts-btn pts-btn-primary"><i class="fa fa-pencil fas fa-edit"></i></a>');					
+						}
+					{% endif %}
+				} 
+				else {
+				  
+				}
+			}
+})
+}
+})
+
+$('[name="is_featured"]').on('change', function(e){
+   if(e.target.checked){
+	var product_id = $(this).attr('product-id');
+	$('#productidinform').val(product_id);
+	var is_featured = $(this).prop('checked');
+	$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/check_featured_product_subscription_plan&value=' +  is_featured + '&product_id='+ product_id,
+			dataType: 'json',
+			success: function(json) {
+				if(json.status == 'success') {
+				   if(json.plan_id){
+				   $('#planidcheck'+json.plan_id).prop('checked', true);
+				   }
+				$('.is_featu'+product_id).prop('checked', false);
+				$('#featuredhidden').val('1');	       
+                $('#featured_Modal').modal();
+				} 
+				else {
+				  
+				}
+			}
+			});	
+      } else {
+     var product_id = $(this).attr('product-id');
+	$('#productidinform').val(product_id);
+	$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/remove_featured_product_subscription_plan&product_id='+ product_id,
+			dataType: 'json',
+			success: function(json) {
+				if(json.status == 'success') {
+				
+				$("html, body").animate({ scrollTop: 0 }, "slow");
+					$(".plansave").html('<div class="alert pts-alert-success"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');$('#product'+json.product_id).css('display','block');	
+			
+			   
+				{% if product_buttonhide %}
+					if($('.is_catfeatu'+product_id).prop('checked')) { } else {
+						$('#producteditlink'+product_id).append('<a href="{{ productedit }}&product_id=' + product_id + ' data-toggle="tooltip" title="{{ button_edit }}" class="pts-btn pts-btn-primary"><i class="fa fa-pencil fas fa-edit"></i></a>');	
+					}						
+					{% endif %}
+				} 
+				else {
+				  
+				}
+			}
+})
+}
+ });
+
+var frm = $('#form_plan');
+frm.submit(function (e) {
+	 e.preventDefault();
+if($('.planidcheck').is(':checked')) {
+		$.ajax({
+			type: frm.attr('method'),
+            url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/add_featured_product_By_Popup',
+			data: frm.serialize(),
+				success: function (json) {
+				if(json.status == 'success') {
+					$('#featured_Modal').modal('hide');
+					$("html, body").animate({ scrollTop: 0 }, "slow");
+					$(".plansave").html('<div class="alert pts-alert-success"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+					if(json.featuredhidden == 1){
+					$('.is_featu'+json.product_id).prop('checked', true);
+					
+					}else{
+					$('.is_catfeatu'+json.product_id).prop('checked', true);
+					}
+					{% if product_buttonhide %}
+					$('#producteditlink'+json.product_id).empty();
+					{% endif %}
+										
+				}else {
+				$('.errorplan').html('<div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+				}
+				},
+				error: function (json) {
+				if(json.status == 'error') {
+					$('.errorplan').html('<div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+					$('div.modal , .modal-backdrop').show();
+				}
+				},
+			});
+} else {
+
+	$('.errorplan').html('<div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i>Please Select Subscription plan</div>');
+					$('div.modal , .modal-backdrop').show();
+}
+		});
+
+</script>
+{% else %}
+<script>
+$('.is_featured').on('click', function(e) {
+var product_id = $(this).attr('product-id');
+var is_featured = $(this).prop('checked');
+$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/change_is_featured&value=' +  is_featured + '&product_id='+ product_id,
+			dataType: 'json',
+			success: function(json) {
+				if(json.status == 'success') {
+					 $("html, body").animate({ scrollTop: 0 }, "slow");
+					  $('.successdiv').html('<div class="alert pts-alert-success"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+					   $('.errordiv').html('');
+					 
+						{% if product_buttonhide %}
+						
+					     if(json.value==1){
+							$('#producteditlink'+json.product_id).empty();
+						} else {
+							//is_catfeatu is_featu
+							if($('.is_catfeatu'+product_id).prop('checked')) { } else {
+						$('#producteditlink'+product_id).append('<a href="{{ productedit }}&product_id=' + product_id + ' data-toggle="tooltip" title="{{ button_edit }}" class="pts-btn pts-btn-primary"><i class="fa fa-pencil fas fa-edit"></i></a>');
+						}
+						}
+					   {% endif %}
+				}
+				else {
+				  $("html, body").animate({ scrollTop: 0 }, "slow");
+					  $('.errordiv').html('<div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+					   $('.successdiv').html('');
+					$('.is_featu'+product_id).prop('checked', false);
+			
+				}
+			}
+			});
+});
+$('.is_category_featured').on('click', function() {
+var product_id = $(this).attr('product-id');
+var is_category_featured = $(this).prop('checked');
+$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/change_is_category_featured&value=' +  is_category_featured + '&product_id='+ product_id,
+			dataType: 'json',
+			success: function(json) {
+			if(json.status == 'success') {
+					$("html, body").animate({ scrollTop: 0 }, "slow");
+					  $('.successdiv').html('<div class="alert pts-alert-success"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+					   $('.errordiv').html('');
+					    {% if product_buttonhide %}
+					     if(json.value==1){
+							 
+							$('#producteditlink'+product_id).empty();
+						} else {
+							//is_catfeatu is_featu
+							if($('.is_featu'+product_id).prop('checked')) { 
+							
+							} else {
+								
+						$('#producteditlink'+product_id).append('<a href="{{ productedit }}&product_id=' + product_id + ' data-toggle="tooltip" title="{{ button_edit }}" class="pts-btn pts-btn-primary"><i class="fa fa-pencil fas fa-edit"></i></a>');
+						}
+						}
+					   {% endif %}
+					   
+				}
+				else {
+					$("html, body").animate({ scrollTop: 0 }, "slow");
+					  $('.errordiv').html('<div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i>'+ json.message +'</div>');
+					   $('.successdiv').html('');
+					$('.is_catfeatu'+product_id).prop('checked', false)
+				}
+			}
+			});
+});
+</script>
+{% endif %}
+<script type="text/javascript"><!--
+$('#button-enabledproduct, #button-disabledproduct').on('click', function(e) {
+	
+	if(confirm('{{ text_confirm }}')) {
+		
+		$('#form-product').attr('action', this.getAttribute('formAction')).submit();
+    }
+    else { 
+        return false;
+    }
+	});
+$('#pts-button-filter').on('click', function() {
+	var url = 'index.php?route=extension/account/purpletree_multivendor/sellerproduct';
+
+	var filter_name = $('input[name=\'filter_name\']').val();
+
+	if (filter_name) {
+		url += '&filter_name=' + encodeURIComponent(filter_name);
+	}
+
+	var filter_price = $('input[name=\'filter_price\']').val();
+
+	if (filter_price) {
+		url += '&filter_price=' + encodeURIComponent(filter_price);
+	}
+
+	var filter_quantity = $('input[name=\'filter_quantity\']').val();
+
+	if (filter_quantity) {
+		url += '&filter_quantity=' + encodeURIComponent(filter_quantity);
+	}
+
+	var filter_status = $('select[name=\'filter_status\']').val();
+
+	if (filter_status != '*') {
+		url += '&filter_status=' + encodeURIComponent(filter_status);
+	}
+
+  var filter_model = $('input[name=\'filter_model\']').val();
+
+  if (filter_model != '*') {
+    url += '&filter_model=' + encodeURIComponent(filter_model);
+  }
+
+	location = url;
+});
+//--></script>
+  <script type="text/javascript"><!--
+$('input[name=\'filter_name\']').autocompletepts({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/autocomplete&filter_name=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['name'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'filter_name\']').val(item['label']);
+	}
+});
+$('input[name=\'filter_model\']').autocompletepts({
+	'source': function(request, response) {
+		$.ajax({
+			url: 'index.php?route=extension/account/purpletree_multivendor/sellerproduct/autocomplete&filter_model=' +  encodeURIComponent(request),
+			dataType: 'json',
+			success: function(json) {
+				response($.map(json, function(item) {
+					return {
+						label: item['model'],
+						value: item['product_id']
+					}
+				}));
+			}
+		});
+	},
+	'select': function(item) {
+		$('input[name=\'filter_model\']').val(item['label']);
+	}
+});
+//--></script>
+{{ footer }}

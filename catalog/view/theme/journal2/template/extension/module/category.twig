@@ -1,0 +1,22 @@
+<div class="box oc-module">
+  <div class="list-group box-content">
+    <ul class="box-category">
+      {% for category in categories %}
+        {% if category.category_id == category_id %}
+          <li><a href="{{ category.href }}" class="list-group-item active">{{ category.name }}</a></li>
+          {% if category.children %}
+            {% for child in category.children %}
+              {% if child.category_id == child_id %}
+                <li><a href="{{ child.href }}" class="list-group-item active">&nbsp;&nbsp;&nbsp;- {{ child.name }}</a></li>
+              {% else %}
+                <li><a href="{{ child.href }}" class="list-group-item">&nbsp;&nbsp;&nbsp;- {{ child.name }}</a></li>
+              {% endif %}
+            {% endfor %}
+          {% endif %}
+        {% else %}
+          <li><a href="{{ category.href }}" class="list-group-item">{{ category.name }}</a></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>

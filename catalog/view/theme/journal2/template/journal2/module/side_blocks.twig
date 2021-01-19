@@ -1,0 +1,12 @@
+<div id="side-block-{{ module }}" class="side-block-{{ module_id }} side-block-{{ alignment }} side-block-{{ type }}" style="{{ css }}">
+  {% if type == 'button' %}
+    <div class="side-block-icon" style="width: {{ icon_width }}; height: {{ icon_height }}; line-height: {{ icon_height }}; background-color: {{ icon_bgcolor }}; {{ icon_border }}; {{ pos_offset }}"><a href="{{ url }}" {{ target }}>{{ icon }}</a></div>
+  {% if icon_bg_hover_color %}
+    <script>$('<style>#side-block-{{ module }} .side-block-icon:hover { background-color: {{ icon_bg_hover_color }} !important; }</style>').appendTo($('head'));</script>
+  {% endif %}
+  {% endif %}
+  {% if type == 'block' %}
+    <div class="side-block-icon" style="width: {{ icon_width }}; height: {{ icon_height }}; line-height: {{ icon_height }}; background-color: {{ icon_bgcolor }}; {{ icon_border }}; {{ pos_offset }}">{{ icon }}</div>
+    <div class="side-block-content" style="background-color: {{ content_bgcolor }}; padding: {{ content_padding }}" data-url="{{ url }}">Loading...</div>
+  {% endif %}
+</div>

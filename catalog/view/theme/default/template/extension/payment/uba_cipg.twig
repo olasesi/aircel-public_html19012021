@@ -1,0 +1,32 @@
+{% if testmode %}
+<div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ text_testmode }}</div>
+{% endif %}
+<form action="{{ action }}" method="post">
+  <input type="hidden" name="merchantId" value="{{ merchantId }}" />
+  <input type="hidden" name="description" value="{{ description }}" />
+  <input type="hidden" name="total" value="{{ total }}" />
+  <input type="hidden" name="date" value="{{ date }}" />
+  <input type="hidden" name="countryCurrencyCode" value="{{ countryCurrencyCode }}" />
+  <input type="hidden" name="currency_code" value="{{ currency_code }}" />
+  <input type="hidden" name="noOfItems" value="{{ noOfItems }}" />
+  <input type="hidden" name="customerFirstName" value="{{ customerFirstName }}" />  
+  <input type="hidden" name="customerLastname" value="{{ customerLastname }}" />
+  <input type="hidden" name="customerEmail" value="{{ customerEmail }}" />
+  <input type="hidden" name="customerPhoneNumber" value="{{ customerPhoneNumber }}" />
+  <input type="hidden" name="referenceNumber" value="{{ referenceNumber }}" />
+  <input type="hidden" name="serviceKey" value="{{ serviceKey }}" />
+  <input type="hidden" name="approveurl" value="{{ approveurl }}" />
+  <input type="hidden" name="cancelurl" value="{{ cancelurl }}" />
+  <input type="hidden" name="declineurl" value="{{ declineurl }}" />
+  <input type="hidden" name="callbackurl" value="{{ callbackurl }}" />
+
+
+
+  <div class="buttons">
+    <div class="pull-right">
+      <input type="submit" value="{{ button_confirm }}" class="btn btn-primary" />
+    </div>
+  </div>
+</form>
+
+

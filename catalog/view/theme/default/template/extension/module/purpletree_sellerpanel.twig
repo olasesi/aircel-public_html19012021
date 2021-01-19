@@ -1,0 +1,102 @@
+{%  if isSeller.store_status is defined %}
+ {% if isSeller.store_status %} 
+<div class="pts-list-group" style="display: grid";>
+  <h1 class="pts-seller-heading">&nbsp;{{ text_selleroption }}</h1>	
+  <a class="pts-list-group-item" href="{{ dashboardicons }}">{{ text_dashboard_icon }}</a>
+  <a class="pts-list-group-item" href="{{ dashboard }}">{{ text_dashboard }}</a>
+    <a class="pts-list-group-item" href="{{ sellerprofile }}">{{ text_sellerprofile }}</a>
+  {% if password %}
+  <a class="pts-list-group-item" href="{{ password }}" >{{ text_password }}</a>
+  {% endif %}
+  <a class="pts-list-group-item" href="{{ sellerorder }}" >{{ text_sellerorder }}</a>
+  <a class="pts-list-group-item" href="{{ sellerproduct }}" >{{ text_sellerproduct }}</a>
+  {% if module_purpletree_multivendor_seller_product_template == 1 %}
+  <a class="pts-list-group-item" href="{{ seller_template_product }}" >{{ text_seller_template_product }}</a>
+  {% endif %}
+  <a class="pts-list-group-item" href="{{ sellerstore }}" >{{ text_sellerstore }}</a>
+  <a class="pts-list-group-item" href="{{ sellerpayment }}" >{{ text_sellerpayment }}</a>
+  <a class="pts-list-group-item" href="{{ sellercommission }}" >{{ text_sellercommission }}</a>
+  <a class="pts-list-group-item" href="{{ commissioninvoice }}" >{{ text_commissioninvoice }}</a>
+  <a class="pts-list-group-item" href="{{ shipping }}" >{{ text_shipping }}</a>
+  {#<a class="pts-list-group-item" href="{{ bulkproductupload }}" >{{ text_bulkproductupload }}</a>#}
+  {#<a class="pts-list-group-item" href="{{ sellerenquiry }}" >{{ text_sellerenquiry }}</a> #}
+  <a href="{{ sellerenquiries }}" class="pts-list-group-item">{{  text_seller_enquiries }}</a>  
+  <a class="pts-list-group-item" href="{{ sellerreview }}" >{{ text_sellerreview }}</a>
+  <a class="pts-list-group-item" href="{{ downloadsitems }}" >{{ text_downloads }}</a>
+  <a class="pts-list-group-item" target="_blank" href="https://www.obejor.com/seller_mobile/comm_rate.pdf" >{{ text_commissionrates }}</a>
+ <!-- blog -->   
+  {#<a href="{{ sellerblogpost }}" class="pts-list-group-item">{{ text_blog_post }}</a>#}
+  {#<a href="{{ sellerblogcomment }}" class="pts-list-group-item">{{ text_blog_comment }}</a> 	#}
+ <!-- blog -->  
+	  {% if subscriptionplan %}
+  <a class="pts-list-group-item" href="{{ subscriptionplan }}">{{ text_subscription }}</a>
+  <a class="pts-list-group-item" href="{{ subscriptions }}">{{ text_subscriptions }}</a>	     {% endif %}   
+  <a class="pts-list-group-item" href="{{ removeseller }}" onclick="return confirm('Are you sure?')" ><b>{{ text_removeseller }}</b></a>
+  {% if logout %}
+  <a class="pts-list-group-item" href="{{ logout }}" >{{ text_logout }}</a>
+  {% endif %}
+  </div>
+  {% else %}
+ <div class="pts-list-group">
+  {% if isSeller.is_removed %}
+  <a class="pts-list-group-item" href="{{ becomeseller }}">{{ text_becomeseller }}</a>
+ {% else %}
+  <a class="pts-list-group-item" javascript="void(0)">{{ text_approval }}</a>
+  {% endif %}
+  </div>
+  {% endif %}
+  
+ <script>
+$(window).load(function() {
+	if($('.pts-list-group').parent().attr('id') == 'column-right' || $('.pts-list-group').parent().hasClass('right_column')) {
+		   $('.pts-list-group').parent().addClass('pts-col-sm-3');
+		}
+		if ($(window).width() < 768) {
+		   $('.pts-list-group').parent().addClass('pts-column-right-sellerpanel');
+		}
+	});
+ </script>
+ <style>
+ @media only screen and (max-width: 760px) {
+	 .pts-column-right-sellerpanel,#column-right {
+		display:block !important;
+		margin: 0 auto;
+		width: 100%;
+		padding: 30px;
+		z-index: 99 !important;
+	 }
+ }
+ </style>
+  {% endif %} 
+  
+  {% if logged %}
+ {% if module_purpletree_multivendor_status %}
+ {% if isSeller.store_status is empty %}
+<div class="pts-list-group">
+ <a class="pts-list-group-item" href="{{ becomeseller }}" >{{ text_becomeseller }}</a>
+  </div>
+ <script>
+$(window).load(function() {
+		 if($('.pts-list-group').parent().attr('id') == 'column-right' || $('.pts-list-group').parent().hasClass('right_column')) {
+		   $('.pts-list-group').parent().addClass('pts-col-sm-3');
+		}
+		if ($(window).width() < 768) {
+		   $('.pts-list-group').parent().addClass('pts-column-right-sellerpanel');
+		}
+	});
+ </script>
+ <style>
+ @media only screen and (max-width: 760px) {
+	 .pts-column-right-sellerpanel,#column-right {
+		display:block !important;
+		margin: 0 auto;
+		width: 100%;
+		padding: 30px;
+		z-index: 99 !important;
+	 }
+ }
+ </style>
+ {% endif %}
+ {% endif %}
+ {% endif %}
+ 

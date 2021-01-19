@@ -1,0 +1,95 @@
+{{ header }}
+<div class="pts-container">
+  <ul class="pts-breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	{% endfor %}
+  </ul>
+  {% if success %}
+  <div class="alert pts-alert-success"><i class="fa fa-check-circle"></i> {{ success }}</div>
+	{% endif %}
+	{% if error_warning %}
+  <div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+	{% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+	{% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+
+      <h1>{{ heading_title }}</h1>
+	 <div class="pts-panel pts-panel-default">
+      <div class="pts-panel-heading">
+        <h3 class="pts-panel-title"><i class="fa fa-list"></i> {{ text_bulk_shipping_upload }}</h3>
+      </div>
+	  
+      <div class="pts-panel-body">
+	  		  <div class="pts-well">
+          <div class="pts-row">
+		  	  <div class="pts-col-sm-12" style="text-align:left;">
+				 <div>
+				  <div>
+					<label class="pts-control-label" for="input-name" style="  font-weight: normal; ">{{ text_maxtime_info }}</label><label style="font-weight: bold;">&nbsp;{{ max_time }}&nbsp; {{'seconds' }}</label>
+					
+				  </div>
+				  <div>
+					<label class="pts-control-label" for="input-name" style=" font-weight: normal ">{{ text_file_size_info }} </label><label style="font-weight: bold;">&nbsp;{{ memory_limit }}</label>
+					
+				  </div>
+				</div>
+             
+            </div>
+          </div>
+        </div>  
+	  <form action="{{ export }}" method="post" enctype="multipart/form-data" id="form-customer">
+        <div class="pts-well">
+          <div class="pts-row">
+		  	 <div class="pts-panel-heading">
+        <h3 class="pts-panel-title"><i class="fa fa-download"></i> {{ text_bulk_shipping_export_data }}</h3>
+			</div>
+
+				<div class="pts-col-sm-12" style="text-align:left;">
+				  <div class="pts-form-group">
+				  	<input type="submit" value="{{ button_export }}" class="pts-btn pts-btn-primary" class="pts-button_add"  style=" padding: 8px 20px 8px 20px; " >
+					
+				  </div>
+				</div>
+             
+            </div>
+          </div>
+		  </form>
+		  	  <form action="{{ upload }}" method="post" enctype="multipart/form-data" id="form-customer">
+        <div class="pts-well">
+          <div class="pts-row">
+		  	 <div class="pts-panel-heading">
+        <h3 class="pts-panel-title"><i class="fa fa-upload"></i> {{ text_bulk_shipping_upload_data }}</h3>
+			</div>
+
+				<div class="pts-col-sm-6" style="text-align:left;">
+				  <div class="pts-form-group">
+				  	<input type="file" style="height:35px"  name="import">
+					
+				  </div>
+				</div>
+				<div class="pts-col-sm-6" style="text-align:left;">
+				  <div class="pts-form-group">
+				  	<input type="submit" value="{{ button_upload }}" class="pts-btn pts-btn-primary" class="button_add"  style=" padding: 8px 20px 8px 20px; " >
+					
+				  </div>
+				</div>
+             
+            </div>
+          </div>
+		  </form>
+     
+      </div>
+    </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+
+{{ footer }}

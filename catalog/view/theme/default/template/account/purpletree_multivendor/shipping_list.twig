@@ -1,0 +1,216 @@
+{{ header }}
+<div class="pts-content">
+<div class="pts-container">
+  <ul class="pts-breadcrumb">
+	{% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+	{% endfor %}
+  </ul>
+  {% if success %}
+  <div class="alert pts-alert-success"><i class="fa fa-check-circle"></i> {{ success }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+	{% endif %}
+	{% if error_warning %}
+  <div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}<button type="button" class="close" data-dismiss="alert">&times;</button></div>
+	{% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+	{% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+	<div class="pts-pull-right">
+		<a href="{{url}}" data-toggle="tooltip" title="{{ button_upload }}"><input type="button" value="{{ button_upload }}" class="pts-btn pts-btn-primary" class="button_add"  style=" padding: 8px 20px 8px 20px; " ></a>
+        <button type="button" data-toggle="tooltip" title="{{ button_filter }}" onclick="$('#filter-seller').toggleClass('hidden-sm hidden-xs');" class="pts-btn pts-btn-default hidden-md hidden-lg"><i class="fa fa-filter"></i></button>
+        <a href="{{ add }}" data-toggle="tooltip" title="{{ button_add }}" class="pts-btn pts-btn-primary"><i class="fa fa-plus"></i></a>
+        <button type="button" data-toggle="tooltip" title="{{ button_delete }}" class="pts-btn pts-btn-danger" onclick="confirm('{{ text_confirm }}') ? $('#form-seller').submit() : false;"><i class="fa fa-trash-o fas fa-trash-alt"></i></button>
+		</div>
+      <h1>{{ heading_title }}</h1>
+	  <div>
+	  <div class="pts-row pts-well"style="margin-left: 0px;margin-right: 0px;" >
+            <div class="pts-col-sm-4">
+			<!-- country -->						
+				    <div class="pts-form-group">
+                        <label class="pts-control-label" for="input-shipping-country">{{ entry_shipping_country }}</label>                       
+                          <select name="filter_shipping_country" id="input-shippingcountry" class="pts-form-control">
+                            <option value="">{{ text_select }}</option>
+							{% for country in countries %}
+							{% if country.country_id == shipping_country %}
+                            <option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+							{% else %}
+                            <option value="{{ country.country_id }}">{{ country.name }}</option>
+                            {% endif %}
+                            {% endfor %}
+                          </select>
+                    </div>		
+            <div class="pts-form-group">
+              <label class="pts-control-label" for="input-weight-from">{{ entry_weight_from }}</label>
+              <input type="text" name="filter_weight_from" value="{{ filter_weight_from }}" placeholder="{{ entry_weight_from }}" id="input-weight-from" class="pts-form-control" />
+            </div>					
+             
+            </div>
+            <div class="pts-col-sm-4">
+			<div class="pts-form-group">
+              <label class="pts-control-label" for="input-zip-from">{{ entry_zip_from }}</label>
+              <input type="text" name="filter_zip_from" value="{{ filter_zip_from}}" placeholder="{{ entry_zip_from }}" id="input-zip-from" class="pts-form-control" />
+            </div>
+			<div class="pts-form-group">
+              <label class="pts-control-label" for="input-weight-to">{{ entry_weight_to }}</label>
+              <input type="text" name="filter_weight_to" value="{{ filter_weight_to }}" placeholder="{{ entry_weight_to }}" id="input-weight-to" class="pts-form-control" />
+            </div>
+              
+            </div>
+            <div class="pts-col-sm-4">
+               <div class="pts-form-group">
+              <label class="pts-control-label" for="input-zip-to">{{ entry_zip_to }}</label>
+              <input type="text" name="filter_zip_to" value="{{ filter_zip_to }}" placeholder="{{ entry_zip_to }}" id="input-zip-to" class="pts-form-control"/>
+            </div>
+			 
+			<div class="pts-form-group">
+              <label class="pts-control-label" for="input-price">{{ entry_price }}</label>
+              <input type="text" name="filter_price" value="{{ filter_price }}" placeholder="{{ entry_price }}" id="input-price" class="pts-form-control" />
+            </div>
+            </div>
+			<div class="pts-col-sm-12">
+				<button type="button" id="button-filter" class="pts-btn pts-btn-primary pts-pull-right"><i class="fa fa-filter"></i>{{ button_filter }}</button>
+			</div>
+			 
+          </div>
+      
+      <div>
+               <div class="pts-panel pts-panel-default" style="margin-top: 18px;">
+          <div class="pts-panel-heading">
+            <h3 class="pts-panel-title"><i class="fa fa-list"></i> {{ text_list }}</h3>
+          </div>
+          <div class="pts-panel-body">
+            <div class="pts-table-responsive">
+              <form action="{{ delete }}" method="post" enctype="multipart/form-data" id="form-seller">
+                <table class="pts-table pts-table-bordered pts-table-hover">
+                  <thead>
+                    <tr>
+                      <td style="width: 1px;" class="pts-text-center"><input type="checkbox" onclick="$('input[name*=\'selected\']').prop('checked', this.checked);" /></td>
+                      <td class="pts-text-left">{{ column_shipping_country }}</td>
+					  
+                      <td class="pts-text-left">{{ column_zip_from }}</td>
+					  
+                      <td class="pts-text-left">{{ column_zip_to }}</td>
+					  
+					  
+                      <td class="pts-text-left">{{ column_weight_from }}</td>
+					  
+						<td class="pts-text-left">{{ column_weight_to }}</td>
+						
+                      <td class="pts-text-left">{{ column_price }}</td>
+                      <!-- <td class="text-right">{{ column_max_days }}</td> -->
+					  <td class="pts-text-right">{{ column_action }}</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {% if sellers %}
+                  {% for seller in sellers %}
+                  <tr>
+                    <td class="pts-text-center">{% if seller.seller_id in selected %}
+                      <input type="checkbox" name="selected[]" value="{{ seller.shipping_id }}" checked="checked" />
+                      {% else %}
+                      <input type="checkbox" name="selected[]" value="{{ seller.shipping_id }}" />
+                      {% endif %}
+                    </td>
+                    <td class="pts-text-left">{{ seller.shipping_country }}</td>
+                    <td class="pts-text-left">{{ seller.zipcode_from }}</td>
+                    <td class="pts-text-left">{{ seller.zipcode_to }}</td>
+                    <td class="pts-text-left">{{ seller.weight_from }}</td>
+					<td class="pts-text-left">{{ seller.weight_to }}</td>
+                    <td class="pts-text-left">{{ seller.shipping_price }}</td>
+					<!-- <td class="text-left">{{ seller.max_days }}</td> -->
+                    <td class="pts-text-right">
+                      <div class="btn-group" style="min-width: 65px;">
+                        <a onclick="checkdata(event)" href="{{ seller.deletes }}" data-toggle="tooltip" title="{{ button_delete }}" class="btn btn-danger"><i class="fa fa-trash-o fas fa-trash-alt"></i></a>                     
+                      </div>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                  {% else %}
+                  <tr>
+                    <td class="pts-text-center" colspan="8">{{ text_no_results }}</td>
+                  </tr>
+                  {% endif %}
+                    </tbody>
+                </table>
+              </div>
+            </form>
+            <div class="pts-row">
+              <div class="pts-col-sm-6 pts-text-left">{{ pagination }}</div>
+              <div class="pts-col-sm-6 pts-text-right">{{ results }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+     
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+ <script type="text/javascript"><!--
+  $('.table-responsive').on('shown.bs.dropdown', function (e) {
+    var t = $(this),
+      m = $(e.target).find('.dropdown-menu'),
+      tb = t.offset().top + t.height(),
+      mb = m.offset().top + m.outerHeight(true),
+      d = 20;
+    if (t[0].scrollWidth > t.innerWidth()) {
+      if (mb + d > tb) {
+        t.css('padding-bottom', ((mb + d) - tb));
+      }
+    } else {
+      t.css('overflow', 'visible');
+    }
+  }).on('hidden.bs.dropdown', function () {
+    $(this).css({'padding-bottom': '', 'overflow': ''});
+  });
+  //--></script>
+  
+ <script type="text/javascript"><!--
+  $('#button-filter').on('click', function() {
+    url = 'index.php?route=extension/account/purpletree_multivendor/shipping';
+    
+    var filter_shipping_country = $('select[name=\'filter_shipping_country\']').val();
+    if (filter_shipping_country !== '') {
+      url += '&filter_shipping_country=' + encodeURIComponent(filter_shipping_country);
+    }
+	var filter_zip_from = $('input[name=\'filter_zip_from\']').val();
+    if (filter_zip_from) {
+      url += '&filter_zip_from=' + encodeURIComponent(filter_zip_from);
+    }
+	var filter_zip_to = $('input[name=\'filter_zip_to\']').val();
+    if (filter_zip_to) {
+      url += '&filter_zip_to=' + encodeURIComponent(filter_zip_to);
+    }
+    var filter_price = $('input[name=\'filter_price\']').val();
+    if (filter_price) {
+      url += '&filter_price=' + encodeURIComponent(filter_price); 
+    }
+    var filter_weight_from = $('input[name=\'filter_weight_from\']').val();
+    if (filter_weight_from) {
+      url += '&filter_weight_from=' + encodeURIComponent(filter_weight_from);
+    }
+    var filter_weight_to = $('input[name=\'filter_weight_to\']').val();
+    if (filter_weight_to) {
+      url += '&filter_weight_to=' + encodeURIComponent(filter_weight_to);
+    }
+    location = url;
+  });
+  //--></script>
+  
+<script>
+				 function checkdata(e){			
+				  if (confirm("{{ text_confirm }}")) {
+				  
+				  } else {
+				  e.preventDefault();
+				  }	  
+                  }
+</script>
+</div>
+{{ footer }}

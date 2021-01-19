@@ -1,0 +1,12 @@
+<div id="journal-blog-search-{{ module }}" class="journal-blog-search-{{ module_id }} box side-blog blog-search">
+  {% if heading_title %}
+    <div class="box-heading">{{ heading_title }}</div>
+  {% endif %}
+  <div class="box-post">
+    <div class="box-search">
+      <input type="text" value="{{ search }}" placeholder="{{ placeholder }}"/>
+      <a class="search-btn"></a>
+    </div>
+  </div>
+</div>
+<script>Journal.blogSearch($('#journal-blog-search-{{ module }}'), '{{ search_url }}');</script>

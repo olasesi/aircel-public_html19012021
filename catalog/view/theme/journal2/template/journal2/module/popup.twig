@@ -1,0 +1,130 @@
+<div id="journal-popup-{{ module }}" class="journal-popup-{{ module_id }} journal-popup journal-popup-{{ type }} {{ disable_on_classes | join(' ') }} {% if not close_button %} hide-close-button {% endif %}" style="{{ global_style | join('; ') }}; {% if not is_ajax %} display: none {% endif %}">
+  {% if title %}
+    <div class="journal-popup-header">
+      <div class="journal-popup-header-content heading-title" style="{{ header_style | join ('; ') }}">{{ title }}</div>
+    </div>
+  {% endif %}
+  {% if type == 'text' %}
+    <div class="journal-popup-content {{ content_overflow }}" style="{{ content_style | join ('; ') }}">
+      {{ content }}
+    </div>
+  {% endif %}
+
+  {% if type == 'contact' %}
+    {{ include(config.get('config_template') ~ "/template/information/contact.twig") }}
+  {% endif %}
+
+  {% if newsletter and type == 'text' %}
+    <div class="journal-popup-newsletter">
+      <div class="journal-popup-newsletter-content" style="{{ newsletter_style | join ('; ') }}">{{ newsletter }}</div>
+    </div>
+  {% endif %}
+
+  {% if footer and type == 'contact' %}
+    <div class="journal-popup-footer">
+      <div class="journal-popup-footer-content {{ footer_buttons_class }}" style="{{ footer_style | join('; ') }}">
+        <a onclick="Journal.contact($('#journal-popup-{{ module }}'))" class="button button-icon-{{ button_submit.icon_position }}" style="{{ button_submit.style }}">{{ button_submit.icon }}{{ button_submit.text }}</a>
+      </div>
+    </div>
+    <script>$('head').append('<style>.journal-popup-footer-content  .button:hover { {{ button_submit.hover_style }}</style>');</script>
+  {% endif %}
+
+  {% if footer and type == 'text' %}
+    <div class="journal-popup-footer">
+      <div class="journal-popup-footer-content {{ footer_buttons_class }}" style="{{ footer_style | join('; ') }}">
+        {% if not is_ajax and do_not_show_again %}
+          <span class="dont-show-label">
+                <label>
+                    <input type="checkbox" class="dont-show-me"/>
+                    <span style="{{ do_not_show_again_font | join ('; ') }}">{{ do_not_show_again_text }}</span>
+                </label>
+            </span>
+        {% endif %}
+        {% if button_1.status %}
+          {% if button_1.link %}
+            <a href="{{ button_1.link }}" class="button button-1 button-icon-{{ button_1.icon_position }}" {{ button_1.target }} style="{{ button_1.style }}">{{ button_1.icon }}{{ button_1.text }}</a>
+          {% else %}
+            <a onclick="$.magnificPopup.close();" class="button button-1 button-icon-{{ button_1.icon_position }}" style="{{ button_1.style }}">{{ button_1.icon }}{{ button_1.text }}</a>
+          {% endif %}
+        {% endif %}
+
+        {% if button_2.status %}
+          {% if button_2.link %}
+            <a href="{{ button_2.link }}" class="button button-1 button-icon-{{ button_2.icon_position }}" {{ button_2.target }} style="{{ button_2.style }}">{{ button_2.icon }}{{ button_2.text }}</a>
+          {% else %}
+            <a onclick="$.magnificPopup.close();" class="button button-1 button-icon-{{ button_2.icon_position }}" style="{{ button_2.style }}">{{ button_2.icon }}{{ button_2.text }}</a>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% if not is_ajax %}
+<script>
+  (function () {
+    {% if button_1.status and button_1.hover_style %}
+    $('<style>#journal-popup-{{ module }} .button-1:hover { {{ button_1.hover_style }}</style>').appendTo($('head'));
+    {% endif %}
+
+    {% if button_2.status and button_2.hover_style %}
+    $('<style>#journal-popup-{{ module }} .button-1:hover { {{ button_2.hover_style }}</style>').appendTo($('head'));
+    {% endif %}
+
+    var open_after = parseInt('{{ open_after }}', 10);
+    var close_after = parseInt('{{ close_after }}', 10);
+
+    setTimeout(function () {
+      $('#journal-popup-{{ module }}').show();
+      $.magnificPopup.open({
+        items: {
+          src: '#journal-popup-{{ module }}',
+          type: 'inline'
+        },
+        showCloseBtn: {% if close_button %} true {% else %} false {% endif %},
+        enableEscapeKey: {% if close_button %} true {% else %} false {% endif %},
+        closeOnContentClick: false,
+        closeOnBgClick: false,
+        removalDelay: 200,
+        callbacks: {
+          close: function () {
+            $('html').removeClass('has-popup');
+            $('#journal-popup-{{ module }}').remove();
+          },
+          open: function () {
+            $('html').addClass('has-popup');
+          }
+        }
+      });
+
+      if (close_after > 0) {
+        setTimeout(function () {
+          $.magnificPopup.close();
+        }, close_after);
+      }
+    }, open_after);
+
+    $('#journal-popup-{{ module }} .dont-show-me').change(function () {
+      if ($(this).is(':checked')) {
+        $.cookie('{{ cookie_name }}', true, {
+          path: '/',
+          expires: 365
+        });
+      } else {
+        $.removeCookie('{{ cookie_name }}')
+      }
+    });
+  }());
+</script>
+{% else %}
+<script type="text/html" style="display: none;">
+  {% if button_1.status and button_1.hover_style %}
+    $('
+    <style>#journal-popup-{{ module }} .button-1:hover { {{ button_1.hover_style }}</style>').appendTo($('head'));
+  {% endif %}
+
+  {% if button_2.status and button_2.hover_style %}
+    $('
+    <style>#journal-popup-{{ module }} .button-1:hover { {{ button_2.hover_style }}</style>').appendTo($('head'));
+  {% endif %}
+</script>
+{% endif %}

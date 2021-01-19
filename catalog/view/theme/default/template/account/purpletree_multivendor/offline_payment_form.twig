@@ -1,0 +1,55 @@
+{{ header }}
+<div id="account-account" class="pts-container">
+  <ul class="pts-breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+    {% if error_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+  {% if success %}
+  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_offline_payment }}</h1>
+<div class="pts-container">
+	<div class="pts-row">
+		<div class="pts-col-sm-9">
+			
+			<div class="pts-col-sm-12 form-group p-0">
+				<div class="pts-col-sm-12 bordr">
+				<form action="{{ action }}" method="post" enctype="multipart/form-data" class="pts-col-sm-12 pts-form-horizontal">	
+					<div class="pts-col-sm-12 form-group  p-0">
+						<div class="pts-col-sm-6">
+							<label>{{ column_enter_payment }}</label>
+						</div>
+						<div class="pts-col-sm-6">
+						<input type="hidden" name="invoice_id" value="{{ invoice_id }}">
+							<textarea rows="8" cols="100%"  name="comment" id="" class="form-control" placeholder="{{ entry_enter_payment }}"></textarea>
+						</div>
+						<div class="pts-col-sm-12 form-group text-right m-t10">
+							<button type="submit" class="pts-btn pts-btn-primary">{{ button_save_offline }}</button>
+						</div>
+					</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+		 
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}

@@ -1,0 +1,156 @@
+<div id="journal-gallery-{{ module }}" class="journal-gallery-{{ module_id }} box journal-gallery {% if carousel %} journal-carousel {% if bullets %} has-bullets {% endif %} {% if arrows == 'top' %} arrows-top {% endif %} {% endif %} {{ disable_on_classes | join(' ') }} {{ gutter_on_class }}" style="{{ css }}">
+  <div>
+    {% if title %}
+      <div class="box-heading">{{ title }}</div>
+    {% endif %}
+    <div class="box-content">
+      {% if carousel %}
+        <div class="swiper">
+          <div class="swiper-container" {% if journal2.settings.get('rtl') %} dir="rtl" {% endif %}>
+            <div class="swiper-wrapper">
+
+              {% for image in images %}
+                <div class="gallery-thumb {{ grid_classes }} swiper-slide">
+                  <a href="{{ image.image }}" style="{{ image_border }}" data-thumb="{{ image.thumb }}" class="swipebox" title="{{ image.name }}">
+                    <div class="item-hover"></div>
+                    <img width="{{ thumbs_width }}" height="{{ thumbs_height }}" src="{{ image.thumb }}" alt="{{ image.name }}"/>
+                  </a>
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          {% if arrows %}
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+          {% endif %}
+        </div>
+        {% if bullets %}
+          <div class="swiper-pagination"></div>
+        {% endif %}
+      {% else %}
+        {% for image in images %}
+          <div class="gallery-thumb {{ grid_classes }}" {% if thumbs_limit < loop.index %} style="display: none" {% endif %}>
+            <a href="{{ image.image }}" style="{{ image_border }}" data-thumb="{{ image.thumb }}" class="swipebox" title="{{ image.name }}">
+              <div class="item-hover"></div>
+              <img src="{{ image.thumb }}" width="{{ thumbs_width }}" height="{{ thumbs_height }}" alt="{{ image.name }}"/>
+            </a>
+          </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+<script>
+  {% if carousel %}
+
+  {% set grid = [
+  [0, is_column ? 3 : grid.xs],
+  [470, is_column ? 3 : grid.sm],
+  [760, is_column ? 3 : grid.md],
+  [980, is_column ? 3 : grid.lg],
+  [1100, is_column ? 3 : grid.xl],
+  ] %}
+
+  (function () {
+    var grid = $.parseJSON('{{ grid | json_encode() }}');
+
+    var breakpoints = {
+      470: {
+        slidesPerView: grid[0][1],
+        slidesPerGroup: grid[0][1]
+      },
+      760: {
+        slidesPerView: grid[1][1],
+        slidesPerGroup: grid[1][1]
+      },
+      980: {
+        slidesPerView: grid[2][1],
+        slidesPerGroup: grid[2][1]
+      },
+      1220: {
+        slidesPerView: grid[3][1],
+        slidesPerGroup: grid[3][1]
+      }
+    };
+
+    var opts = {
+      slidesPerView: grid[4][1],
+      slidesPerGroup: grid[4][1],
+      breakpoints: breakpoints,
+      spaceBetween: 15,
+      pagination: {% if bullets %} $('#journal-gallery-{{ module }} .swiper-pagination') {% else %} false {% endif %},
+      paginationClickable: true,
+      nextButton: {% if arrows != 'none' %} $('#journal-gallery-{{ module }} .swiper-button-next') {% else %} false {% endif %},
+      prevButton: {% if arrows != 'none' %} $('#journal-gallery-{{ module }} .swiper-button-prev') {% else %} false {% endif %},
+      autoplay: {{ autoplay ? autoplay : 0 }},
+      autoplayStopOnHover: {% if pause_on_hover %} true {% else %} false {% endif %},
+      speed: {{ slide_speed }},
+      touchEventsTarget: {% if touch_drag %} 'container' {% else %} false {% endif %},
+      onInit: function (swiper) {
+        var imgs = [
+          {% for image in images %}
+          {src: '{{ image.image }}', thumb: '{{ image.thumb }}', subHtml: '{{ image.name | replace ("'","\\'") }}'},
+          {% endfor %}
+        ];
+
+        $('#journal-gallery-{{ module }} a').click(function (e) {
+          e.preventDefault();
+
+          var index = -1;
+          var href = $(this).attr('href');
+
+          $.map(imgs, function (img, i) {
+            if (img['src'] === href) {
+              index = i;
+            }
+          });
+
+          $(this).lightGallery({
+            thumbnail: {{ journal2.settings.get('gallery_thumbs', 'on') == 'on' ? 'true' : 'false' }},
+            showThumbByDefault: {{ journal2.settings.get('gallery_thumbs_hide', 'on') == 'off' ? 'true' : 'false' }},
+            thumbWidth: parseInt('{{ journal2.settings.get('gallery_thumbs_width', '100') }}', 10),
+            thumbContHeight: parseInt('{{ journal2.settings.get('gallery_thumbs_height', '100') }}', 10),
+            thumbMargin: parseInt('{{ journal2.settings.get('gallery_thumbs_spacing', '7') }}', 10),
+            hideBarsDelay: parseInt('{{ journal2.settings.get('hide_gallery_bars_after', '5000') }}', 10),
+            dynamic: true,
+            dynamicEl: imgs,
+            download: false,
+            actualSize: false,
+            index: index
+          })
+        });
+      }
+    };
+
+    $('#journal-gallery-{{ module }} .swiper-container').swiper(opts);
+  })();
+  {% else %}
+  (function () {
+    var imgs = [
+      {% for image in images %}
+      {src: '{{ image.image }}', thumb: '{{ image.thumb }}', subHtml: '{{ image.name | replace ("'","\\'") }}'},
+      {% endfor %}
+    ];
+
+    $('#journal-gallery-{{ module }} a').click(function (e) {
+      e.preventDefault();
+
+      var index = $(this).index('#journal-gallery-{{ module }} a');
+
+      $(this).lightGallery({
+        thumbnail: {{ journal2.settings.get('gallery_thumbs', 'on') == 'on' ? 'true' : 'false' }},
+        showThumbByDefault: {{ journal2.settings.get('gallery_thumbs_hide', 'on') == 'off' ? 'true' : 'false' }},
+        thumbWidth: parseInt('{{ journal2.settings.get('gallery_thumbs_width', '100') }}', 10),
+        thumbContHeight: parseInt('{{ journal2.settings.get('gallery_thumbs_height', '100') }}', 10),
+        thumbMargin: parseInt('{{ journal2.settings.get('gallery_thumbs_spacing', '7') }}', 10),
+        hideBarsDelay: parseInt('{{ journal2.settings.get('hide_gallery_bars_after', '5000') }}', 10),
+        dynamic: true,
+        dynamicEl: imgs,
+        download: false,
+        actualSize: false,
+        index: index
+      })
+    });
+  })();
+  {% endif %}
+</script>

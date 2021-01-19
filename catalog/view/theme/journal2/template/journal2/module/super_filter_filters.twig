@@ -1,0 +1,10 @@
+<div class="box sf-filter sf-{{ filter.display_mode }} sf-filter-{{ filter.filter_group_id }} sf-{{ filter.type }} {% if is_collapsed %} is-collapsed {% endif %}" data-id="filter-{{ filter.filter_group_id }}">
+  <div class="box-heading">{{ filter.filter_group_name }}</div>
+  <div class="box-content">
+    <ul class="{% if not journal2.settings.get('filter_show_box') %} hide-checkbox {% endif %}">
+      {% for value in filter.values %}
+      <li><label><input data-keyword="{{ value.keyword }}" type="checkbox" name="filter[{{ filter.filter_group_id }}]" value="{{ value.filter_id }}"><span class="sf-name">{{ value.filter_name }}</span></label></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>

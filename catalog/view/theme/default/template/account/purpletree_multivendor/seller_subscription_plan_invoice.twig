@@ -1,0 +1,161 @@
+{{ header }}
+<div id="account-account" class="pts-container">
+  <ul class="pts-breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+    {% if error_warning %}
+    <div class="alert pts-alert-danger"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+  {% if success %}
+  <div class="alert pts-alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  <div class="pts-row d-flex">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'pts-col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'pts-col-sm-9' %}
+    {% else %}
+    {% set class = 'pts-col-sm-12' %}
+    {% endif %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+		 
+<!-----------------Invoice no----------------------------->
+		<div class="pts-col-sm-9 p-0">
+		<h1>{{ text_invoice_id }}: {{ invoice_id }}</h1>
+		</div>
+		<div class="pts-col-sm-3 print">
+		<a href="{{ print_invoice }}" target="_blank"><i class="fa fa-print" aria-hidden="true" style="font-size:28px;color:#5bc0de"></i>
+		</a>
+		</div>
+			<div class="pts-col-sm-12  selected-plan">
+				<div class="pts-col-sm-12 mid">
+					{% if admin_info %}
+					<div class="pts-col-sm-6 admin-store">
+						<p><strong>{{ text_admin_storename }}: </strong>{{ admin_info.name }}</p>
+						<p><strong>{{ text_address }}: </strong>{{ admin_info.address }}</p>
+						<p><strong>{{ text_telephone }}: </strong>{{ admin_info.telephone }}</p>
+						<p><strong>{{ text_email }}: </strong>{{ admin_info.email }}</p>
+						<p><strong>{{ text_website }}: </strong>{{ admin_info.url }}</p>
+					</div>
+					{% endif %}
+					{% if store_info %}
+					<div class="pts-col-sm-6">
+						<p><strong>{{ text_seller_storename }}: </strong>{{ store_info.name }}</p>
+							<p><strong>{{ text_seller_name }}: </strong>{{ origina_seller_name.seller_name }}</p>
+						<p><strong>{{ text_address }}: </strong>{{ store_info.address }}</p>
+						<p><strong>{{ text_telephone }}: </strong>{{ store_info.telephone }}</p>
+						<p><strong>{{ text_email }}: </strong>{{ store_info.email }}</p>
+					</div>
+					{% endif %}
+				</div>
+				{% if newplan %}
+				<div class="pts-col-sm-12 mid" >
+					<div class="pts-col-sm-9">
+						<p><strong>{{ newplan.plan_name }}</strong> {{ newplan.plan_short_description }}</p>
+						<p><strong>{{ column_start_date }}: </strong>{{ newplan.start_date }}</p>
+						<p><strong>{{ column_end_date }}: </strong>{{ newplan.end_date }}</p>
+					</div>
+					<div class="pts-col-sm-3 pts-text-right">
+						<span>{{ newplan.subscription_price }}</span>
+					</div>
+					<div class="pts-col-sm-12 pts-text-right p-0">
+					{% for value in invoice.item %}
+						
+						<div class="pts-col-sm-10 p-0 pts-total_price"><span><strong>{{ value.title }}</strong></span></div><div class="pts-col-sm-2 pts-total_price pts-text-right">{{ value.price }}</div>
+					{% endfor %}
+					<div class="pts-col-sm-10 p-0 pts-grand_total_price"><span class="pts-grand_total1">{{ text_grand_total }} </span></div><div class="pts-col-sm-2 pts-text-right pts-grand_total_price"><strong>{{ grand_total }}</strong></div>
+					
+					</div>
+				</div>
+				{% endif %}
+				
+			
+				<div class="pts-col-sm-12 mid">
+				
+					<div class="pts-col-sm-6">
+						<p><strong>{{ text_invoice_number }}: </strong>{{ invoice_id }}</p>
+						<p><strong>{{ text_created_date }}: </strong>{{ invoice.created_date }}</p>
+						<p><strong>{{ text_status }}: </strong>{{ invoice.status_id }}</p>
+					</div>
+					<div class="pts-col-sm-6 payment">
+					{% if grand_total_no_currency > '0' %}
+					{% if invoice.status_id_id == '2' %}
+					<h4 style="text-align:center;margin-top: 21px;font-size: 21px;">{{ invoice.status_id }}</h4>
+					{% else %}
+						<h4>{{ heading_make_payment }}</h4><br>
+						<a href="{{ payment_offline }}" >{{ button_pay_offline }}</a>
+{% if module_purpletree_multivendor_paypal_email is defined and module_purpletree_multivendor_paypal_email != '' %}
+												<form style="float:right" name="_xclick" action="https://www.paypal.com/cgi-bin/webscr" method="post">
+<input type="hidden" name="cmd" value="_xclick"/>
+<input type="hidden" name="return" value="{{ return_url }}"/>
+<input type="hidden" name="notify_url" value="{{ notify_url }}"/>
+<input type="hidden" name="business" value="{{ module_purpletree_multivendor_paypal_email }}">
+<input type="hidden" name="currency_code" value="{{ currency_currency1 }}"/>
+  <input type="hidden" name="item_name" value="{{ newplan.plan_name }}"/>
+  <input type="hidden" name="item_number" value="1"/>
+  <input type="hidden" name="amount" value="{{  grand_total_no_currency1 }}"/>
+  <input type="hidden" name="first_name" value="{{ origina_seller_name.firstname }}"/>
+  <input type="hidden" name="last_name" value="{{ origina_seller_name.lastname }}"/>
+  <input type="hidden" name="address1" value="{{ store_info.address }}"/>
+  <input type="hidden" name="custom" value="{{ invoice_id }}"/>
+  <input type="hidden" name="city" value="{{ store_info.city }}"/>
+  <input type="hidden" name="state" value="{{ store_info.state }}"/>
+  <input type="hidden" name="zip" value="{{ store_info.zip }}"/>
+  <input type="hidden" name="country" value="{{ store_info.country }}"/>
+  <input type="hidden" name="night_phone_a" value="{{ store_info.telephone }}"/>
+  <input type="hidden" name="email" value="{{ store_info.email }}"/>
+<input style="width: 120px;" type="image" src="image/catalog/paypalbutton.png" border="0" name="submit" alt="Make payments with PayPal - it's fast, free and secure!"/>
+</form>
+{% endif %}
+{% endif %}
+					
+					
+					{% endif %}
+					</div>
+				</div>	<div class="pts-col-sm-12 history pts-table-responsive">
+					<h3>{{ heading_payment_history }}</h3>
+					<table class="pts-table pts-table-bordered pts-table-hover">
+						<thead>
+							<tr>
+								<td>{{ column_payment_mode }}</td>
+								<!--td>{{ text_status }}</td--->
+								<td>{{ column_transaction_id }}</td>
+								<td>{{ column_payment_date }}</td>
+								<td>{{ column_comment }}</td>
+							</tr>
+						</thead>
+						<tbody>
+						{% if payment_history %}
+						{% for value in payment_history %}
+							<tr>
+								<td>{{ value.payment_mode }}</td>
+								<!---td>{{ value.status_id }}</td---->
+								<td>{{ value.transaction_id }}</td>
+								<td>{{ value.created_date }}</td>
+								<td>{{ value.comment }}</td>
+							</tr>
+							{% endfor %}
+							{% else %}
+							  <tr>
+								<td class="pts-text-center" colspan="8">{{ text_no_results }}</td>
+							  </tr>
+							{% endif %}
+						<tbody>
+					</table>
+				</div>
+			</div>
+
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+{{ footer }}
+<style type="text/css">
+.print {
+    text-align: right;
+    padding: 15px;
+}
+</style>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html dir="{{ direction }}" lang="{{ lang }}">
+<head>
+<meta charset="UTF-8" />
+<title>{{ title }}</title>
+<base href="{{ base }}" />
+<link href="{{ HTTPS_SERVER }}catalog/view/javascript/bootstrap/css/bootstrap.css" rel="stylesheet" media="all" />
+<style>
+	.pts-text-bold{
+		font-size:18px;
+		font-weight:bold
+		
+	}
+	.b-payment{font-size:15px;padding-left: 15px;margin-top: 5px;}
+	.h3-payment{font-size:25px;font-weight:normal;margin: 0;padding: 2px 3px;}
+	.pd{padding:15px !important;width:50%}
+	.status-payment{font-size:25px;font-weight:normal}
+	.payment-td{font-weight:normal;padding: 7px !important;line-height: 2.5 !important;}
+	
+</style>
+</head>
+<body>
+<div class="container">
+  <div style="page-break-after: always;">
+  <h1>{{ invoice_number_text }}{{ invoice_number }}</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+         <td>{{ text_order_detail }}</td>
+		  <td class="pts-text-right">{{ text_created_at }}: {{ created_at }}</td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><address>
+            <strong>{{ store_name }}</strong><br />
+            {{ store_address }}
+            </address>
+            <b>{{ text_telephone }}</b> {{ store_telephone }}<br />
+            <b>{{ text_email }}</b> {{ store_email }}<br />
+            <b>{{ text_website }}</b> <a href="{{ store_url }}">{{ store_url }}</a><br />
+			
+			</td>
+			<td><address>
+            <strong>{{ sellerdetails.store_name }}</strong><br />
+            {{ sellerdetails.store_address }}
+            {{ sellerdetails.store_city }}
+            </address>
+            <b>{{ text_telephone }}</b> {{ sellerdetails.store_phone }}<br />
+            <b>{{ text_email }}</b> {{ sellerdetails.store_email }}<br />
+			{% if seller_vatnumber != '' %}
+            <b>{{ seller_vatname }}</b> {{ seller_vatnumber }}<br />
+			{% endif %}
+			</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <td>{{ order_id_text }}</td>
+          <td><b>{{ column_product }}</b></td>
+          <td class="pts-text-right"><b>{{ column_quantity }}</b></td>
+          <td class="pts-text-right"><b>{{ column_product_price }}</b></td>
+          <td class="pts-text-right"><b>{{ column_commission_percent }}</b></td>
+          <td class="pts-text-right"><b>{{ fixed_text }}</b></td>
+          <td class="pts-text-right"><b>{{ commision_product }}</b></td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+        <tr>
+          <td class="pts-text-right">{{ order.order_id }}</td>
+          <td>{{ order.product.name }}
+            {% for option in order.product.option %}
+            <br />
+            &nbsp;<small> - {{ option.name }}: {{ option.value }}</small>
+            {% endfor %}</td>
+
+          <td class="pts-text-right">{{ order.product.quantity }}</td>
+          <td class="pts-text-right">{{ order.product.price_total }}</td>
+          <td class="pts-text-right">{{ order.commission_percent }}</td>
+          <td class="pts-text-right">{{ order.commission_fixed }}</td>
+          <td class="pts-text-right">{{ order.total_commission }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    <tfoot>
+        <tr>
+          <td class="pts-text-right" colspan="5"></td>          
+          <td class="">{{ shipping_text }}</td>
+          <td class="text-right">{{ total_shipping_commission }}</td>
+	   </tr>
+	   <tr>
+          <td class="pts-text-right" colspan="5"></td>          
+          <td class=" pts-text-bold">{{ commision_product }}</td>
+          <td class="text-right pts-text-bold">{{ total_commissionn }}</td>
+	   </tr>
+      </tfoot>
+    </table>
+	
+		<table class="table table-bordered">
+      <tbody style="box-shadow:0px 0px 5px 0px rgba(0,0,0,0.5)">
+		<tr style="border:none !important">
+			<td colspan="2"><h3 class="h3-payment">{{ text_payment }}</h3></td>
+		</tr>
+        <tr>	
+          <td class="pts-text-left payment-td" style="">
+
+			<b class="b-payment">{{ text_totla_payable_amount }}</b>: {{ total_pay_amountt }}<br>
+			<b class="b-payment">{{ payment_status }}</b>: {{ invoice_status }}<br>	
+		    
+		  </td>
+        </tr>
+      </tbody>
+    </table>
+	 <table class="table table-bordered">
+      <thead>
+        <tr>
+          <td class="pts-text-right"><b>{{ column_id }}</td>
+          <td class="pts-text-right"><b>{{ column_transacton_id }}</b></td>
+          <td class="pts-text-right"><b>{{ column_payment_mode }}</b></td>
+          <td class="pts-text-right"><b>{{ column_payment_date }}</b></td>
+          <td class="pts-text-right"><b>{{ column_commentt }}</b></td>
+          <td class="pts-text-right"><b>{{ column_statuss }}</b></td>		  
+        </tr>
+      </thead>
+      <tbody>
+      {% if commissionn_history %}
+	  {% for commission_hist in commissionn_history%}
+        <tr>
+          <td class="pts-text-right">{{ commission_hist.id }}</td>
+          <td class="pts-text-right">{{ commission_hist.transaction_id }}</td>
+          <td class="pts-text-right">{{ commission_hist.payment_mode }}</td>
+          <td class="pts-text-right">{{ commission_hist.created_date }}</td>
+          <td class="pts-text-right">{{ commission_hist.comment }}</td> 
+          <td class="pts-text-right">{{ commission_hist.status_id }}</td>  
+        </tr>
+		{% endfor %}
+		{% else %}
+		     <tr>
+                  <td class="pts-text-center" colspan="9">{{ text_no_results }}</td>
+             </tr>
+		{% endif %}
+      </tbody>
+    </table>
+	{% if module_purpletree_multivendor_footer_text %}
+    <table class="table table-bordered">
+      <tbody>
+        <tr>
+          <td>{{ module_purpletree_multivendor_footer_text }}			 
+		 </td>
+        </tr>
+      </tbody>
+    </table>
+	{% endif %}
+  </div>
+</div>
+</body>
+</html>

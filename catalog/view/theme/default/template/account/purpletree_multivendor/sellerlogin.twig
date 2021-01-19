@@ -1,0 +1,62 @@
+{{ header }}
+<div id="account-login" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if success %}
+  <div class="alert alert-success alert-dismissible"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}  
+      <div class="pts-row">
+		<div id="" class="{{ class }}">{{ content_top }}
+        <div class="pts-col-sm-12">
+			<div class="pts-col-md-6 pts-col-md-offset-3">
+			  <div class="pts-well seller-login-form" style="">
+				<h2 class="text-center">{{ text_seller_login }}</h2>
+				<form action="{{ action }}" method="post" id="regForm" enctype="multipart/form-data">
+				  <div class="pts-form-group">
+					<label class="pts-control-label col-form-label" for="seller-email">{{ entry_email }}</label>
+					<input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="seller-email" class="pts-form-control" />
+				  </div>
+				  <div class="pts-form-group ">
+					<label class="pts-control-label col-form-label" for="seller-password">{{ entry_password }}</label>
+					<input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="seller-password" class="pts-form-control" />
+                    {#<i id="pass-status" class="fa fa-eye" aria-hidden="true" onClick="viewPassword()"></i>#}
+                     <span toggle="#seller-password" class="fa fa-fw fa-eye field-icon toggle-password"></span>
+					</div>
+					<a href="{{ forgotten }}">{{ text_forgotten }}</a>
+					<div class="pts-row">
+					<div class="pts-col-sm-5 pts-pull-left-1  pts-mt-3">
+						<input type="submit" value="{{ button_login }}" class="pts-btn pts-btn-primary" />
+					</div>
+					<div class="pts-pr-3 text-center pts-pull-right-1 pts-mt-3">
+					<p class="new-seller-register-here"=""><span class="login-seller"><i class="fa fa-user"></i> {{ text_new_seller }}  </span><a href="{{ sellerregister }}" style="font-size:11px"> {{ text_register_new }} </a><span></p>
+					</div>
+					</div>
+				  {% if redirect %}
+				  <input type="hidden" name="redirect" value="{{ redirect }}" />
+				  {% endif %}
+				</form>
+			  </div>
+			</div>
+        </div>
+      </div>
+	</div>
+</div>
+<script>
+    $(".toggle-password").click(function() {
+      $(this).toggleClass("fa-eye fa-eye-slash");
+      var input = $($(this).attr("toggle"));
+      if (input.attr("type") == "password") {
+        input.attr("type", "text");
+      } else {
+        input.attr("type", "password");
+      }
+    });
+</script>
+{{ footer }}      
+      

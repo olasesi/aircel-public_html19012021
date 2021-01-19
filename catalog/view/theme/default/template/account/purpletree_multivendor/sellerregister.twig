@@ -1,0 +1,677 @@
+{{ header }}
+<div id="account-register" class="container">
+  <ul class="breadcrumb">
+    {% for breadcrumb in breadcrumbs %}
+    <li class="breadcrumb-item"><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+    {% endfor %}
+  </ul>
+  {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+  <div class="row">
+    {% set class = 'col-sm-12' %}
+    <div id="pts-content" class="{{ class }}">{{ content_top }}
+      <!-- <h1>{{ heading_title }}</h1> -->
+      <!-- <p>{{ text_account_already }}</p> -->
+    <form action="" method="post" name="sellerregForm" id="regForm" enctype="multipart/form-data" class="form-horizontal">
+	  
+	<div class="pts-col-md-12">
+		<div class="pts-col-md-6 pts-col-md-offset-3 md-offset-3">
+			<h2 class="text-center">{{ text_seller_register_page }}</h2>
+			<hr style="width:226px;border:2px solid #2097c4;margin-top:5px;border-radius:50px;">
+			<div class="head_steps text-center">
+			<span class="step step-one ">
+				
+				<div class="step-icon"><i class="fa fa-pencil fa-edit"></i>
+				</div>
+				<p> {{ text_personal_details }}</p>
+			</span>
+			<span class="step step-two">
+				<div class="step-icon"><i class="fa fa-user-o fa-user"></i>
+				</div>
+				<p> {{ text_seller_information1 }}</p>
+			</span>
+			<span class="step step-three">
+				<div class="step-icon"><i class="fa fa-credit-card"></i>
+				</div>
+				<p> {{ text_payment_details1 }}</p>
+			</span>
+		  </div>
+			<div class="pts-well seller-rgistration-form">
+			  <div class="pts-col-md-12 p-0">
+				<div class=" pts-col-md-5 pts-pull-left-1 p-0">
+				<p class="new-seller-login-here"><span class="login-seller"><i class="fa fa-user"></i>   {{ text_new_customer_register }}  </span><a href="{{ sellerlogin }}" style="font-size:11px"> {{ text_seller_login1 }} </a><span></span></p>
+				</div>
+				<div class=" pts-col-md-5  pts-pull-right-1 p-0">
+					<div style="overflow:auto;">
+						<div style="float:right;">
+						  <button type="button" id="prevBtn" class="pts-btn pts-btn-sm pts-btn-default" onclick="nextPrev(-1)">{{ btn_prev }}</button>
+						  <button type="button" id="nextBtn" class="pts-btn pts-btn-sm pts-btn-primary" onclick="nextPrev(1)">{{ btn_next }}</button>
+						</div>
+					</div>
+				</div>
+			  </div>
+			  <hr style="margin-top:16px;margin-bottom:5px;">
+			  <!--personal data-->
+			  <div class="tab">
+			  {% if loggedcus=='' %}
+			  <div class="pts-row " style="display:none">
+			  <div class="pts-form-group required" style="display: {% if customer_groups|length > 1 %} block {% else %} none {% endif %};">
+				<label class="pts-col-sm-2 pts-control-label">{{ entry_customer_group }}</label>
+				<div class="pts-col-sm-10">{% for customer_group in customer_groups %}
+				  {% if customer_group.customer_group_id == customer_group_id %}
+				  <div class="radio">
+					<label>
+					  <input type="radio" name="customer_group_id" value="{{ customer_group.customer_group_id }}" checked="checked" />
+					  {{ customer_group.name }}</label>
+				  </div>
+				  {% else %}
+				  <div class="radio">
+					<label>
+					  <input type="radio" name="customer_group_id" value="{{ customer_group.customer_group_id }}" />
+					  {{ customer_group.name }}</label>
+				  </div>
+              {% endif %}
+              {% endfor %}</div>
+               </div>
+			</div>
+				<div class="pts-row ">
+					<div class="pts-col-md-6 pts-form-group required">
+						<label class="pts-control-label" for="input-firstname">{{ entry_firstname }}</label>
+						 <input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ entry_firstname }}" id="input-firstname" class="pts-form-control" />
+						  {% if error_firstname %}
+						  <div class="text-danger">{{ error_firstname }}</div>
+						  {% endif %} 
+					</div>
+					<div class="pts-col-md-6 pts-form-group required">
+						<label class="pts-control-label" for="input-lastname">{{ entry_lastname }}</label>
+						  <input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ entry_lastname }}" id="input-lastname" class="pts-form-control" />
+						  {% if error_lastname %}
+						  <div class="text-danger">{{ error_lastname }}</div>
+						  {% endif %}
+					</div>
+				</div>
+				
+				<div class="pts-form-group required">
+					<label class="pts-control-label" for="input-email">{{ entry_email }}</label>
+					<input type="email" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="pts-form-control" />
+					  {% if error_email %}
+					  <div class="text-danger">{{ error_email }}</div>
+					  {% endif %}
+				</div>
+				
+				<div class="pts-form-group required">
+					<label class="pts-control-label" for="input-password">{{ entry_password }}</label>
+					  <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="password" class="pts-form-control" />
+					  {% if error_password %}
+					  <div class="text-danger">{{ error_password }}</div>
+					  {% endif %}
+				</div>
+				  
+				<div class="pts-form-group required">
+					<label class="pts-control-label" for="input-confirm">{{ entry_confirm }}</label>
+					  <input type="password" name="confirm" value="{{ confirm }}" placeholder="{{ entry_confirm }}" id="confirm" class="pts-form-control" />
+					  {% if error_confirm %}
+					  <div class="text-danger">{{ error_confirm }}</div>
+					  {% endif %}
+				</div>
+				
+				<div class="pts-form-group required">
+					<label class="pts-control-label" for="input-telephone">{{ entry_telephone }}</label>
+					  <input type="tel" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="input-telephone" class="pts-form-control" />
+					  {% if error_telephone %}
+					  <div class="text-danger">{{ error_telephone }}</div>
+					  {% endif %}
+				</div>
+			{{ captcha }}
+             {% if text_agree %}
+			 <div class="required">
+			 {{ text_agree }}
+              {% if agree %}			  
+               <input  required type="checkbox" name="agree" value="1" checked="checked" style="margin-right:5px;" />
+              {% else %}
+                <input  required  type="checkbox" name="agree" value="1" />		
+              {% endif %}	
+	          </div>			  
+		     {% endif %}
+		     {% endif %}
+				
+			  </div>
+			  <!--end personal data-->
+			  
+			  <!--seller data-->
+			  <div class="tab">
+				<div class="pts-form-group pts-col-md-12 required p-0">				
+						<label class="pts-control-label" for="store_name">{{ entry_storename }}</label>
+						 <input required type="text" name="store_name" value="{{ store_name }}" placeholder="{{ entry_storename }}" id="store_name" class="pts-form-control" />		 
+						 {% if error_sellerstore %}
+			               <div class="text-danger">{{ error_sellerstore }}</div>
+			             {% endif %}
+					
+				</div>
+				
+				<!--<div class="pts-row">
+					 <div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="input-selleremail">{{ entry_storeemail }}</label>
+						 <input type="text" name="store_email" value="{{ store_email }}" placeholder="{{ entry_storeemail }}" id="input-selleremail" class="pts-form-control email" />	 
+						 {% if error_storeemail %}
+			                <div class="text-danger">{{ error_storeemail }}</div>
+			              {% endif %}
+					</div>
+					
+				</div> -->
+
+				<div class="pts-form-group pts-col-md-12 p-0">
+						<label class="pts-control-label" for="input-storephone">{{ entry_storephone }}</label>
+						 <input type="text" name="store_phone" value="{{ store_phone }}" placeholder="{{ entry_storephone }}" id="input-storephone" class="pts-form-control" />		 
+					</div>
+				
+				
+				<div class="pts-row">
+					<div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="store-logo">{{ entry_storelogo }}</label>
+						<input type="file" name="store_logo" id="store-logo" value="">	
+						
+					</div>
+					<div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="store-banner">{{ entry_storebanner }}</label>
+						<input type="file" name="store_banner" id="store-banner" value="">			
+					</div>
+				</div>
+				
+				<div class="pts-form-group pts-col-md-12 p-0">
+					<label class="pts-control-label" for="input-storeaddress">{{ entry_storeaddress }}</label>
+					<textarea name="store_address" class="pts-form-control" rows="5"placeholder="{{ entry_storeaddress }}">{{ store_address }}</textarea>
+				</div>
+				
+				<div class="pts-row">
+					<div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="input-storecountry">{{ entry_storecountry }}</label>
+						<select name="store_country" id="input-storecountry" onchange="country(this,'{{ store_state }}');" class="pts-form-control">
+							<option value="">{{ text_select }}</option>
+							{% for country in countries %}
+							{% if country.country_id == store_country %}
+							<option value="{{ country.country_id }}" selected="selected">{{ country.name }}</option>
+							{% else %}
+							<option value="{{ country.country_id }}">{{ country.name }}</option>
+							{% endif %}
+							{% endfor %}
+						  </select>
+						  
+					</div>
+					
+			
+					<div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="store-storestate">{{ entry_storezone }}</label>						
+						 <select name="store_state" id="input-storestate" class="pts-form-control">
+		                </select>		             
+					</div>
+				</div>
+				
+				<div class="pts-row">
+					<div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="input-sellercity">{{ entry_storecity }}</label>
+						 <input type="text" name="store_city" value="{{ store_city }}" placeholder="{{ entry_storecity }}" id="input-sellercity" class="pts-form-control" />	 
+					</div>
+					<div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="input-storepostcode">{{ entry_storepostcode }}</label>
+						 <input type="text" name="store_zipcode" value="{{ store_zipcode }}" placeholder="{{ entry_storepostcode }}" id="input-storepostcode" class="pts-form-control" />
+					</div>
+				</div>
+				<div class="pts-row">
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeshipping">{{ entry_storeshippingpolicy }}</label>
+					<textarea name="store_shipping_policy" class="pts-form-control" rows="5"placeholder="{{ entry_storeshippingpolicy }}" id="input-storeshipping">{{ store_shipping_policy }}</textarea>
+				</div>
+				</div>
+				<div class="pts-row">
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-return-policy">{{ entry_storereturn }}</label>
+					<textarea name="store_return_policy" class="pts-form-control" rows="5"placeholder="{{ entry_storereturn }}" id="input-return-policy">{{ store_return_policy }}</textarea>
+				</div>
+				</div>
+				<div class="pts-row">
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeaddress">{{ entry_storemetakeyword }}</label>
+					<textarea name="store_meta_keywords" class="pts-form-control" rows="5"placeholder="{{ entry_storemetakeyword }}" id="input-storeaddress">{{ store_meta_keywords }}</textarea>
+				</div>
+				</div>
+				<div class="pts-row">
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-meta-description">{{ entry_storemetadescription }}</label>
+					<textarea name="store_meta_description" class="pts-form-control" rows="5"placeholder="{{ entry_storemetadescription }}" id="input-meta-description">{{ store_meta_description }}</textarea>					
+				</div>
+				</div>
+				<div class="pts-row">
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeseo">{{ entry_storeseo }}</label>	
+					<input type="text" name="store_seo" value="{{ store_seo }}" placeholder="{{ entry_storeseo }}" id="input-storeseo" class="pts-form-control" />
+					 {% if error_store_seo %}
+			                <div class="text-danger">{{ error_store_seo }}</div>
+			              {% endif %}
+				</div>
+				</div>
+				<div class="pts-row">
+		    	<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeseo">{{ entry_facebook }}</label>	
+					<input type="text" name="facebook_link" value="" placeholder="{{ entry_facebook }}" id="input-storeseo" class="pts-form-control" />
+				</div>
+				</div>
+				<div class="pts-row">
+		    	<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeseo">{{ entry_google }}</label>	
+					<input type="text" name="google_link" value="" placeholder="{{ entry_google }}" id="input-storeseo" class="pts-form-control" />
+				</div>
+				</div>
+				<div class="pts-row">
+		    	<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeseo">{{ entry_twitter }}</label>	
+					<input type="text" name="twitter_link" value="" placeholder="{{ entry_twitter }}" id="input-storeseo" class="pts-form-control" />
+				</div>
+				</div>
+				<div class="pts-row">
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeseo">{{ entry_instagram }}</label>	
+					<input type="text" name="instagram_link" value="" placeholder="{{ entry_instagram }}" id="input-storeseo" class="pts-form-control" />
+				</div>
+				</div>
+				<div class="pts-row">
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeseo">{{ entry_printerest }}</label>	
+					<input type="text" name="pinterest_link" value="" placeholder="{{ entry_printerest }}" id="input-storeseo" class="pts-form-control" />
+				</div>		
+</div>
+				<div class="pts-row">				
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-storeseo">{{ entry_website }}</label>	
+					<input type="text" name="wesbsite_link" value="" placeholder="{{ entry_website }}" id="input-storeseo" class="pts-form-control" />
+				</div>
+				</div>
+				<div class="pts-row">				
+				<div class="pts-form-group pts-col-md-12">
+					<label class="pts-control-label" for="input-whatsapp_link">{{ entry_whatsapp_number }}</label>	
+					<input type="text" name="whatsapp_link" value="" placeholder="{{ entry_whatsapp_number }}" id="input-whatsapp_link" class="pts-form-control" />
+				</div>
+				</div>
+				{% if module_purpletree_multivendor_allow_live_chat %}
+				<div class="pts-row">
+					<div class="pts-form-group pts-col-md-6">							
+						<label class="pts-control-label" for="input-live-chat">{{ entry_allow_live_chat }}</label>
+							<select name="store_live_chat_enable" id="input-live-chat" class="pts-form-control">			  
+			                   <option value="1" {% if store_live_chat_enable %} selected="selected" {% endif %}>{{text_yes}}</option>
+			                  <option value="0" {% if store_live_chat_enable == 0 %} selected="selected" {% endif %}>{{text_no}}</option>			 
+			             </select>
+					</div>
+					<div class="pts-form-group pts-col-md-6">
+						<label class="pts-control-label" for="input-live_chat_code">{{ entry_live_chat_code }}</label>						
+						<input type="text" id="input-live_chat_code" name="store_live_chat_code" class="pts-form-control" value="{{ store_live_chat_code }}" />
+					</div>
+				</div>
+				{% endif %}				
+			  </div>
+			  <!--end store data-->
+			  
+			  
+			  <!--payment data-->
+			  <div class="tab">
+				<div class="pts-form-group pts-col-md-12 p-0">
+					<label class="pts-control-label" for="input-storebankdetail">{{ entry_storebankdetail }}</label>
+					   <textarea name="store_bank_details" class="pts-form-control" rows="5" placeholder="{{ entry_storebankdetail1 }}">{{ store_bank_details }}</textarea>
+					  
+				</div>
+				
+				<div class="pts-form-group pts-col-md-12 p-0">					
+					<label class="pts-control-label" for="input-storetin">{{ entry_storetin }}</label> <input type="text" name="store_tin" value="{{ store_tin }}" placeholder="{{ entry_storetin1 }}" id="input-storetin" class="pts-form-control" />
+					 
+				</div>				
+				<div class="pts-row">
+					<!-- paypal -->
+						<div class="pts-form-group pts-col-md-12">
+							<label class="pts-control-label" for="input-seller-paypal-id">{{ entry_seller_paypal_id }}
+							</label>
+							<input type="text" id="input-seller-paypal-id" name="seller_paypal_id" class="pts-form-control email" value="{{ seller_paypal_id }}" />
+						 {% if error_seller_paypal_id %}
+			                <div class="text-danger">{{ error_seller_paypal_id }}</div>
+			              {% endif %}
+						</div>
+					<!-- End paypal -->
+				</div>
+				
+			  </div>
+			  <!--end payment data-->			
+				 <div class="pts-form-group pts-text-right">
+					<div style="overflow:auto;">
+						<div style="float:right;">
+						  <button type="button" id="prevBtn1" class="pts-btn pts-btn-sm pts-btn-default" onclick="nextPrev(-1)">{{ btn_prev }}</button>
+						  <button type="button" id="nextBtn1" class="pts-btn pts-btn-sm pts-btn-primary" onclick="nextPrev(1)">{{ btn_next }}</button>
+						</div>
+					</div>
+				</div>				
+			   <!-- Circles which indicates the steps of the form: -->
+			</div>
+		</div>
+	</div>
+		  <div style="">
+			<span class="step"></span>
+			<span class="step"></span>
+			<span class="step"></span>
+			<span class="step"></span>
+		  </div>
+ </form>
+      {{ content_bottom }}</div>
+    </div>
+</div>		
+<!--seller registration form-->
+<script type="text/javascript">
+{% if loggedcus=='' %}
+	var currentTab = 0; // Current tab is set to be the first tab (0)
+	{% else %}
+	var currentTab = 1; // Current tab is set to be the first tab (0)
+	{% endif %}
+	showTab(currentTab); // Display the crurrent tab
+
+	function showTab(n) {
+	  // This function will display the specified tab of the form...
+	  var x = document.getElementsByClassName("tab");
+	  x[n].style.display = "block";
+	  //... and fix the Previous/Next buttons:
+	  if (n == 0) {
+	  $('.step.step-one').addClass('finish');
+	  $('.step.step-two').removeClass('finish');
+	  $('.step.step-three').removeClass('finish');
+		document.getElementById("prevBtn").style.display = "none";
+		document.getElementById("prevBtn1").style.display = "none";
+	  } else {
+	  {% if loggedcus=='' %}
+		document.getElementById("prevBtn").style.display = "inline";
+		document.getElementById("prevBtn1").style.display = "inline";
+		{% else %}
+		if (n == 1) {
+		document.getElementById("prevBtn").style.display = "none";
+		document.getElementById("prevBtn1").style.display = "none";
+		} else {
+		document.getElementById("prevBtn").style.display = "inline";
+		document.getElementById("prevBtn1").style.display = "inline";
+		}
+		{% endif %}
+		
+	  }
+	  if (n == 1) {
+	    $('.step.step-one').addClass('finish');
+	  $('.step.step-two').addClass('finish');
+	  $('.step.step-three').removeClass('finish');
+	  }
+	  if (n == (x.length - 1)) {
+		document.getElementById("nextBtn").innerHTML = "{{ btn_submit1 }}";
+		document.getElementById("nextBtn1").innerHTML = "{{ btn_submit1 }}";
+	  } else {
+		document.getElementById("nextBtn").innerHTML = "{{ btn_next }}";
+		document.getElementById("nextBtn1").innerHTML = "{{ btn_next }}";
+	  }
+	  //... and run a function that will display the correct step indicator:
+	  fixStepIndicator(n)
+	}
+
+	function nextPrev(n) {
+	  // This function will figure out which tab to display
+	  var x = document.getElementsByClassName("tab");
+	  // Exit the function if any field in the current tab is invalid:
+	  if (n == 1 && !validateForm()) return false;
+	  // Hide the current tab:
+	  x[currentTab].style.display = "none";
+	  // Increase or decrease the current tab by 1:
+	  currentTab = currentTab + n;
+	  // if you have reached the end of the form...
+	  if (currentTab >= x.length) {
+		// ... the form gets submitted:
+		document.getElementById("regForm").submit();
+		return false;
+	  }
+	  // Otherwise, display the correct tab:
+	  showTab(currentTab);
+	}
+
+	function validateForm() {
+	  // This function deals with validation of the form fields
+	  //var valid = true;
+	  //x = document.getElementsByClassName("tab");
+	 // y = x[currentTab].getElementsByTagName("input");
+
+	   valid = false;
+	  // Wait for the DOM to be ready
+  // Initialize form validation on the registration form.
+  // It has the name attribute "registration"
+ // alert('in');
+  $("#regForm").validate({
+    // Specify validation rules
+    rules: {
+      // The key name on the left side is the name attribute
+      // of an input field. Validation rules are defined
+      // on the right side
+      firstname: "required",
+      lastname: "required",
+      email: {
+        required: true,
+        // Specify that email should be validated
+        // by the built-in "email" rule
+        email: true
+      },
+      password: {
+        required: true,
+        minlength: 5
+      },
+	   confirm: {
+		equalTo: "#password"
+		},
+	
+    telephone: {
+	 required: true,
+      number: true
+    }
+
+
+    },
+    // Specify validation error messages
+    messages: {
+      firstname: "{{ error_enter_firstname }}",
+      lastname: "{{ error_enter_lastname }}",
+      password: {
+        required: "{{ error_enter_password }}",
+        minlength: "{{ error_enter_password_lenght }}"
+      },
+      email: "{{ error_enter_email_address }}",
+      confirm: "{{ error_enter_confirm_password }}",
+	  //telephone: "Enter valide telephone no.",
+	 
+
+    },
+    // Make sure the form is submitted to the destination defined
+    // in the "action" attribute of the form when valid
+  });
+ 
+  if ($('#regForm').valid()) {
+  valid = true;
+}
+	  
+	  // If the valid status is true, mark the step as finished and valid:
+	  if (valid) {
+		//document.getElementsByClassName("step")[currentTab].className += " finish";
+	  }
+	  return valid; // return the valid status
+	}
+
+	function fixStepIndicator(n) {
+	  // This function removes the "active" class of all steps...
+	  var i, x = document.getElementsByClassName("step");
+	  for (i = 0; i < x.length; i++) {
+		x[i].className = x[i].className.replace(" active", "");
+	  }
+	  //... and adds the "active" class on the current step:
+	  x[n].className += " active";
+	}
+
+</script>
+
+<style>
+
+</style>
+<!-- <link href="catalog/view/javascript/purpletree/codemirror/lib/codemirror.css" rel="stylesheet" />
+  <link href="catalog/view/javascript/purpletree/codemirror/theme/monokai.css" rel="stylesheet" />
+  <script type="text/javascript" src="catalog/view/javascript/purpletree/codemirror/lib/codemirror.js"></script> 
+  <script type="text/javascript" src="catalog/view/javascript/purpletree/codemirror/lib/xml.js"></script> 
+  <script type="text/javascript" src="catalog/view/javascript/purpletree/codemirror/lib/formatting.js"></script>   -->
+ <script type="text/javascript"><!--
+function country(element,zone_id) { 
+	$.ajax({
+		url: 'index.php?route=account/account/country&country_id=' + element.value,
+		dataType: 'json',
+		beforeSend: function() {
+			$('select[name=\'store_country\']').after(' <i class="fa fa-circle-o-notch fa-spin"></i>');
+		},
+		complete: function() {
+			$('.fa-spin').remove();
+		},
+		success: function(json) {
+			if (json['postcode_required'] == '1') {
+				$('input[name=\'store_zipcode]\']').parent().parent().addClass('required');
+			} else {
+				$('input[name=\'store_zipcode\']').parent().parent().removeClass('required');
+			}
+
+			html = '<option value="">{{ text_select }}</option>';
+
+			if (json['zone'] && json['zone'] != '') {
+				for (i = 0; i < json['zone'].length; i++) {
+					html += '<option value="' + json['zone'][i]['zone_id'] + '"';
+
+					if (json['zone'][i]['zone_id'] == zone_id) {
+						html += ' selected="selected"';
+					}
+
+					html += '>' + json['zone'][i]['name'] + '</option>';
+				}
+			} else {
+				html += '<option value="0">{{ text_none }}</option>';
+			}
+
+			$('select[name=\'store_state\']').html(html);
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			//alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+}
+
+$('select[name$=\'store_country\']').trigger('change');
+function show1(){
+  document.getElementById('div1').style.display ='none';
+}
+function show2(){
+  document.getElementById('div1').style.display = 'block';
+}
+$(window).load(function(){
+	{% if store_shipping_type == 'pts_matrix_shipping' %}
+	 document.getElementById('div1').style.display ='none';
+	 {% endif %}
+})
+//--></script>
+<script type="text/javascript"><!--
+// Sort the custom fields
+$('#account .form-group[data-sort]').detach().each(function() {
+	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('#account .form-group').length) {
+		$('#account .form-group').eq($(this).attr('data-sort')).before(this);
+	}
+
+	if ($(this).attr('data-sort') > $('#account .form-group').length) {
+		$('#account .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') == $('#account .form-group').length) {
+		$('#account .form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') < -$('#account .form-group').length) {
+		$('#account .form-group:first').before(this);
+	}
+});
+
+$('input[name=\'customer_group_id\']').on('change', function() {
+	$.ajax({
+		url: 'index.php?route=account/register/customfield&customer_group_id=' + this.value,
+		dataType: 'json',
+		success: function(json) {
+			$('.custom-field').hide();
+			$('.custom-field').removeClass('required');
+
+			for (i = 0; i < json.length; i++) {
+				custom_field = json[i];
+
+				$('#custom-field' + custom_field['custom_field_id']).show();
+
+				if (custom_field['required']) {
+					$('#custom-field' + custom_field['custom_field_id']).addClass('required');
+				}
+			}
+		},
+		error: function(xhr, ajaxOptions, thrownError) {
+			//alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+		}
+	});
+});
+
+$('input[name=\'customer_group_id\']:checked').trigger('change');
+//--></script> 
+<script type="text/javascript"><!--
+$('button[id^=\'button-custom-field\']').on('click', function() {
+	var element = this;
+
+	$('#form-upload').remove();
+
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+	$('#form-upload input[name=\'file\']').trigger('click');
+
+	if (typeof timer != 'undefined') {
+    	clearInterval(timer);
+	}
+
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+
+			$.ajax({
+				url: 'index.php?route=tool/upload',
+				type: 'post',
+				dataType: 'json',
+				data: new FormData($('#form-upload')[0]),
+				cache: false,
+				contentType: false,
+				processData: false,
+				beforeSend: function() {
+					$(element).button('loading'); 
+				},
+				complete: function() {
+					$(element).button('reset');
+				},
+				success: function(json) {
+					$(element).parent().find('.text-danger').remove();
+
+					if (json['error']) {
+						$(node).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+					}
+
+					if (json['success']) {
+						alert(json['success']);
+
+						$(element).parent().find('input').val(json['code']);
+					}
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					//alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+				}
+			});
+		}
+	}, 500);
+});
+//--></script>
+{{ footer }} 

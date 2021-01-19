@@ -1,0 +1,3 @@
+{% for module in modules %}
+  <div class="{{ module.type }} {{ journal2.settings.get('module_' ~ module.type ~ '_' ~ module.module_id ~ '_classes') }}" style="{{ journal2.settings.get('module_' ~ module.type ~ '_' ~ module.module_id) }}">{{ module.module }}</div>
+{% endfor %}

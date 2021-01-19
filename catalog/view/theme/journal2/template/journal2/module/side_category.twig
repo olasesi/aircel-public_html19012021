@@ -1,0 +1,125 @@
+{% macro renderSideCategoryMenu(menu, show_total) %}
+  {% for item in menu.subcategories %}
+    {% set submenu = _self.renderSideCategoryMenu(item, show_total) %}
+    <li>
+      <a href="{{ item.href }}" class="{{ item.class }}">
+        <span class="category-name">{{ item.name }}
+          {% if show_total %}
+            <span class="product-count">({{ item.total }})</span>
+          {% endif %}
+        </span>
+        {% if item.subcategories | length > 0 %}
+          {% if item.class == 'active' %}
+            <i><span><</span></i>
+          {% else %}
+            <i><span>></span></i>
+          {% endif %}
+        {% endif %}
+      </a>
+      {% if item.subcategories | length > 0 %}
+        <ul> {{ submenu }}</ul>
+      {% endif %}
+    </li>
+  {% endfor %}
+{% endmacro %}
+<div id="journal-side-category-{{ module }}" class="journal-side-category-{{ module_id }} box side-category {{ class }}">
+  <div class="box-heading">{{ heading_title }}</div>
+  <div class="box-category">
+    <ul>
+      {% for item in top_items %}
+        <li>
+          {% if item.type == 'custom' %}
+            {% if item.href %}
+              <a href="{{ item.href }}" {{ item.target }} class="{{ item.class }}">{{ item.name }}</a>
+            {% else %}
+              <a>{{ item.name }}</a>
+            {% endif %}
+          {% else %}
+            {% set menu = _self.renderSideCategoryMenu(item, show_total) %}
+            <a href="{{ item.href }}" class="{{ item.class }}">
+              <span class="category-name">{{ item.name }}
+                {% if show_total %}
+                  <span class="product-count">({{ item.total }})</span>
+                {% endif %}
+              </span>
+              {% if item.subcategories | length > 0 %}
+                {% if item.class == 'active' %}
+                  <i><span><</span></i>
+                {% else %}
+                  <i><span>></span></i>
+                {% endif %}
+              {% endif %}
+            </a>
+            {% if item.subcategories | length > 0 %}
+              <ul> {{ menu }}</ul>
+            {% endif %}
+          {% endif %}
+        </li>
+      {% endfor %}
+      {% for category in categories %}
+        <li>
+          {% set menu = _self.renderSideCategoryMenu(category, show_total) %}
+          <a href="{{ category.href }}" class="{{ category.class }}">
+            <span class="category-name">{{ category.name }}
+              {% if show_total %}
+                <span class="product-count">({{ category.total }})</span>
+              {% endif %}
+            </span>
+            {% if category.subcategories | length > 0 %}
+              {% if category.class == 'active' %}
+                <i><span><</span></i>
+              {% else %}
+                <i><span>></span></i>
+              {% endif %}
+            {% endif %}
+          </a>
+          {% if category.subcategories | length > 0 %}
+            <ul> {{ menu }}</ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+      {% for item in bottom_items %}
+        <li>
+          {% if item.type == 'custom' %}
+            {% if item.href %}
+              <a href="{{ item.href }}" {{ item.target }} class="{{ item.class }}">{{ item.name }}</a>
+            {% else %}
+              <a>{{ item.name }}</a>
+            {% endif %}
+          {% else %}
+            {% set menu = _self.renderSideCategoryMenu(item, show_total) %}
+            <a href="{{ item.href }}" class="{{ item.class }}">
+              <span class="category-name">{{ item.name }}
+                {% if show_total %}
+                  <span class="product-count">({{ item.total }})</span>
+                {% endif %}
+              </span>
+              {% if item.subcategories | length > 0 %}
+                {% if item.class == 'active' %}
+                  <i><span><</span></i>
+                {% else %}
+                  <i><span>></span></i>
+                {% endif %}
+              {% endif %}
+            </a>
+            {% if item.subcategories | length > 0 %}
+              <ul> {{ menu }}</ul>
+            {% endif %}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% if type == 'accordion' %}
+    <script>
+      $('#journal-side-category-{{ module }} .box-category a i').click(function (e, first) {
+        e.preventDefault();
+        $('+ ul', $(this).parent()).slideToggle(first ? 0 : 400);
+        $(this).parent().toggleClass('active');
+        $(this).html($(this).parent().hasClass('active') ? "<span><</span>" : "<span>></span>");
+        return false;
+      });
+      $('#journal-side-category-{{ module }} .is-active i').trigger('click', true);
+    </script>
+  {% endif %}
+</div>

@@ -1,0 +1,69 @@
+<div class="checkout-content checkout-cart">
+  <h2 class="secondary-title">{{ journal2.settings.get('one_page_lang_shop_cart', 'Shopping Cart') }}</h2>
+  <div class="table-responsive checkout-product">
+    <table class="table table-bordered table-hover">
+      <thead>
+      <tr>
+        <td class="text-left name" colspan="2">{{ column_name }}</td>
+        <td class="text-left quantity">{{ column_quantity }}</td>
+        <td class="text-right price">{{ column_price }}</td>
+        <td class="text-right total">{{ column_total }}</td>
+      </tr>
+      </thead>
+      <tbody>
+      {% for product in products %}
+        <tr>
+          <td class="text-center image">{% if product.thumb %}
+              <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-thumbnail"/></a>
+            {% endif %}
+          <td class="text-left name"><a
+              href="{{ product.href }}">{{ product.name }}</a>
+            {% for option in product.option %}
+              <br/>
+              &nbsp;
+              <small> - {{ option.name }}: {{ option.value }}</small>
+            {% endfor %}
+            {% if product.recurring %}
+              <br/>
+              <span class="label label-info">{{ text_recurring_item }}</span>
+              <small>{{ product.recurring }}</small>
+            {% endif %}
+          <td class="text-left quantity">
+            <div class="input-group btn-block" style="max-width: 200px;">
+              <input type="text" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}" size="1" class="form-control"/>
+              <span class="input-group-btn">
+                <button type="submit" data-toggle="tooltip" title="{{ button_update }}" data-product-key="{{ product.cart_id }}" class="btn btn-primary btn-update"><i class="fa fa-refresh"></i></button>
+                <button type="button" data-toggle="tooltip" title="{{ button_remove }}" data-product-key="{{ product.cart_id }}" class="btn btn-danger  btn-delete"><i class="fa fa-times-circle"></i></button>
+              </span>
+            </div>
+          </td>
+          <td class="text-right price">{{ product.price }}</td>
+          <td class="text-right total">{{ product.total }}</td>
+        </tr>
+      {% endfor %}
+      {% for voucher in vouchers %}
+        <tr>
+          <td class="text-left">{{ voucher.description }}</td>
+          <td class="text-left"></td>
+          <td class="text-right">1</td>
+          <td class="text-right">{{ voucher.amount }}</td>
+          <td class="text-right">{{ voucher.amount }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+      <tfoot>
+      {% for total in totals %}
+        <tr>
+          <td colspan="4" class="text-right">{{ total.title }}:</td>
+          <td class="text-right">{{ total.text }}</td>
+        </tr>
+      {% endfor %}
+      </tfoot>
+    </table>
+  </div>
+  <div id="payment-confirm-button" class="payment-{{ payment_code }}">
+    <h2 class="secondary-title">{{ journal2.settings.get('one_page_lang_payment_details', 'Payment Details') }}</h2>
+    {{ payment }}
+  </div>
+</div>
+

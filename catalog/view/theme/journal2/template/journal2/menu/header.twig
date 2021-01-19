@@ -1,0 +1,26 @@
+{% for item in items %}
+  <li>
+    {% if item.href %}
+      <a href="{{ item.href }}" {{ item.class }}{{ item.target }}>{{ item.icon_left }}
+        <span class="top-menu-link">{{ item.name }}</span>{{ item.icon_right }}
+      </a>
+    {% else %}
+      <span {{ item.class }}{{ item.target }}>{{ item.icon_left }}<span>{{ item.name }}</span>{{ item.icon_right }}</span>
+    {% endif %}
+    {% if item.items %}
+      <ul class="top-dropdown">
+        {% for item in item.items %}
+          <li>
+            {% if item.href %}
+              <a href="{{ item.href }}" {{ item.class }}{{ item.target }}>{{ item.icon_left }}
+                <span class="top-menu-link">{{ item.name }}</span>{{ item.icon_right }}
+              </a>
+            {% else %}
+              <span {{ item.class }}{{ item.target }}>{{ item.icon_left }}{{ item.name }}{{ item.icon_right }}</span>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </li>
+{% endfor %}

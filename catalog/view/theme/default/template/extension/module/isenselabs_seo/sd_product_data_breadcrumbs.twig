@@ -1,0 +1,78 @@
+{% if product_data %}
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org",
+    "@type": "Product",
+    {% if image %}"image": "{{ image }}",{% endif %}    
+    "name": "{{ name }}",
+    "model": "{{ model }}",
+    "sku": "{{ sku }}",
+    "gtin8": "{{ ean }}",
+    "mpn": "{{ mpn }}",
+    "description": "{{ description}}",
+    "brand": {
+        "@type": "Thing",
+        "name": "{{ manufacturer }}"
+    },
+    "offers": {
+        "@type": "Offer",
+        "url": "{{ url }}",
+        "priceCurrency": "{{ currency_code }}",
+        "price": "{{ price }}",
+        "priceValidUntil": "{{ price_valid_until }}",
+    {% if quantity > 0 %}
+        "availability": "http://schema.org/InStock"
+    {% else %}
+        "availability": "http://schema.org/OutOfStock"
+    {% endif %}
+    }
+    {% if review_count > 0 %},
+    "aggregateRating": {
+        "@type": "aggregateRating",
+        "ratingValue": "{{ rating }}",
+        "reviewCount": "{{ review_count }}",
+        "bestRating": "5",
+        "worstRating" : "1"
+    },
+    "review":{
+      "@type": "Review",
+      "reviewRating": {
+        "@type": "Rating",
+        "ratingValue": "{{ review_rating }}",
+        "bestRating": "5"
+      },
+    "author": {
+        "@type": "Person",
+        "name": "{{ review_author }}"
+      }
+    }
+    {% endif %}
+}
+</script>
+{% endif %}
+
+{% if product_breadcrumbs %}
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+  
+  {% for index, breadcrumb in breadcrumbs %}
+  {
+    "@type": "ListItem",
+    "position": {{ index+1 }},
+    "item": {
+      "@id": "{{ breadcrumb.href }}",
+      "name": "{{ breadcrumb.name}}"
+    }
+  }   
+  {% if loop.last %}
+  ]
+  {% else %}
+  ,
+  {% endif %}
+  {% endfor %}
+}
+</script>
+{% endif %}

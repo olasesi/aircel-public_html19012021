@@ -1,0 +1,65 @@
+{% set type = journal2.settings.get(staticCall('Journal2Utils', 'getDevice') == 'desktop' ? 'currency_display' : 'currency_display_mobile', 'symbol') %}
+{% if currencies | length > 1 %}
+  <form action="{{ action }}" method="post" enctype="multipart/form-data">
+    <div id="currency" class="{{ journal2.settings.get('currency_display', 'never') == 'full' ? 'full-text' : '' }}">
+      <div class="btn-group">
+        <button class="dropdown-toggle" type="button" data-hover="dropdown">
+          <div>
+            {% for currency in currencies %}
+              {% if currency.code == code %}
+                {% if type == 'symbol' %}
+                  <span class="currency-symbol">{{ currency.symbol_left ? currency.symbol_left : currency.symbol_right }}</span>
+                {% elseif type == 'text' %}
+                  {{ currency.title }}
+                {% elseif type == 'code' %}
+                  {{ currency.code }}
+                {% elseif type == 'full' %}
+                  {% if currency.symbol_left %}
+                    <span class="currency-symbol">{{ currency.symbol_left }}</span>
+                    <span class="currency-text">{{ currency.title }}</span>
+                  {% else %}
+                    <span class="currency-text">{{ currency.title }}</span>
+                    <span class="currency-symbol">{{ currency.symbol_right }}</span>
+                  {% endif %}
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </button>
+        <ul class="dropdown-menu">
+          {% for currency in currencies %}
+            {% if currency.symbol_left %}
+              {% if type == 'symbol' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();">{{ currency.symbol_left }}</a></li>
+              {% endif %}
+              {% if type == 'text' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();">{{ currency.title }}</a></li>
+              {% endif %}
+              {% if type == 'code' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();">{{ currency.code }}</a></li>
+              {% endif %}
+              {% if type == 'full' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();">{{ currency.symbol_left }} <span class="currency-text">{{ currency.title }}</span></a></li>
+              {% endif %}
+            {% else %}
+              {% if type == 'symbol' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();">{{ currency.symbol_right }}</a></li>
+              {% endif %}
+              {% if type == 'text' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();">{{ currency.title }}</a></li>
+              {% endif %}
+              {% if type == 'code' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();">{{ currency.code }}</a></li>
+              {% endif %}
+              {% if type == 'full' %}
+                <li><a onclick="$(this).closest('form').find('input[name=\'code\']').val('{{ currency.code }}'); $(this).closest('form').submit();"><span class="currency-text">{{ currency.title }}</span> {{ currency.symbol_right }}</a></li>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+      <input type="hidden" name="code" value=""/>
+      <input type="hidden" name="redirect" value="{{ redirect }}"/>
+    </div>
+  </form>
+{% endif %}
